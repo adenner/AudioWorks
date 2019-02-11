@@ -27,10 +27,30 @@ namespace AudioWorks.Common
     [PublicAPI]
     public class SettingDictionary : IDictionary<string, object>
     {
-        [NotNull] readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>();
+        readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>();
 
         /// <summary>
-        /// Gets the value associated with the specified key and of the specified type.
+        /// Gets the string value associated with the specified key, if present.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value, or empty string.</param>
+        /// <returns>true, if the value is present in the dictionary. Otherwise, false.</returns>
+        [CollectionAccess(CollectionAccessType.Read)]
+        [ContractAnnotation("=> false, value:null; => true, value:notnull")]
+        public bool TryGetValue([NotNull] string key, out string value)
+        {
+            if (TryGetValue(key, out object objectValue) && objectValue is string typedValue)
+            {
+                value = typedValue;
+                return true;
+            }
+
+            value = string.Empty;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the value associated with the specified key and of the specified type, if present.
         /// </summary>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
@@ -38,9 +58,9 @@ namespace AudioWorks.Common
         /// <returns>true, if the value is present in the dictionary. Otherwise, false.</returns>
         [CollectionAccess(CollectionAccessType.Read)]
         [ContractAnnotation("=> false, value:null; => true, value:notnull")]
-        public bool TryGetValue<TValue>([NotNull] string key, out TValue value)
+        public bool TryGetValue<TValue>([NotNull] string key, out TValue value) where TValue : struct
         {
-            if (TryGetValue(key, out var objectValue) && objectValue is TValue typedValue)
+            if (TryGetValue(key, out object objectValue) && objectValue is TValue typedValue)
             {
                 value = typedValue;
                 return true;

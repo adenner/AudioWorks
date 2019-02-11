@@ -29,8 +29,8 @@ namespace AudioWorks.Common
     /// </summary>
     public static class CoverArtFactory
     {
-        [NotNull, ItemNotNull] static readonly string[] _acceptedExtensions = { ".bmp", ".png", ".jpg", ".jpeg" };
-        [NotNull] static readonly Dictionary<string, WeakReference<CoverArt>> _internedCovers =
+        static readonly string[] _acceptedExtensions = { ".bmp", ".png", ".jpg", ".jpeg" };
+        static readonly Dictionary<string, WeakReference<CoverArt>> _internedCovers =
             new Dictionary<string, WeakReference<CoverArt>>();
 
         /// <summary>
@@ -104,8 +104,7 @@ namespace AudioWorks.Common
             }
         }
 
-        [NotNull]
-        static ICoverArt GetOrCreate([NotNull] Stream stream)
+        static ICoverArt GetOrCreate(Stream stream)
         {
             var hash = GetHash(stream);
             lock (_internedCovers)
@@ -128,10 +127,10 @@ namespace AudioWorks.Common
             }
         }
 
-        [Pure, NotNull]
+        [Pure]
         [SuppressMessage("Microsoft.Security", "CA5351:Do not use insecure cryptographic algorithm MD5.",
             Justification = "Usage is not security critical")]
-        static string GetHash([NotNull] Stream stream)
+        static string GetHash(Stream stream)
         {
             using (var md5 = MD5.Create())
             {

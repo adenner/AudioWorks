@@ -28,7 +28,7 @@ namespace AudioWorks.Common
     public sealed class CoverArt : ICoverArt
     {
         readonly int _dataSize;
-        [NotNull] readonly byte[] _data;
+        readonly byte[] _data;
 
         /// <inheritdoc/>
         public int Width { get; }
@@ -51,7 +51,7 @@ namespace AudioWorks.Common
         /// <inheritdoc/>
         public ReadOnlySpan<byte> Data => _data.AsSpan().Slice(0, _dataSize);
 
-        internal CoverArt([NotNull] Stream stream)
+        internal CoverArt(Stream stream)
         {
             var format = Image.DetectFormat(stream) ??
                          throw new ImageInvalidException("Not a valid image.");

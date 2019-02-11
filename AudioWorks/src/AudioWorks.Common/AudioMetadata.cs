@@ -27,22 +27,22 @@ namespace AudioWorks.Common
     [Serializable]
     public class AudioMetadata
     {
-        [NotNull] string _title;
-        [NotNull] string _artist;
-        [NotNull] string _album;
-        [NotNull] string _albumArtist;
-        [NotNull] string _composer;
-        [NotNull] string _genre;
-        [NotNull] string _comment;
-        [NotNull] string _day;
-        [NotNull] string _month;
-        [NotNull] string _year;
-        [NotNull] string _trackNumber;
-        [NotNull] string _trackCount;
-        [NotNull] string _trackPeak;
-        [NotNull] string _albumPeak;
-        [NotNull] string _trackGain;
-        [NotNull] string _albumGain;
+        string _title;
+        string _artist;
+        string _album;
+        string _albumArtist;
+        string _composer;
+        string _genre;
+        string _comment;
+        string _day;
+        string _month;
+        string _year;
+        string _trackNumber;
+        string _trackCount;
+        string _trackPeak;
+        string _albumPeak;
+        string _trackGain;
+        string _albumGain;
 
         /// <summary>
         /// Gets or sets the title. To clear the title, set an empty <paramref name="value"/>.
@@ -370,7 +370,7 @@ namespace AudioWorks.Common
         /// </summary>
         /// <value>The cover art.</value>
         [CanBeNull]
-        public ICoverArt CoverArt { get; set; }
+        public ICoverArt? CoverArt { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioMetadata"/> class.

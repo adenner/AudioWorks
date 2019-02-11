@@ -26,7 +26,7 @@ namespace AudioWorks.Common
     /// </summary>
     public static class LoggerManager
     {
-        [NotNull] static readonly List<ILoggerProvider> _providerSingletons = new List<ILoggerProvider>();
+        static readonly List<ILoggerProvider> _providerSingletons = new List<ILoggerProvider>();
 
         /// <summary>
         /// Gets the singleton logger factory.

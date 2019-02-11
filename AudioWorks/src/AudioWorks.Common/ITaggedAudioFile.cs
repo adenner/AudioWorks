@@ -42,6 +42,6 @@ namespace AudioWorks.Common
         /// Persists the current metadata to disk.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        void SaveMetadata([CanBeNull] SettingDictionary settings = null);
+        void SaveMetadata([CanBeNull] SettingDictionary? settings = null);
     }
 }

@@ -140,7 +140,7 @@ namespace AudioWorks.Common
                 : new TimeSpan(0, 0, (int) Math.Round(FrameCount / (double) SampleRate));
 
         AudioInfo(
-            [NotNull] string format,
+            string format,
             int channels,
             int bitsPerSample,
             int sampleRate,
