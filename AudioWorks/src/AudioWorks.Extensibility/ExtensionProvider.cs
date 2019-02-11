@@ -52,10 +52,8 @@ namespace AudioWorks.Extensibility
         public static IEnumerable<ExportFactory<T>> GetFactories<T>([NotNull] string key, [NotNull] string value)
             where T : class
         {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException(nameof(key), "The key cannot be null or empty.");
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentNullException(nameof(value), "The value cannot be null or empty.");
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            if (value == null) throw new ArgumentNullException(nameof(value));
 
             return ExtensionContainer<T>.Instance.Factories.Where(factory =>
                 value.Equals((string) factory.Metadata[key], StringComparison.OrdinalIgnoreCase));
