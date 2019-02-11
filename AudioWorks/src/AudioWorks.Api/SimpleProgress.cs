@@ -26,7 +26,7 @@ namespace AudioWorks.Api
     /// <seealso cref="IProgress{T}"/>
     public sealed class SimpleProgress<T> : IProgress<T>
     {
-        [NotNull] readonly Action<T> _handler;
+        readonly Action<T> _handler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleProgress{T}"/> class.

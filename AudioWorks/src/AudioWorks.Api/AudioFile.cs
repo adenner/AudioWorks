@@ -72,7 +72,6 @@ namespace AudioWorks.Api
             Path = newPath;
         }
 
-        [NotNull]
         AudioInfo LoadInfo()
         {
             var logger = LoggerManager.LoggerFactory.CreateLogger<AudioFile>();

@@ -33,8 +33,8 @@ namespace AudioWorks.Api
     [PublicAPI]
     public sealed class AudioFileAnalyzer
     {
-        [NotNull] readonly ExportFactory<IAudioAnalyzer> _analyzerFactory;
-        [NotNull] readonly string _progressDescription;
+        readonly ExportFactory<IAudioAnalyzer> _analyzerFactory;
+        readonly string _progressDescription;
         int _maxDegreeOfParallelism = Environment.ProcessorCount;
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace AudioWorks.Api
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="name"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if <see paramref="name"/> is not the name of an available analyzer.
         /// </exception>
-        public AudioFileAnalyzer([NotNull] string name, [CanBeNull] SettingDictionary settings = null)
+        public AudioFileAnalyzer([NotNull] string name, [CanBeNull] SettingDictionary? settings = null)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -109,7 +109,7 @@ namespace AudioWorks.Api
         public async Task AnalyzeAsync(
             [NotNull, ItemNotNull] IEnumerable<ITaggedAudioFile> audioFiles,
             CancellationToken cancellationToken,
-            [CanBeNull] IProgress<ProgressToken> progress = null)
+            [CanBeNull] IProgress<ProgressToken>? progress = null)
         {
             if (audioFiles == null) throw new ArgumentNullException(nameof(audioFiles));
 
@@ -151,7 +151,7 @@ namespace AudioWorks.Api
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
         public async Task AnalyzeAsync(
-            [CanBeNull] IProgress<ProgressToken> progress,
+            [CanBeNull] IProgress<ProgressToken>? progress,
             CancellationToken cancellationToken,
             [NotNull, ItemNotNull] params ITaggedAudioFile[] audioFiles)
         {
@@ -198,7 +198,7 @@ namespace AudioWorks.Api
                             message.audioFile.Path,
                             progress == null
                                 ? null
-                                : new SimpleProgress<int>(framesCompleted => progress.Report(new ProgressToken
+                                : new SimpleProgress<int>(framesCompleted => progress!.Report(new ProgressToken
                                 {
                                     // ReSharper disable once AccessToModifiedClosure
                                     AudioFilesCompleted = audioFilesCompleted,
@@ -256,7 +256,7 @@ namespace AudioWorks.Api
             });
         }
 
-        static void CopyStringProperties([NotNull] AudioMetadata source, [NotNull] AudioMetadata destination)
+        static void CopyStringProperties(AudioMetadata source, AudioMetadata destination)
         {
             // Copy every non-blank string property from source to destination
             foreach (var property in typeof(AudioMetadata).GetProperties())

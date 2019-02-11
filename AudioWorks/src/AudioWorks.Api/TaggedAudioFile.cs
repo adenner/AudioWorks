@@ -28,7 +28,7 @@ namespace AudioWorks.Api
     [Serializable]
     public sealed class TaggedAudioFile : AudioFile, ITaggedAudioFile
     {
-        [CanBeNull] AudioMetadata _metadata;
+        AudioMetadata? _metadata;
 
         /// <inheritdoc/>
         public AudioMetadata Metadata
@@ -55,7 +55,7 @@ namespace AudioWorks.Api
         }
 
         /// <inheritdoc/>
-        public void SaveMetadata(SettingDictionary settings = null)
+        public void SaveMetadata(SettingDictionary? settings = null)
         {
             if (settings == null)
                 settings = new SettingDictionary();
@@ -91,15 +91,13 @@ namespace AudioWorks.Api
             base.Rename(new EncodedPath(name).ReplaceWith(Metadata), replace);
         }
 
-        [NotNull]
-        static AudioMetadata LoadMetadata([NotNull] string path)
+        static AudioMetadata LoadMetadata(string path)
         {
             using (var fileStream = File.OpenRead(path))
                 return LoadMetadata(fileStream);
         }
 
-        [NotNull]
-        static AudioMetadata LoadMetadata([NotNull] FileStream stream)
+        static AudioMetadata LoadMetadata(FileStream stream)
         {
             var initialPosition = stream.Position;
             var logger = LoggerManager.LoggerFactory.CreateLogger<TaggedAudioFile>();

@@ -47,7 +47,7 @@ namespace AudioWorks.Api
         [NotNull]
         public string Description { get; }
 
-        internal AudioMetadataEncoderInfo([NotNull] IDictionary<string, object> metadata)
+        internal AudioMetadataEncoderInfo(IDictionary<string, object> metadata)
         {
             Extension = (string) metadata["Extension"];
             Format = (string) metadata["Format"];

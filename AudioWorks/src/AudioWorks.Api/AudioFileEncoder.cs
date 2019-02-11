@@ -33,9 +33,9 @@ namespace AudioWorks.Api
     [PublicAPI]
     public sealed class AudioFileEncoder
     {
-        [CanBeNull] readonly EncodedPath _encodedFileName;
-        [CanBeNull] readonly EncodedPath _encodedDirectoryName;
-        [NotNull] readonly ExportFactory<IAudioEncoder> _encoderFactory;
+        readonly EncodedPath? _encodedFileName;
+        readonly EncodedPath? _encodedDirectoryName;
+        readonly ExportFactory<IAudioEncoder> _encoderFactory;
         int _maxDegreeOfParallelism = Environment.ProcessorCount;
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace AudioWorks.Api
         /// </exception>
         public AudioFileEncoder(
             [NotNull] string name,
-            [CanBeNull] string encodedDirectoryName = null,
-            [CanBeNull] string encodedFileName = null,
-            [CanBeNull] SettingDictionary settings = null)
+            [CanBeNull] string? encodedDirectoryName = null,
+            [CanBeNull] string? encodedFileName = null,
+            [CanBeNull] SettingDictionary? settings = null)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -129,7 +129,7 @@ namespace AudioWorks.Api
         public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
             [NotNull, ItemNotNull] IEnumerable<ITaggedAudioFile> audioFiles,
             CancellationToken cancellationToken,
-            [CanBeNull] IProgress<ProgressToken> progress = null)
+            [CanBeNull] IProgress<ProgressToken>? progress = null)
         {
             if (audioFiles == null) throw new ArgumentNullException(nameof(audioFiles));
 
@@ -177,7 +177,7 @@ namespace AudioWorks.Api
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
         [NotNull, ItemNotNull]
         public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            [CanBeNull] IProgress<ProgressToken> progress,
+            [CanBeNull] IProgress<ProgressToken>? progress,
             CancellationToken cancellationToken,
             [NotNull, ItemNotNull] params ITaggedAudioFile[] audioFiles)
         {
@@ -205,7 +205,7 @@ namespace AudioWorks.Api
 
                     try
                     {
-                        FileStream outputStream = null;
+                        FileStream? outputStream = null;
                         var encoderExport = _encoderFactory.CreateExport();
 
                         try
@@ -223,7 +223,7 @@ namespace AudioWorks.Api
                                 message.audioFile.Path,
                                 progress == null
                                     ? null
-                                    : new SimpleProgress<int>(framesCompleted => progress.Report(new ProgressToken
+                                    : new SimpleProgress<int>(framesCompleted => progress!.Report(new ProgressToken
                                     {
                                         // ReSharper disable once AccessToModifiedClosure
                                         AudioFilesCompleted = audioFilesCompleted,
@@ -309,8 +309,7 @@ namespace AudioWorks.Api
             }
         }
 
-        [NotNull]
-        static string GetUniquePath([NotNull] string path, [NotNull, ItemNotNull] List<string> uniquePaths)
+        static string GetUniquePath(string path, List<string> uniquePaths)
         {
             if (uniquePaths.Contains(path, StringComparer.OrdinalIgnoreCase))
                 path = $"{Path.ChangeExtension(path, null)}~{uniquePaths.Count}{Path.GetExtension(path)}";

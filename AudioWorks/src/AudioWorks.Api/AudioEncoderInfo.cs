@@ -39,7 +39,7 @@ namespace AudioWorks.Api
         [NotNull]
         public string Description { get; }
 
-        internal AudioEncoderInfo([NotNull] IDictionary<string, object> metadata)
+        internal AudioEncoderInfo(IDictionary<string, object> metadata)
         {
             Name = (string) metadata["Name"];
             Description = (string) metadata["Description"];
