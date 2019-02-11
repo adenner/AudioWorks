@@ -23,8 +23,8 @@ namespace AudioWorks.Extensibility
     /// </summary>
     public sealed class GroupToken : IDisposable
     {
-        [NotNull] readonly object _syncRoot = new object();
-        [CanBeNull] object _groupState;
+        readonly object _syncRoot = new object();
+        object? _groupState;
 
         /// <summary>
         /// Sets a group state object, or returns the current one if it has already been set.

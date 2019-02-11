@@ -14,7 +14,6 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System.IO;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensibility
 {
@@ -24,7 +23,6 @@ namespace AudioWorks.Extensibility
     /// <seealso cref="Stream" />
     public sealed class TempFileStream : Stream
     {
-        [NotNull]
         readonly FileStream _fileStream = File.Create(Path.GetTempFileName(), 4096, FileOptions.DeleteOnClose);
 
         /// <inheritdoc/>

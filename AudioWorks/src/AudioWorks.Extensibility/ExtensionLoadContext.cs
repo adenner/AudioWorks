@@ -33,7 +33,7 @@ namespace AudioWorks.Extensibility
     /// <seealso cref="AssemblyLoadContext"/>
     public sealed class ExtensionLoadContext : AssemblyLoadContext
     {
-        [NotNull, ItemNotNull] readonly List<string> _unmanagedLibraryPaths = new List<string>();
+        readonly List<string> _unmanagedLibraryPaths = new List<string>();
 
         /// <summary>
         /// Adds a path that contains unmanaged libraries. When an unmanaged method is called via
@@ -50,8 +50,8 @@ namespace AudioWorks.Extensibility
         }
 
         /// <inheritdoc/>
-        [CanBeNull]
-        protected override Assembly Load([CanBeNull] AssemblyName assemblyName)
+        [ContractAnnotation("=> null")]
+        protected override Assembly? Load([CanBeNull] AssemblyName? assemblyName)
         {
             return null;
         }
