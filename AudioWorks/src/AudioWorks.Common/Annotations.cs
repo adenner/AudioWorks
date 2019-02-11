@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable All
 
 #pragma warning disable 1591
+#pragma warning disable nullable
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
