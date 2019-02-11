@@ -34,7 +34,6 @@ namespace AudioWorks.Api
     public sealed class AudioFileAnalyzer
     {
         readonly ExportFactory<IAudioAnalyzer> _analyzerFactory;
-        readonly string _progressDescription;
         int _maxDegreeOfParallelism = Environment.ProcessorCount;
 
         /// <summary>
@@ -80,8 +79,6 @@ namespace AudioWorks.Api
 
             using (var export = _analyzerFactory.CreateExport())
                 Settings = new ValidatingSettingDictionary(export.Value.SettingInfo, settings);
-
-            _progressDescription = $"Performing {name} analysis";
         }
 
         /// <summary>
