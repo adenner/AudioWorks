@@ -34,7 +34,7 @@ namespace AudioWorks.Api
         /// <param name="handler">The handler to invoke for each reported progress value.</param>
         public SimpleProgress([NotNull] Action<T> handler)
         {
-            _handler = handler;
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         /// <inheritdoc/>
