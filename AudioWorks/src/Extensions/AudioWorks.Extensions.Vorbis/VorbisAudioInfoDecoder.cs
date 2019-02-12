@@ -21,7 +21,6 @@ using System.IO;
 using System.Text;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Vorbis
 {
@@ -34,7 +33,7 @@ namespace AudioWorks.Extensions.Vorbis
 
         public unsafe AudioInfo ReadAudioInfo(Stream stream)
         {
-            OggStream oggStream = null;
+            OggStream? oggStream = null;
             SafeNativeMethods.VorbisCommentInit(out var vorbisComment);
 #if NETSTANDARD2_0
             var buffer = ArrayPool<byte>.Shared.Rent(4096);
@@ -112,7 +111,7 @@ namespace AudioWorks.Extensions.Vorbis
             }
         }
 
-        static long GetFinalGranulePosition(int serialNumber, [NotNull] Stream stream)
+        static long GetFinalGranulePosition(int serialNumber, Stream stream)
         {
             // The largest possible Ogg page is 65,307 bytes long
             stream.Seek(-Math.Min(65307, stream.Length), SeekOrigin.End);

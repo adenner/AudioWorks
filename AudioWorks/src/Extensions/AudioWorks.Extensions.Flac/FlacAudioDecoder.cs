@@ -14,18 +14,16 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     [AudioDecoderExport(".flac")]
     public sealed class FlacAudioDecoder : IAudioDecoder, IDisposable
     {
-        [CanBeNull] AudioStreamDecoder _decoder;
+        AudioStreamDecoder? _decoder;
 
         public bool Finished { get; private set; }
 
@@ -35,10 +33,9 @@ namespace AudioWorks.Extensions.Flac
             _decoder.Initialize();
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public SampleBuffer DecodeSamples()
         {
-            while (_decoder.GetState() != DecoderState.EndOfStream)
+            while (_decoder!.GetState() != DecoderState.EndOfStream)
             {
                 if (!_decoder.ProcessSingle())
                     throw new AudioInvalidException($"libFLAC failed to decode the samples: {_decoder.GetState()}.");
@@ -56,9 +53,6 @@ namespace AudioWorks.Extensions.Flac
             return SampleBuffer.Empty;
         }
 
-        public void Dispose()
-        {
-            _decoder?.Dispose();
-        }
+        public void Dispose() => _decoder?.Dispose();
     }
 }

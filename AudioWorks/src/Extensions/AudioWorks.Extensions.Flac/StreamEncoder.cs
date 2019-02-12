@@ -21,20 +21,19 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     sealed class StreamEncoder : IDisposable
     {
-        [NotNull] readonly StreamEncoderHandle _handle = SafeNativeMethods.StreamEncoderNew();
-        [NotNull] readonly NativeCallbacks.StreamEncoderWriteCallback _writeCallback;
-        [NotNull] readonly NativeCallbacks.StreamEncoderSeekCallback _seekCallback;
-        [NotNull] readonly NativeCallbacks.StreamEncoderTellCallback _tellCallback;
-        [NotNull] Stream _stream;
+        readonly StreamEncoderHandle _handle = SafeNativeMethods.StreamEncoderNew();
+        readonly NativeCallbacks.StreamEncoderWriteCallback _writeCallback;
+        readonly NativeCallbacks.StreamEncoderSeekCallback _seekCallback;
+        readonly NativeCallbacks.StreamEncoderTellCallback _tellCallback;
+        Stream _stream;
         long _endOfData;
 
-        internal StreamEncoder([NotNull] Stream stream)
+        internal StreamEncoder(Stream stream)
         {
             // Need a reference to the callbacks for the lifetime of the encoder
             _writeCallback = WriteCallback;
@@ -44,34 +43,23 @@ namespace AudioWorks.Extensions.Flac
             _stream = stream;
         }
 
-        internal void SetChannels(uint channels)
-        {
-            SafeNativeMethods.StreamEncoderSetChannels(_handle, channels);
-        }
+        internal void SetChannels(uint channels) => SafeNativeMethods.StreamEncoderSetChannels(_handle, channels);
 
-        internal void SetBitsPerSample(uint bitsPerSample)
-        {
+        internal void SetBitsPerSample(uint bitsPerSample) =>
             SafeNativeMethods.StreamEncoderSetBitsPerSample(_handle, bitsPerSample);
-        }
 
-        internal void SetSampleRate(uint sampleRate)
-        {
+        internal void SetSampleRate(uint sampleRate) =>
             SafeNativeMethods.StreamEncoderSetSampleRate(_handle, sampleRate);
-        }
 
-        internal void SetTotalSamplesEstimate(ulong sampleCount)
-        {
+        internal void SetTotalSamplesEstimate(ulong sampleCount) =>
             SafeNativeMethods.StreamEncoderSetTotalSamplesEstimate(_handle, sampleCount);
-        }
 
-        internal void SetCompressionLevel(uint compressionLevel)
-        {
+        internal void SetCompressionLevel(uint compressionLevel) =>
             SafeNativeMethods.StreamEncoderSetCompressionLevel(_handle, compressionLevel);
-        }
 
         [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods",
             Justification = "Can't pass an array of SafeHandles")]
-        internal void SetMetadata([NotNull, ItemNotNull] IEnumerable<MetadataBlock> metadataBlocks)
+        internal void SetMetadata(IEnumerable<MetadataBlock> metadataBlocks)
         {
             var blockPointers = metadataBlocks.Select(block => block.Handle.DangerousGetHandle()).ToArray();
             SafeNativeMethods.StreamEncoderSetMetadata(_handle, blockPointers, (uint) blockPointers.Length);
@@ -136,12 +124,15 @@ namespace AudioWorks.Extensions.Flac
             _stream.SetLength(_endOfData);
         }
 
-        public void Dispose()
-        {
-            _handle.Dispose();
-        }
+        public void Dispose() => _handle.Dispose();
 
-        EncoderWriteStatus WriteCallback(IntPtr handle, [NotNull] byte[] buffer, int bytes, uint samples, uint currentFrame, IntPtr userData)
+        EncoderWriteStatus WriteCallback(
+            IntPtr handle,
+            byte[] buffer,
+            int bytes,
+            uint samples,
+            uint currentFrame,
+            IntPtr userData)
         {
             _stream.Write(buffer, 0, bytes);
             _endOfData = Math.Max(_endOfData, _stream.Position);
@@ -160,10 +151,6 @@ namespace AudioWorks.Extensions.Flac
             return EncoderTellStatus.Ok;
         }
 
-        [Pure]
-        EncoderState GetState()
-        {
-            return SafeNativeMethods.StreamEncoderGetState(_handle);
-        }
+        EncoderState GetState() => SafeNativeMethods.StreamEncoderGetState(_handle);
     }
 }

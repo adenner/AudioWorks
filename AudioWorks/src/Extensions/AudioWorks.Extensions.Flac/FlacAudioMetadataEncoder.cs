@@ -17,7 +17,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
@@ -38,7 +37,7 @@ namespace AudioWorks.Extensions.Flac
             {
                 chain.Read();
 
-                PictureBlock pictureBlock = null;
+                PictureBlock? pictureBlock = null;
                 try
                 {
                     if (metadata.CoverArt != null)
@@ -69,8 +68,7 @@ namespace AudioWorks.Extensions.Flac
             }
         }
 
-        [Pure]
-        static int? GetPadding([NotNull] SettingDictionary settings)
+        static int? GetPadding(SettingDictionary settings)
         {
             if (settings.TryGetValue("Padding", out int result))
                 return result;
@@ -78,9 +76,9 @@ namespace AudioWorks.Extensions.Flac
         }
 
         static void UpdateChain(
-            [NotNull] MetadataIterator iterator,
-            [NotNull] VorbisCommentBlock newComments,
-            [CanBeNull] PictureBlock pictureBlock,
+            MetadataIterator iterator,
+            VorbisCommentBlock newComments,
+            PictureBlock? pictureBlock,
             int? padding)
         {
             var metadataInserted = false;

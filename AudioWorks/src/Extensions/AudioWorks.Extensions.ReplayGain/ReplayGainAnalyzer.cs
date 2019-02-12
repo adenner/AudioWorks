@@ -14,11 +14,9 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.ReplayGain
 {
@@ -27,8 +25,8 @@ namespace AudioWorks.Extensions.ReplayGain
     {
         const int _referenceLevel = -18;
 
-        [CanBeNull] R128Analyzer _analyzer;
-        [CanBeNull] GroupState _groupState;
+        R128Analyzer? _analyzer;
+        GroupState? _groupState;
 
         public SettingInfoDictionary SettingInfo { get; } = new SettingInfoDictionary
         {
@@ -42,25 +40,22 @@ namespace AudioWorks.Extensions.ReplayGain
                 peakAnalysis.Equals("Interpolated", StringComparison.Ordinal));
 
             _groupState = (GroupState) groupToken.GetOrSetGroupState(new GroupState());
-            // ReSharper disable once PossibleNullReferenceException
             _groupState.Handles.Enqueue(_analyzer.Handle);
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void Submit(SampleBuffer samples)
         {
             if (samples.Frames == 0) return;
 
             Span<float> buffer = stackalloc float[samples.Frames * samples.Channels];
             samples.CopyToInterleaved(buffer);
-            _analyzer.AddFrames(buffer, (uint) samples.Frames);
+            _analyzer!.AddFrames(buffer, (uint) samples.Frames);
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public AudioMetadata GetResult()
         {
-            var peak = _analyzer.GetPeak();
-            _groupState.AddPeak(peak);
+            var peak = _analyzer!.GetPeak();
+            _groupState!.AddPeak(peak);
 
             return new AudioMetadata
             {
@@ -70,15 +65,11 @@ namespace AudioWorks.Extensions.ReplayGain
             };
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public AudioMetadata GetGroupResult()
+        public AudioMetadata GetGroupResult() => new AudioMetadata
         {
-            return new AudioMetadata
-            {
-                AlbumPeak = _groupState.GroupPeak.ToString(CultureInfo.InvariantCulture),
-                AlbumGain = (_referenceLevel - R128Analyzer.GetLoudnessMultiple(_groupState.Handles.ToArray()))
+            AlbumPeak = _groupState!.GroupPeak.ToString(CultureInfo.InvariantCulture),
+            AlbumGain = (_referenceLevel - R128Analyzer.GetLoudnessMultiple(_groupState.Handles.ToArray()))
                     .ToString(CultureInfo.InvariantCulture)
-            };
-        }
+        };
     }
 }

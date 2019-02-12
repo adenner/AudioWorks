@@ -19,7 +19,6 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.ReplayGain
 {
@@ -75,8 +74,7 @@ namespace AudioWorks.Extensions.ReplayGain
             return new SampleBuffer(buffer, samples.Channels);
         }
 
-        [Pure]
-        static float CalculateScale([CanBeNull] string gain, [CanBeNull] string peak)
+        static float CalculateScale(string? gain, string? peak)
         {
             return string.IsNullOrEmpty(gain) || string.IsNullOrEmpty(peak)
                 ? 1
@@ -85,8 +83,7 @@ namespace AudioWorks.Extensions.ReplayGain
                     1 / float.Parse(peak, CultureInfo.InvariantCulture));
         }
 
-        [Pure, ContractAnnotation("peak:null => null; peak:notnull => notnull")]
-        static string CalculatePeak([CanBeNull] string peak, float scale)
+        static string CalculatePeak(string? peak, float scale)
         {
             return string.IsNullOrEmpty(peak)
                 ? string.Empty
@@ -94,8 +91,7 @@ namespace AudioWorks.Extensions.ReplayGain
                     float.Parse(peak, CultureInfo.InvariantCulture) * scale);
         }
 
-        [Pure, ContractAnnotation("gain:null => null; gain:notnull => notnull")]
-        static string CalculateGain([CanBeNull] string gain, float scale)
+        static string CalculateGain(string? gain, float scale)
         {
             return string.IsNullOrEmpty(gain)
                 ? string.Empty

@@ -20,7 +20,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Apple
 {
@@ -29,9 +28,9 @@ namespace AudioWorks.Extensions.Apple
     {
         const uint _defaultFrameCount = 4096;
 
-        [CanBeNull] AudioFile _audioFile;
+        AudioFile? _audioFile;
         AudioStreamBasicDescription _outputDescription;
-        [CanBeNull] AudioConverter _converter;
+        AudioConverter? _converter;
         IntPtr _magicCookie;
 
         public bool Finished { get; private set; }
@@ -65,7 +64,7 @@ namespace AudioWorks.Extensions.Apple
             bufferList.Buffers[0].Data = new IntPtr(Unsafe.AsPointer(ref MemoryMarshal.GetReference(buffer)));
 
             var frameCount = _defaultFrameCount;
-            _converter.FillBuffer(ref frameCount, ref bufferList, null);
+            _converter!.FillBuffer(ref frameCount, ref bufferList, null);
 
             if (frameCount == 0)
                 Finished = true;
@@ -125,7 +124,7 @@ namespace AudioWorks.Extensions.Apple
             };
         }
 
-        static IntPtr GetMagicCookie([NotNull] AudioFile audioFile, [NotNull] AudioConverter converter)
+        static IntPtr GetMagicCookie(AudioFile audioFile, AudioConverter converter)
         {
             audioFile.GetPropertyInfo(AudioFilePropertyId.MagicCookieData, out var dataSize, out _);
             var cookie = audioFile.GetProperty(AudioFilePropertyId.MagicCookieData, dataSize);

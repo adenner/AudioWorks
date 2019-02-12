@@ -26,7 +26,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Opus
 {
@@ -39,7 +38,7 @@ namespace AudioWorks.Extensions.Opus
 
         public unsafe AudioInfo ReadAudioInfo(Stream stream)
         {
-            OggStream oggStream = null;
+            OggStream? oggStream = null;
 #if NETSTANDARD2_0
             var buffer = ArrayPool<byte>.Shared.Rent(4096);
 #else
@@ -99,15 +98,7 @@ namespace AudioWorks.Extensions.Opus
             }
         }
 
-        /// <summary>
-        /// Gets the audio information.
-        /// </summary>
-        /// <param name="serialNumber">The serial number.</param>
-        /// <param name="headerPacket">The header packet.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
-        [NotNull]
-        static unsafe AudioInfo GetAudioInfo(int serialNumber, in OggPacket headerPacket, [NotNull] Stream stream)
+        static unsafe AudioInfo GetAudioInfo(int serialNumber, in OggPacket headerPacket, Stream stream)
         {
             if (headerPacket.Bytes < 19)
                 throw new AudioUnsupportedException("Not an Opus stream.");
@@ -138,7 +129,7 @@ namespace AudioWorks.Extensions.Opus
                     0.0));
         }
 
-        static long GetFinalGranulePosition(int serialNumber, [NotNull] Stream stream)
+        static long GetFinalGranulePosition(int serialNumber, Stream stream)
         {
             // The largest possible Ogg page is 65,307 bytes long
             stream.Seek(-Math.Min(65307, stream.Length), SeekOrigin.End);

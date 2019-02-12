@@ -18,18 +18,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Threading;
-using JetBrains.Annotations;
 using Microsoft.PowerShell.Commands;
 
 namespace AudioWorks.Commands
 {
     static class ExtensionMethods
     {
-        [Pure, NotNull]
-        internal static IEnumerable<string> GetFileSystemPaths(
-            [NotNull] this PSCmdlet cmdlet,
-            [CanBeNull] string path,
-            [CanBeNull] string literalPath)
+        internal static IEnumerable<string> GetFileSystemPaths(this PSCmdlet cmdlet, string? path, string? literalPath)
         {
             ProviderInfo provider;
             if (!string.IsNullOrEmpty(path))
@@ -51,8 +46,8 @@ namespace AudioWorks.Commands
         }
 
         internal static void OutputMessages(
-            [NotNull] this Cmdlet cmdlet,
-            [NotNull] BlockingCollection<object> messageQueue,
+            this Cmdlet cmdlet,
+            BlockingCollection<object> messageQueue,
             CancellationToken cancellationToken)
         {
             foreach (var message in messageQueue.GetConsumingEnumerable(cancellationToken))

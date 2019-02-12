@@ -21,55 +21,33 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Lame
 {
     sealed class Encoder : IDisposable
     {
-        [NotNull] readonly EncoderHandle _handle = SafeNativeMethods.Init();
-        [NotNull] readonly Stream _stream;
+        readonly EncoderHandle _handle = SafeNativeMethods.Init();
+        readonly Stream _stream;
         long _startPosition;
 
-        internal Encoder([NotNull] Stream stream)
+        internal Encoder(Stream stream)
         {
             _stream = stream;
         }
 
-        internal void SetChannels(int channels)
-        {
-            SafeNativeMethods.SetNumChannels(_handle, channels);
-        }
+        internal void SetChannels(int channels) => SafeNativeMethods.SetNumChannels(_handle, channels);
 
-        internal void SetSampleRate(int sampleRate)
-        {
-            SafeNativeMethods.SetInSampleRate(_handle, sampleRate);
-        }
+        internal void SetSampleRate(int sampleRate) => SafeNativeMethods.SetInSampleRate(_handle, sampleRate);
 
-        internal void SetSampleCount(uint sampleCount)
-        {
-            SafeNativeMethods.SetNumSamples(_handle, sampleCount);
-        }
+        internal void SetSampleCount(uint sampleCount) => SafeNativeMethods.SetNumSamples(_handle, sampleCount);
 
-        internal void SetBitRate(int bitRate)
-        {
-            SafeNativeMethods.SetBRate(_handle, bitRate);
-        }
+        internal void SetBitRate(int bitRate) => SafeNativeMethods.SetBRate(_handle, bitRate);
 
-        internal void SetVbrMode(VbrMode mode)
-        {
-            SafeNativeMethods.SetVbr(_handle, mode);
-        }
+        internal void SetVbrMode(VbrMode mode) => SafeNativeMethods.SetVbr(_handle, mode);
 
-        internal void SetVbrMeanBitRate(int bitRate)
-        {
-            SafeNativeMethods.SetVbrMeanBitRateKbps(_handle, bitRate);
-        }
+        internal void SetVbrMeanBitRate(int bitRate) => SafeNativeMethods.SetVbrMeanBitRateKbps(_handle, bitRate);
 
-        internal void SetVbrQuality(float quality)
-        {
-            SafeNativeMethods.SetVbrQuality(_handle, quality);
-        }
+        internal void SetVbrQuality(float quality) => SafeNativeMethods.SetVbrQuality(_handle, quality);
 
         [SuppressMessage("Performance", "CA1806:Do not ignore method results",
             Justification = "Native method is always expected to return 0")]
@@ -211,9 +189,6 @@ namespace AudioWorks.Extensions.Lame
             _stream.Position = endOfData;
         }
 
-        public void Dispose()
-        {
-            _handle.Dispose();
-        }
+        public void Dispose() => _handle.Dispose();
     }
 }

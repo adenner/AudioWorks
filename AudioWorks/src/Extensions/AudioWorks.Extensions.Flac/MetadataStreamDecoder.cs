@@ -21,24 +21,20 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     sealed class MetadataStreamDecoder : StreamDecoder
     {
-        [NotNull]
         internal VorbisCommentToMetadataAdapter AudioMetadata { get; } = new VorbisCommentToMetadataAdapter();
 
-        internal MetadataStreamDecoder([NotNull] Stream stream)
+        internal MetadataStreamDecoder(Stream stream)
             : base(stream)
         {
         }
 
-        internal void SetMetadataRespond(MetadataType type)
-        {
+        internal void SetMetadataRespond(MetadataType type) =>
             SafeNativeMethods.StreamDecoderSetMetadataRespond(Handle, type);
-        }
 
         protected override unsafe void MetadataCallback(IntPtr handle, IntPtr metadataBlock, IntPtr userData)
         {

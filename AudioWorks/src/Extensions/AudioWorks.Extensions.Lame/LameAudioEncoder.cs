@@ -15,21 +15,19 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System;
 using System.Composition;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Lame
 {
     [AudioEncoderExport("LameMP3", "Lame MPEG Audio Layer 3")]
     public sealed class LameAudioEncoder : IAudioEncoder, IDisposable
     {
-        [CanBeNull] Stream _stream;
-        [CanBeNull] Encoder _encoder;
-        [CanBeNull] Export<IAudioFilter> _replayGainExport;
+        Stream? _stream;
+        Encoder? _encoder;
+        Export<IAudioFilter>? _replayGainExport;
 
         public SettingInfoDictionary SettingInfo
         {
@@ -118,7 +116,6 @@ namespace AudioWorks.Extensions.Lame
             _encoder.InitializeParameters();
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void Submit(SampleBuffer samples)
         {
             if (samples.Frames == 0) return;
@@ -130,31 +127,30 @@ namespace AudioWorks.Extensions.Lame
             {
                 Span<float> interleavedSamples = stackalloc float[samples.Frames * samples.Channels];
                 samples.CopyToInterleaved(interleavedSamples);
-                _encoder.EncodeInterleaved(interleavedSamples, samples.Frames);
+                _encoder!.EncodeInterleaved(interleavedSamples, samples.Frames);
             }
             else if (samples.Channels == 1)
             {
                 Span<float> monoSamples = stackalloc float[samples.Frames];
                 samples.CopyTo(monoSamples);
-                _encoder.Encode(monoSamples, null);
+                _encoder!.Encode(monoSamples, null);
             }
             else
             {
                 Span<float> leftSamples = stackalloc float[samples.Frames];
                 Span<float> rightSamples = stackalloc float[samples.Frames];
                 samples.CopyTo(leftSamples, rightSamples);
-                _encoder.Encode(leftSamples, rightSamples);
+                _encoder!.Encode(leftSamples, rightSamples);
             }
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void Finish()
         {
-            _encoder.Flush();
+            _encoder!.Flush();
             _encoder.UpdateLameTag();
 
             // The pre-allocation was based on estimates
-            _stream.SetLength(_stream.Position);
+            _stream!.SetLength(_stream.Position);
         }
 
         public void Dispose()
@@ -164,16 +160,15 @@ namespace AudioWorks.Extensions.Lame
         }
 
         void InitializeReplayGainFilter(
-            [NotNull] AudioInfo info,
-            [NotNull] AudioMetadata metadata,
-            [NotNull] SettingDictionary settings)
+            AudioInfo info,
+            AudioMetadata metadata,
+            SettingDictionary settings)
         {
             var filterFactory =
                 ExtensionProvider.GetFactories<IAudioFilter>("Name", "ReplayGain").FirstOrDefault();
             if (filterFactory == null) return;
 
             _replayGainExport = filterFactory.CreateExport();
-            // ReSharper disable once PossibleNullReferenceException
             _replayGainExport.Value.Initialize(info, metadata, settings);
         }
     }

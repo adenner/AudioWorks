@@ -17,37 +17,28 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     sealed class MetadataChain : IDisposable
     {
-        [NotNull] readonly MetadataChainHandle _handle = SafeNativeMethods.MetadataChainNew();
+        readonly MetadataChainHandle _handle = SafeNativeMethods.MetadataChainNew();
         readonly IoCallbacks _callbacks;
 
-        internal MetadataChain([NotNull] Stream stream)
+        internal MetadataChain(Stream stream)
         {
             _callbacks = InitializeCallbacks(stream);
         }
 
-        internal void Read()
-        {
-            SafeNativeMethods.MetadataChainReadWithCallbacks(_handle, IntPtr.Zero, _callbacks);
-        }
+        internal void Read() => SafeNativeMethods.MetadataChainReadWithCallbacks(_handle, IntPtr.Zero, _callbacks);
 
-        internal bool CheckIfTempFileNeeded(bool usePadding)
-        {
-            return SafeNativeMethods.MetadataChainCheckIfTempFileNeeded(_handle, usePadding);
-        }
+        internal bool CheckIfTempFileNeeded(bool usePadding) =>
+            SafeNativeMethods.MetadataChainCheckIfTempFileNeeded(_handle, usePadding);
 
-        internal void Write(bool usePadding)
-        {
+        internal void Write(bool usePadding) =>
             SafeNativeMethods.MetadataChainWriteWithCallbacks(_handle, usePadding, IntPtr.Zero, _callbacks);
-        }
 
-        internal void WriteWithTempFile(bool usePadding, [NotNull] Stream tempStream)
-        {
+        internal void WriteWithTempFile(bool usePadding, Stream tempStream) =>
             SafeNativeMethods.MetadataChainWriteWithCallbacksAndTempFile(
                 _handle,
                 usePadding,
@@ -55,20 +46,12 @@ namespace AudioWorks.Extensions.Flac
                 _callbacks,
                 IntPtr.Zero,
                 InitializeCallbacks(tempStream));
-        }
 
-        [NotNull]
-        internal MetadataIterator GetIterator()
-        {
-            return new MetadataIterator(_handle);
-        }
+        internal MetadataIterator GetIterator() => new MetadataIterator(_handle);
 
-        public void Dispose()
-        {
-            _handle.Dispose();
-        }
+        public void Dispose() => _handle.Dispose();
 
-        static IoCallbacks InitializeCallbacks([NotNull] Stream stream)
+        static IoCallbacks InitializeCallbacks(Stream stream)
         {
             return new IoCallbacks
             {

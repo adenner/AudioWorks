@@ -22,7 +22,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Opus
 {
@@ -35,8 +34,8 @@ namespace AudioWorks.Extensions.Opus
         {
             using (var tempStream = new TempFileStream())
             {
-                OggStream inputOggStream = null;
-                OggStream outputOggStream = null;
+                OggStream? inputOggStream = null;
+                OggStream? outputOggStream = null;
 #if NETSTANDARD2_0
                 var buffer = ArrayPool<byte>.Shared.Rent(4096);
 #else
@@ -141,7 +140,7 @@ namespace AudioWorks.Extensions.Opus
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static void WritePage(in OggPage page, [NotNull] Stream stream)
+        static void WritePage(in OggPage page, Stream stream)
         {
 #if WINDOWS
             WriteFromUnmanaged(page.Header, page.HeaderLength, stream);
@@ -153,7 +152,7 @@ namespace AudioWorks.Extensions.Opus
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static unsafe void WriteFromUnmanaged(IntPtr location, int length, [NotNull] Stream stream)
+        static unsafe void WriteFromUnmanaged(IntPtr location, int length, Stream stream)
         {
 #if NETSTANDARD2_0
             var buffer = ArrayPool<byte>.Shared.Rent(4096);

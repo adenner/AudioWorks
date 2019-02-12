@@ -17,25 +17,24 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     sealed class AudioStreamDecoder : AudioInfoStreamDecoder
     {
-        internal SampleBuffer Samples { get; set; }
+        internal SampleBuffer? Samples { get; set; }
 
-        internal AudioStreamDecoder([NotNull] Stream stream)
+        internal AudioStreamDecoder(Stream stream)
             : base(stream)
         {
         }
 
-        internal bool ProcessSingle()
-        {
-            return SafeNativeMethods.StreamDecoderProcessSingle(Handle);
-        }
+        internal bool ProcessSingle() => SafeNativeMethods.StreamDecoderProcessSingle(Handle);
 
-        protected override unsafe DecoderWriteStatus WriteCallback(IntPtr handle, ref Frame frame, IntPtr buffer,
+        protected override unsafe DecoderWriteStatus WriteCallback(
+            IntPtr handle,
+            ref Frame frame,
+            IntPtr buffer,
             IntPtr userData)
         {
             if (frame.Header.Channels == 1)

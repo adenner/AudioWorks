@@ -20,7 +20,6 @@ using System.Buffers;
 using System.IO;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Wave
 {
@@ -29,8 +28,8 @@ namespace AudioWorks.Extensions.Wave
     {
         const int _defaultFrameCount = 4096;
 
-        [CanBeNull] AudioInfo _audioInfo;
-        [CanBeNull] RiffReader _reader;
+        AudioInfo? _audioInfo;
+        RiffReader? _reader;
         int _bitsPerSample;
         int _bytesPerSample;
         long _framesRemaining;
@@ -52,13 +51,11 @@ namespace AudioWorks.Extensions.Wave
         public SampleBuffer DecodeSamples()
         {
 #if NETSTANDARD2_0
-            // ReSharper disable once PossibleNullReferenceException
             var length = _audioInfo.Channels * (int) Math.Min(_framesRemaining, _defaultFrameCount) * _bytesPerSample;
 
             var buffer = ArrayPool<byte>.Shared.Rent(length);
             try
             {
-                // ReSharper disable once PossibleNullReferenceException
                 if (_reader.Read(buffer, 0, length) < length)
                     throw new AudioInvalidException("Stream is unexpectedly truncated.");
 
@@ -74,12 +71,10 @@ namespace AudioWorks.Extensions.Wave
                 ArrayPool<byte>.Shared.Return(buffer);
             }
 #else
-            // ReSharper disable once PossibleNullReferenceException
-            Span<byte> buffer = stackalloc byte[_audioInfo.Channels *
+            Span<byte> buffer = stackalloc byte[_audioInfo!.Channels *
                                                 (int) Math.Min(_framesRemaining, _defaultFrameCount)
                                                 * _bytesPerSample];
-            // ReSharper disable once PossibleNullReferenceException
-            if (_reader.Read(buffer) < buffer.Length)
+            if (_reader!.Read(buffer) < buffer.Length)
                 throw new AudioInvalidException("Stream is unexpectedly truncated.");
 
             var result = new SampleBuffer(buffer, _audioInfo.Channels, _bitsPerSample);
@@ -88,9 +83,6 @@ namespace AudioWorks.Extensions.Wave
 #endif
         }
 
-        public void Dispose()
-        {
-            _reader?.Dispose();
-        }
+        public void Dispose() => _reader?.Dispose();
     }
 }

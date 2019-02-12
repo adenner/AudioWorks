@@ -14,7 +14,6 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions.Internal;
 
@@ -22,17 +21,21 @@ namespace AudioWorks.TestUtilities
 {
     public sealed class XunitLogger : ILogger
     {
-        [NotNull] readonly XunitLoggerProvider _provider;
-        [CanBeNull] readonly string _categoryName;
+        readonly XunitLoggerProvider _provider;
+        readonly string? _categoryName;
 
-        public XunitLogger([NotNull] XunitLoggerProvider provider, [CanBeNull] string categoryName)
+        public XunitLogger(XunitLoggerProvider provider, string? categoryName)
         {
             _provider = provider;
             _categoryName = categoryName;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, [CanBeNull] TState state,
-            [CanBeNull] Exception exception, [NotNull] Func<TState, Exception, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter)
         {
             if (!IsEnabled(logLevel)) return;
 
@@ -56,7 +59,6 @@ namespace AudioWorks.TestUtilities
 
         public bool IsEnabled(LogLevel logLevel) => logLevel >= _provider.MinLogLevel;
 
-        [NotNull]
-        public IDisposable BeginScope<TState>([CanBeNull] TState state) => NullScope.Instance;
+        public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
     }
 }

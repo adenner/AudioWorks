@@ -26,7 +26,6 @@ using AudioWorks.Common;
 #endif
 using AudioWorks.Extensibility;
 #if WINDOWS
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 #endif
 
@@ -73,7 +72,7 @@ namespace AudioWorks.Extensions.Apple
         }
 #if WINDOWS
 
-        static void AddUnmanagedLibraryPath([NotNull] string libPath)
+        static void AddUnmanagedLibraryPath(string libPath)
         {
             ((ExtensionLoadContext) AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly()))
                 .AddUnmanagedLibraryPath(libPath);
