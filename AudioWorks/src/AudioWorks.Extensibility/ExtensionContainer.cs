@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace AudioWorks.Extensibility
@@ -30,7 +29,6 @@ namespace AudioWorks.Extensibility
 
         internal static ExtensionContainer<T> Instance => _lazyInstance.Value;
 
-        [UsedImplicitly]
         [ImportMany]
         internal IEnumerable<ExportFactory<T, IDictionary<string, object>>> Factories { get; private set; }
 

@@ -23,14 +23,12 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Api
 {
     /// <summary>
     /// Encodes one or more audio files in a new audio format.
     /// </summary>
-    [PublicAPI]
     public sealed class AudioFileEncoder
     {
         readonly EncodedPath? _encodedFileName;
@@ -66,7 +64,6 @@ namespace AudioWorks.Api
         /// Gets the settings.
         /// </summary>
         /// <value>The settings.</value>
-        [NotNull]
         public SettingDictionary Settings { get; }
 
         /// <summary>
@@ -80,10 +77,10 @@ namespace AudioWorks.Api
         /// <exception cref="ArgumentException">Thrown if <see paramref="name"/> is not the name of an available encoder.
         /// </exception>
         public AudioFileEncoder(
-            [NotNull] string name,
-            [CanBeNull] string? encodedDirectoryName = null,
-            [CanBeNull] string? encodedFileName = null,
-            [CanBeNull] SettingDictionary? settings = null)
+            string name,
+            string? encodedDirectoryName = null,
+            string? encodedFileName = null,
+            SettingDictionary? settings = null)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -107,9 +104,7 @@ namespace AudioWorks.Api
         /// <returns>A new audio file.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
-        [NotNull, ItemNotNull]
-        public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            [NotNull, ItemNotNull] IEnumerable<ITaggedAudioFile> audioFiles)
+        public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(IEnumerable<ITaggedAudioFile> audioFiles)
         {
             if (audioFiles == null) throw new ArgumentNullException(nameof(audioFiles));
 
@@ -125,11 +120,10 @@ namespace AudioWorks.Api
         /// <returns>A new audio file.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
-        [NotNull, ItemNotNull]
         public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            [NotNull, ItemNotNull] IEnumerable<ITaggedAudioFile> audioFiles,
+            IEnumerable<ITaggedAudioFile> audioFiles,
             CancellationToken cancellationToken,
-            [CanBeNull] IProgress<ProgressToken>? progress = null)
+            IProgress<ProgressToken>? progress = null)
         {
             if (audioFiles == null) throw new ArgumentNullException(nameof(audioFiles));
 
@@ -143,12 +137,8 @@ namespace AudioWorks.Api
         /// <returns>A new audio file.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
-        [NotNull, ItemNotNull]
-        public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            [NotNull, ItemNotNull] params ITaggedAudioFile[] audioFiles)
-        {
-            return await EncodeAsync(null, CancellationToken.None, audioFiles).ConfigureAwait(false);
-        }
+        public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(params ITaggedAudioFile[] audioFiles) =>
+            await EncodeAsync(null, CancellationToken.None, audioFiles).ConfigureAwait(false);
 
         /// <summary>
         /// Encodes the specified audio files.
@@ -158,13 +148,9 @@ namespace AudioWorks.Api
         /// <returns>A new audio file.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
-        [NotNull, ItemNotNull]
         public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            CancellationToken cancellationToken,
-            [NotNull, ItemNotNull] params ITaggedAudioFile[] audioFiles)
-        {
-            return await EncodeAsync(null, cancellationToken, audioFiles).ConfigureAwait(false);
-        }
+            CancellationToken cancellationToken, params ITaggedAudioFile[] audioFiles) =>
+            await EncodeAsync(null, cancellationToken, audioFiles).ConfigureAwait(false);
 
         /// <summary>
         /// Encodes the specified audio files.
@@ -175,11 +161,10 @@ namespace AudioWorks.Api
         /// <returns>A new audio file.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see paramref="audioFiles"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if one or more audio files are null.</exception>
-        [NotNull, ItemNotNull]
         public async Task<IEnumerable<ITaggedAudioFile>> EncodeAsync(
-            [CanBeNull] IProgress<ProgressToken>? progress,
+            IProgress<ProgressToken>? progress,
             CancellationToken cancellationToken,
-            [NotNull, ItemNotNull] params ITaggedAudioFile[] audioFiles)
+            params ITaggedAudioFile[] audioFiles)
         {
             if (audioFiles == null) throw new ArgumentNullException(nameof(audioFiles));
             if (audioFiles.Any(audioFile => audioFile == null))

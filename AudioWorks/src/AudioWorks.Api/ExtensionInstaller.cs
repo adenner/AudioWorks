@@ -21,7 +21,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NuGet.Common;
@@ -261,14 +260,12 @@ namespace AudioWorks.Api
             return true;
         }
 
-        [Pure]
         static string GetOSTag() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? "Windows"
             : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
                 ? "Linux"
                 : "MacOS";
 
-        [Pure]
         static CancellationTokenSource GetCancellationTokenSource() => new CancellationTokenSource(
             ConfigurationManager.Configuration.GetValue("AutomaticExtensionDownloadTimeout", 30) *
             1000);

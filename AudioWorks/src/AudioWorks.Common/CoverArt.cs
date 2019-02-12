@@ -16,14 +16,12 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 
 namespace AudioWorks.Common
 {
     /// <inheritdoc/>
-    [PublicAPI]
     [Serializable]
     public sealed class CoverArt : ICoverArt
     {

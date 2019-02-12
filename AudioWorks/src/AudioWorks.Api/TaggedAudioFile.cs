@@ -17,14 +17,12 @@ using System;
 using System.IO;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using IO = System.IO;
 
 namespace AudioWorks.Api
 {
     /// <inheritdoc cref="ITaggedAudioFile"/>
-    [PublicAPI]
     [Serializable]
     public sealed class TaggedAudioFile : AudioFile, ITaggedAudioFile
     {
@@ -43,7 +41,7 @@ namespace AudioWorks.Api
         /// <param name="path">The fully-qualified path to the file.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="path"/> is null or empty.</exception>
         /// <exception cref="FileNotFoundException">Thrown if <paramref name="path"/> does not exist.</exception>
-        public TaggedAudioFile([NotNull] string path)
+        public TaggedAudioFile(string path)
             : base(path)
         {
         }

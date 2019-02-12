@@ -21,7 +21,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace AudioWorks.Extensibility
@@ -42,7 +41,7 @@ namespace AudioWorks.Extensibility
         /// </summary>
         /// <param name="path">The path.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="path"/> is null.</exception>
-        public void AddUnmanagedLibraryPath([NotNull] string path)
+        public void AddUnmanagedLibraryPath(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
 
@@ -50,14 +49,13 @@ namespace AudioWorks.Extensibility
         }
 
         /// <inheritdoc/>
-        [ContractAnnotation("=> null")]
-        protected override Assembly? Load([CanBeNull] AssemblyName? assemblyName)
+        protected override Assembly? Load(AssemblyName? assemblyName)
         {
             return null;
         }
 
         /// <inheritdoc/>
-        protected override IntPtr LoadUnmanagedDll([NotNull] string unmanagedDllName)
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             var fullPath = _unmanagedLibraryPaths
                 .SelectMany(path =>

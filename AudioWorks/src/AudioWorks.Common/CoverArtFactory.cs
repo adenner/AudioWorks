@@ -19,7 +19,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using JetBrains.Annotations;
 using SixLabors.ImageSharp;
 
 namespace AudioWorks.Common
@@ -44,7 +43,6 @@ namespace AudioWorks.Common
         /// <exception cref="ImageUnsupportedException">Thrown if <paramref name="data"/> is not in a supported image
         /// format.</exception>
         /// <exception cref="ImageInvalidException">Thrown if <paramref name="data"/> is not a valid image.</exception>
-        [NotNull]
         public static unsafe ICoverArt GetOrCreate(ReadOnlySpan<byte> data)
         {
             fixed (byte* dataAddress = data)
@@ -66,8 +64,7 @@ namespace AudioWorks.Common
         /// format.</exception>
         /// <exception cref="ImageInvalidException">Thrown if <paramref name="path"/> is not a valid image file.
         /// </exception>
-        [NotNull]
-        public static ICoverArt GetOrCreate([NotNull] string path)
+        public static ICoverArt GetOrCreate(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path), "Value cannot be null or empty.");
@@ -88,8 +85,7 @@ namespace AudioWorks.Common
         /// <param name="coverArt">The cover art.</param>
         /// <returns>A lossy copy of an <see cref="ICoverArt"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="coverArt"/> is null.</exception>
-        [NotNull]
-        public static ICoverArt ConvertToLossy([NotNull] ICoverArt coverArt)
+        public static ICoverArt ConvertToLossy(ICoverArt coverArt)
         {
             if (coverArt == null) throw new ArgumentNullException(nameof(coverArt));
 
@@ -127,7 +123,6 @@ namespace AudioWorks.Common
             }
         }
 
-        [Pure]
         [SuppressMessage("Microsoft.Security", "CA5351:Do not use insecure cryptographic algorithm MD5.",
             Justification = "Usage is not security critical")]
         static string GetHash(Stream stream)

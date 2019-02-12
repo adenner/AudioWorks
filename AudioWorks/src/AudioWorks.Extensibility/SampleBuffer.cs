@@ -16,7 +16,6 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensibility
 {

@@ -15,7 +15,6 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Api
 {
@@ -29,14 +28,12 @@ namespace AudioWorks.Api
         /// Gets the name of the encoder.
         /// </summary>
         /// <value>The name.</value>
-        [NotNull]
         public string Name { get; }
 
         /// <summary>
         /// Gets a description of the encoder.
         /// </summary>
         /// <value>The description.</value>
-        [NotNull]
         public string Description { get; }
 
         internal AudioEncoderInfo(IDictionary<string, object> metadata)
