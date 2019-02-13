@@ -23,7 +23,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace AudioWorks.Extensions.Opus
@@ -111,14 +110,13 @@ namespace AudioWorks.Extensions.Opus
             return true;
         }
 
-        static void AddUnmanagedLibraryPath([NotNull] string libPath)
+        static void AddUnmanagedLibraryPath(string libPath)
         {
             ((ExtensionLoadContext) AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly()))
                 .AddUnmanagedLibraryPath(libPath);
         }
 #if LINUX
 
-        [NotNull]
         public static string GetRelease()
         {
             try
@@ -144,8 +142,7 @@ namespace AudioWorks.Extensions.Opus
             }
         }
 
-        [Pure]
-        static bool VerifyLibrary([NotNull] string libraryName)
+        static bool VerifyLibrary(string libraryName)
         {
             var process = new Process
             {
@@ -163,7 +160,6 @@ namespace AudioWorks.Extensions.Opus
         }
 #elif OSX
 
-        [NotNull]
         public static string GetOSVersion()
         {
             var process = new Process

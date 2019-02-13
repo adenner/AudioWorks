@@ -14,12 +14,10 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System.Runtime.ConstrainedExecution;
-using JetBrains.Annotations;
 using Microsoft.Win32.SafeHandles;
 
 namespace AudioWorks.Extensions.Opus
 {
-    [UsedImplicitly]
     sealed class OpusEncoderHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         internal OpusEncoderHandle()

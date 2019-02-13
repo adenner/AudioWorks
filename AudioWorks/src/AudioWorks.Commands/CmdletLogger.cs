@@ -16,23 +16,26 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Collections.Concurrent;
 using System.Management.Automation;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions.Internal;
 
 namespace AudioWorks.Commands
 {
-    [UsedImplicitly]
     sealed class CmdletLogger : ILogger
     {
-        [NotNull] readonly ConcurrentQueue<object> _messageQueue;
+        readonly ConcurrentQueue<object> _messageQueue;
 
-        internal CmdletLogger([NotNull] ConcurrentQueue<object> messageQueue)
+        internal CmdletLogger(ConcurrentQueue<object> messageQueue)
         {
             _messageQueue = messageQueue;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, [CanBeNull] TState state, [CanBeNull] Exception exception, [NotNull] Func<TState, Exception, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter)
         {
             var message = formatter(state, exception);
 
@@ -65,7 +68,6 @@ namespace AudioWorks.Commands
             }
         }
 
-        [NotNull]
-        public IDisposable BeginScope<TState>([CanBeNull] TState state) => NullScope.Instance;
+        public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
     }
 }

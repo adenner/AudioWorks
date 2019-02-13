@@ -20,18 +20,17 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Apple
 {
     [AudioEncoderExport("ALAC", "Apple Lossless Audio Codec")]
     public sealed class AlacAudioEncoder : IAudioEncoder, IDisposable
     {
-        [CanBeNull] Stream _stream;
-        [CanBeNull] AudioMetadata _metadata;
-        [CanBeNull] SettingDictionary _settings;
+        Stream? _stream;
+        AudioMetadata? _metadata;
+        SettingDictionary? _settings;
         int _bitsPerSample;
-        [CanBeNull] ExtendedAudioFile _audioFile;
+        ExtendedAudioFile? _audioFile;
 
         public SettingInfoDictionary SettingInfo
         {
@@ -80,37 +79,29 @@ namespace AudioWorks.Extensions.Apple
             bufferList.Buffers[0].DataByteSize = (uint) (buffer.Length * Marshal.SizeOf<int>());
             bufferList.Buffers[0].Data = new IntPtr(Unsafe.AsPointer(ref MemoryMarshal.GetReference(buffer)));
 
-            // ReSharper disable once PossibleNullReferenceException
-            var status = _audioFile.Write(bufferList, (uint) samples.Frames);
+            var status = _audioFile!.Write(bufferList, (uint) samples.Frames);
             if (status != ExtendedAudioFileStatus.Ok)
                 throw new AudioEncodingException($"Apple Lossless encoder encountered error '{status}'.");
         }
 
         public void Finish()
         {
-            // ReSharper disable once PossibleNullReferenceException
-            _audioFile.Dispose();
+            _audioFile!.Dispose();
             _audioFile = null;
 
-            // ReSharper disable once PossibleNullReferenceException
-            _stream.Position = 0;
+            _stream!.Position = 0;
 
             // Call the external MP4 encoder for writing iTunes-compatible atoms
             var metadataEncoderFactory =
                 ExtensionProvider.GetFactories<IAudioMetadataEncoder>("Extension", FileExtension).FirstOrDefault();
             if (metadataEncoderFactory == null) return;
             using (var export = metadataEncoderFactory.CreateExport())
-                // ReSharper disable twice AssignNullToNotNullAttribute
-                export.Value.WriteMetadata(_stream, _metadata, _settings);
+                export.Value.WriteMetadata(_stream, _metadata!, _settings!);
         }
 
-        public void Dispose()
-        {
-            _audioFile?.Dispose();
-        }
+        public void Dispose() => _audioFile?.Dispose();
 
-        [Pure]
-        static AudioStreamBasicDescription GetInputDescription([NotNull] AudioInfo info)
+        static AudioStreamBasicDescription GetInputDescription(AudioInfo info)
         {
             return new AudioStreamBasicDescription
             {
@@ -125,7 +116,6 @@ namespace AudioWorks.Extensions.Apple
             };
         }
 
-        [Pure]
         static AudioStreamBasicDescription GetOutputDescription(AudioStreamBasicDescription inputDescription)
         {
             var result = new AudioStreamBasicDescription

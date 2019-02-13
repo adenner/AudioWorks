@@ -13,58 +13,56 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using JetBrains.Annotations;
-
 namespace AudioWorks.Extensions.Flac
 {
     enum MetadataType
     {
         StreamInfo,
         Padding,
-        [UsedImplicitly] Application,
+        Application,
         SeekTable,
         VorbisComment,
-        [UsedImplicitly] CueSheet,
+        CueSheet,
         Picture
     }
 
     enum PictureType : uint
     {
         Other,
-        [UsedImplicitly] PngIcon,
-        [UsedImplicitly] OtherIcon,
+        PngIcon,
+        OtherIcon,
         CoverFront,
-        [UsedImplicitly] CoverBack,
-        [UsedImplicitly] Leaflet,
-        [UsedImplicitly] Media,
-        [UsedImplicitly] LeadArtist,
-        [UsedImplicitly] Artist,
-        [UsedImplicitly] Conductor,
-        [UsedImplicitly] Band,
-        [UsedImplicitly] Composer,
-        [UsedImplicitly] Lyricist,
-        [UsedImplicitly] Location,
-        [UsedImplicitly] DuringRecording,
-        [UsedImplicitly] DuringPerformance,
-        [UsedImplicitly] ScreenCapture,
-        [UsedImplicitly] BrightFish,
-        [UsedImplicitly] Illustration,
-        [UsedImplicitly] ArtistLogo,
-        [UsedImplicitly] PublisherLogo
+        CoverBack,
+        Leaflet,
+        Media,
+        LeadArtist,
+        Artist,
+        Conductor,
+        Band,
+        Composer,
+        Lyricist,
+        Location,
+        DuringRecording,
+        DuringPerformance,
+        ScreenCapture,
+        BrightFish,
+        Illustration,
+        ArtistLogo,
+        PublisherLogo
     }
 
     enum DecoderState
     {
-        [UsedImplicitly] SearchForMetadata,
-        [UsedImplicitly] ReadMetadata,
-        [UsedImplicitly] SearchForFrameSync,
-        [UsedImplicitly] ReadFrame,
-        [UsedImplicitly] EndOfStream,
-        [UsedImplicitly] OggError,
-        [UsedImplicitly] SeekError,
-        [UsedImplicitly] Aborted,
-        [UsedImplicitly] MemoryAllocationError,
-        [UsedImplicitly] Uninitialized
+        SearchForMetadata,
+        ReadMetadata,
+        SearchForFrameSync,
+        ReadFrame,
+        EndOfStream,
+        OggError,
+        SeekError,
+        Aborted,
+        MemoryAllocationError,
+        Uninitialized
     }
 
     enum DecoderReadStatus
@@ -95,10 +93,10 @@ namespace AudioWorks.Extensions.Flac
 
     enum DecoderErrorStatus
     {
-        [UsedImplicitly] LostSync,
-        [UsedImplicitly] BadHeader,
-        [UsedImplicitly] FrameCrcMismatch,
-        [UsedImplicitly] UnparseableStream
+        LostSync,
+        BadHeader,
+        FrameCrcMismatch,
+        UnparseableStream
     }
 
     enum EncoderWriteStatus
@@ -118,14 +116,14 @@ namespace AudioWorks.Extensions.Flac
 
     enum EncoderState
     {
-        [UsedImplicitly] Ok,
-        [UsedImplicitly] Uninitialized,
-        [UsedImplicitly] OggError,
-        [UsedImplicitly] DecoderError,
-        [UsedImplicitly] AudioDataMismatch,
-        [UsedImplicitly] ClientError,
-        [UsedImplicitly] IoError,
-        [UsedImplicitly] FramingError,
-        [UsedImplicitly] MemoryAllocationError
+        Ok,
+        Uninitialized,
+        OggError,
+        DecoderError,
+        AudioDataMismatch,
+        ClientError,
+        IoError,
+        FramingError,
+        MemoryAllocationError
     }
 }

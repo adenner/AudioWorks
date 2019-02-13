@@ -17,13 +17,12 @@ using System;
 using AudioWorks.Common;
 using Id3Lib;
 using Id3Lib.Frames;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Id3
 {
     sealed class TagModelToMetadataAdapter : AudioMetadata
     {
-        internal TagModelToMetadataAdapter([NotNull] TagModel tagModel)
+        internal TagModelToMetadataAdapter(TagModel tagModel)
         {
             foreach (var frame in tagModel)
                 switch (frame)

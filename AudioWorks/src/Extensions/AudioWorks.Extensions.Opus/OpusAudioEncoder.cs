@@ -18,15 +18,14 @@ using System.Globalization;
 using System.IO;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Opus
 {
     [AudioEncoderExport("Opus", "Opus")]
     public sealed class OpusAudioEncoder : IAudioEncoder, IDisposable
     {
-        [CanBeNull] MetadataToOpusCommentAdapter _comments;
-        [CanBeNull] Encoder _encoder;
+        MetadataToOpusCommentAdapter? _comments;
+        Encoder? _encoder;
 
         public SettingInfoDictionary SettingInfo => new SettingInfoDictionary
         {
@@ -103,15 +102,10 @@ namespace AudioWorks.Extensions.Opus
             Span<float> buffer = stackalloc float[samples.Channels * samples.Frames];
             samples.CopyToInterleaved(buffer);
 
-            // ReSharper disable once PossibleNullReferenceException
-            _encoder.Write(buffer);
+            _encoder?.Write(buffer);
         }
 
-        public void Finish()
-        {
-            // ReSharper disable once PossibleNullReferenceException
-            _encoder.Drain();
-        }
+        public void Finish() => _encoder?.Drain();
 
         public void Dispose()
         {
@@ -119,8 +113,7 @@ namespace AudioWorks.Extensions.Opus
             _comments?.Dispose();
         }
 
-        [Pure]
-        static float CalculateScale([CanBeNull] string gain, [CanBeNull] string peak)
+        static float CalculateScale(string? gain, string? peak)
         {
             return string.IsNullOrEmpty(gain) || string.IsNullOrEmpty(peak)
                 ? 1
@@ -129,8 +122,7 @@ namespace AudioWorks.Extensions.Opus
                     1 / float.Parse(peak, CultureInfo.InvariantCulture));
         }
 
-        [Pure, ContractAnnotation("gain:null => null; gain:notnull => notnull")]
-        static string CalculateGain([CanBeNull] string gain, float scale)
+        static string CalculateGain(string? gain, float scale)
         {
             return string.IsNullOrEmpty(gain)
                 ? string.Empty

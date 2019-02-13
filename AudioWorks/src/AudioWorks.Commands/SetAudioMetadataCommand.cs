@@ -16,103 +16,89 @@ You should have received a copy of the GNU Affero General Public License along w
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Commands
 {
-    [PublicAPI]
     [Cmdlet(VerbsCommon.Set, "AudioMetadata"), OutputType(typeof(ITaggedAudioFile))]
     public sealed class SetAudioMetadataCommand : LoggingCmdlet
     {
-        [NotNull, SuppressMessage("ReSharper", "NotNullMemberIsNotInitialized")]
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        public ITaggedAudioFile AudioFile { get; set; }
+        public ITaggedAudioFile? AudioFile { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Artist { get; set; }
+        public string? Artist { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Album { get; set; }
+        public string? Album { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string AlbumArtist { get; set; }
+        public string? AlbumArtist { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Composer { get; set; }
+        public string? Composer { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Genre { get; set; }
+        public string? Genre { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Day { get; set; }
+        public string? Day { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Month { get; set; }
+        public string? Month { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string Year { get; set; }
+        public string? Year { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string TrackNumber { get; set; }
+        public string? TrackNumber { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public string TrackCount { get; set; }
+        public string? TrackCount { get; set; }
 
-        [CanBeNull]
         [Parameter, ValidateNotNull]
-        public ICoverArt CoverArt { get; set; }
+        public ICoverArt? CoverArt { get; set; }
 
         [Parameter]
         public SwitchParameter PassThru { get; set; }
 
         protected override void ProcessRecord()
         {
+            var metadata = AudioFile!.Metadata;
+
             try
             {
                 if (Title != null)
-                    AudioFile.Metadata.Title = Title;
+                    metadata.Title = Title;
                 if (Artist != null)
-                    AudioFile.Metadata.Artist = Artist;
+                    metadata.Artist = Artist;
                 if (Album != null)
-                    AudioFile.Metadata.Album = Album;
+                    metadata.Album = Album;
                 if (AlbumArtist != null)
-                    AudioFile.Metadata.AlbumArtist = AlbumArtist;
+                    metadata.AlbumArtist = AlbumArtist;
                 if (Composer != null)
-                    AudioFile.Metadata.Composer = Composer;
+                    metadata.Composer = Composer;
                 if (Genre != null)
-                    AudioFile.Metadata.Genre = Genre;
+                    metadata.Genre = Genre;
                 if (Comment != null)
-                    AudioFile.Metadata.Comment = Comment;
+                    metadata.Comment = Comment;
                 if (Day != null)
-                    AudioFile.Metadata.Day = Day;
+                    metadata.Day = Day;
                 if (Month != null)
-                    AudioFile.Metadata.Month = Month;
+                    metadata.Month = Month;
                 if (Year != null)
-                    AudioFile.Metadata.Year = Year;
+                    metadata.Year = Year;
                 if (TrackNumber != null)
-                    AudioFile.Metadata.TrackNumber = TrackNumber;
+                    metadata.TrackNumber = TrackNumber;
                 if (TrackCount != null)
-                    AudioFile.Metadata.TrackCount = TrackCount;
+                    metadata.TrackCount = TrackCount;
                 if (CoverArt != null)
-                    AudioFile.Metadata.CoverArt = CoverArt;
+                    metadata.CoverArt = CoverArt;
             }
             catch (AudioMetadataInvalidException e)
             {

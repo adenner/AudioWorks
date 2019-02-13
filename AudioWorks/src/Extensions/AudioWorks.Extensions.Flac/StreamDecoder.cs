@@ -16,27 +16,25 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Flac
 {
     abstract class StreamDecoder : IDisposable
     {
-        [NotNull] readonly NativeCallbacks.StreamDecoderReadCallback _readCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderSeekCallback _seekCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderTellCallback _tellCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderLengthCallback _lengthCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderEofCallback _eofCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderWriteCallback _writeCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderMetadataCallback _metadataCallback;
-        [NotNull] readonly NativeCallbacks.StreamDecoderErrorCallback _errorCallback;
-        [NotNull] readonly Stream _stream;
+        readonly NativeCallbacks.StreamDecoderReadCallback _readCallback;
+        readonly NativeCallbacks.StreamDecoderSeekCallback _seekCallback;
+        readonly NativeCallbacks.StreamDecoderTellCallback _tellCallback;
+        readonly NativeCallbacks.StreamDecoderLengthCallback _lengthCallback;
+        readonly NativeCallbacks.StreamDecoderEofCallback _eofCallback;
+        readonly NativeCallbacks.StreamDecoderWriteCallback _writeCallback;
+        readonly NativeCallbacks.StreamDecoderMetadataCallback _metadataCallback;
+        readonly NativeCallbacks.StreamDecoderErrorCallback _errorCallback;
+        readonly Stream _stream;
         readonly long _streamLength;
 
-        [NotNull]
         protected StreamDecoderHandle Handle { get; } = SafeNativeMethods.StreamDecoderNew();
 
-        internal StreamDecoder([NotNull] Stream stream)
+        internal StreamDecoder(Stream stream)
         {
             // Need a reference to the callbacks for the lifetime of the decoder
             _readCallback = ReadCallback;
@@ -54,9 +52,8 @@ namespace AudioWorks.Extensions.Flac
 
         [SuppressMessage("Performance", "CA1806:Do not ignore method results",
             Justification = "Native method is always expected to return 0")]
-        internal void Initialize()
-        {
-            SafeNativeMethods.StreamDecoderInitStream(Handle,
+        internal void Initialize() => SafeNativeMethods.StreamDecoderInitStream(
+                Handle,
                 _readCallback,
                 _seekCallback,
                 _tellCallback,
@@ -66,32 +63,18 @@ namespace AudioWorks.Extensions.Flac
                 _metadataCallback,
                 _errorCallback,
                 IntPtr.Zero);
-        }
 
-        internal bool ProcessMetadata()
-        {
-            return SafeNativeMethods.StreamDecoderProcessUntilEndOfMetadata(Handle);
-        }
+        internal bool ProcessMetadata() => SafeNativeMethods.StreamDecoderProcessUntilEndOfMetadata(Handle);
 
-        internal void Finish()
-        {
-            SafeNativeMethods.StreamDecoderFinish(Handle);
-        }
+        internal void Finish() => SafeNativeMethods.StreamDecoderFinish(Handle);
 
-        [Pure]
-        internal DecoderState GetState()
-        {
-            return SafeNativeMethods.StreamDecoderGetState(Handle);
-        }
+        internal DecoderState GetState() => SafeNativeMethods.StreamDecoderGetState(Handle);
 
-        public void Dispose()
-        {
-            Handle.Dispose();
-        }
+        public void Dispose() => Handle.Dispose();
 
         [SuppressMessage("Performance", "CA1801:Review unused parameters",
             Justification = "Part of FLAC API")]
-        DecoderReadStatus ReadCallback(IntPtr handle, [NotNull] byte[] buffer, ref int bytes, IntPtr userData)
+        DecoderReadStatus ReadCallback(IntPtr handle, byte[] buffer, ref int bytes, IntPtr userData)
         {
             bytes = _stream.Read(buffer, 0, bytes);
             return bytes == 0 ? DecoderReadStatus.EndOfStream : DecoderReadStatus.Continue;
@@ -131,11 +114,11 @@ namespace AudioWorks.Extensions.Flac
 
         [SuppressMessage("Performance", "CA1801:Review unused parameters",
             Justification = "Part of FLAC API")]
-        protected virtual DecoderWriteStatus WriteCallback(IntPtr handle, ref Frame frame, IntPtr buffer,
-            IntPtr userData)
-        {
-            return DecoderWriteStatus.Continue;
-        }
+        protected virtual DecoderWriteStatus WriteCallback(
+            IntPtr handle,
+            ref Frame frame,
+            IntPtr buffer,
+            IntPtr userData) => DecoderWriteStatus.Continue;
 
         protected virtual void MetadataCallback(IntPtr handle, IntPtr metadataBlock, IntPtr userData)
         {

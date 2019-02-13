@@ -14,13 +14,12 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.ReplayGain
 {
     enum Ebur128Error
     {
-        [UsedImplicitly] Success
+        Success
     }
 
     [Flags]

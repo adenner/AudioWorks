@@ -17,23 +17,23 @@ using System;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Apple
 {
     sealed class AudioConverter : IDisposable
     {
-        [NotNull] readonly NativeCallbacks.AudioConverterComplexInputCallback _inputCallback;
-        [NotNull] readonly AudioConverterHandle _handle;
-        [NotNull] readonly AudioFile _audioFile;
+        readonly NativeCallbacks.AudioConverterComplexInputCallback _inputCallback;
+        readonly AudioConverterHandle _handle;
+        readonly AudioFile _audioFile;
         long _packetIndex;
-        [CanBeNull] IMemoryOwner<byte> _buffer;
+        IMemoryOwner<byte>? _buffer;
         MemoryHandle _bufferHandle;
         GCHandle _descriptionsHandle;
 
-        internal AudioConverter(ref AudioStreamBasicDescription inputDescription,
+        internal AudioConverter(
+            ref AudioStreamBasicDescription inputDescription,
             ref AudioStreamBasicDescription outputDescription,
-            [NotNull] AudioFile audioFile)
+            AudioFile audioFile)
         {
             _inputCallback = InputCallback;
 
@@ -46,16 +46,17 @@ namespace AudioWorks.Extensions.Apple
         internal void FillBuffer(
             ref uint packetSize,
             ref AudioBufferList outputBuffer,
-            [CanBeNull] AudioStreamPacketDescription[] packetDescriptions)
-        {
-            SafeNativeMethods.AudioConverterFillComplexBuffer(_handle, _inputCallback, IntPtr.Zero,
-                ref packetSize, ref outputBuffer, packetDescriptions);
-        }
+            AudioStreamPacketDescription[]? packetDescriptions) =>
+            SafeNativeMethods.AudioConverterFillComplexBuffer(
+                _handle,
+                _inputCallback,
+                IntPtr.Zero,
+                ref packetSize,
+                ref outputBuffer,
+                packetDescriptions);
 
-        internal void SetProperty(AudioConverterPropertyId propertyId, uint size, IntPtr data)
-        {
+        internal void SetProperty(AudioConverterPropertyId propertyId, uint size, IntPtr data) =>
             SafeNativeMethods.AudioConverterSetProperty(_handle, propertyId, size, data);
-        }
 
         public void Dispose()
         {
@@ -79,7 +80,6 @@ namespace AudioWorks.Extensions.Apple
             {
                 _buffer = MemoryPool<byte>.Shared.Rent((int)
                     (numberPackets * _audioFile.GetProperty<uint>(AudioFilePropertyId.PacketSizeUpperBound)));
-                // ReSharper disable once PossibleNullReferenceException
                 _bufferHandle = _buffer.Memory.Pin();
             }
 

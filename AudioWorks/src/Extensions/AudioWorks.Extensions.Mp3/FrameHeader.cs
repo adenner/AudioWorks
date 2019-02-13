@@ -16,7 +16,6 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Diagnostics.CodeAnalysis;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Mp3
 {
@@ -61,7 +60,6 @@ namespace AudioWorks.Extensions.Mp3
             SideInfoLength = CalculateSideInfoLength(mpegVersion, Channels);
         }
 
-        [Pure]
         static MpegVersion ParseMpegVersion(ReadOnlySpan<byte> data)
         {
             var value = (data[1] >> 3) & 0b00000011;
@@ -81,7 +79,6 @@ namespace AudioWorks.Extensions.Mp3
             }
         }
 
-        [Pure]
         static int ParseBitRate(ReadOnlySpan<byte> data, MpegVersion mpegVersion)
         {
             var column = (data[2] >> 4) & 0b00001111;
@@ -91,7 +88,6 @@ namespace AudioWorks.Extensions.Mp3
             return _bitRateTable[mpegVersion == MpegVersion.One ? 0 : 1, column];
         }
 
-        [Pure]
         static int ParseSampleRate(ReadOnlySpan<byte> data, MpegVersion mpegVersion)
         {
             var column = (data[2] >> 2) & 0b00000011;
@@ -105,13 +101,11 @@ namespace AudioWorks.Extensions.Mp3
                 column];
         }
 
-        [Pure]
         static int ParsePadding(ReadOnlySpan<byte> data)
         {
             return (data[2] >> 1) & 0b00000001;
         }
 
-        [Pure]
         static int ParseChannels(ReadOnlySpan<byte> data)
         {
             switch ((data[3] >> 6) & 0b00000011)
@@ -123,13 +117,11 @@ namespace AudioWorks.Extensions.Mp3
             }
         }
 
-        [Pure]
         static int CalculateSamplesPerFrame(MpegVersion mpegVersion)
         {
             return mpegVersion == MpegVersion.One ? 1152 : 576;
         }
 
-        [Pure]
         static int CalculateSideInfoLength(MpegVersion mpegVersion, int channels)
         {
             if (channels == 1)
@@ -139,7 +131,7 @@ namespace AudioWorks.Extensions.Mp3
 
         enum MpegVersion
         {
-            [UsedImplicitly] TwoPointFive = 0b00000000,
+            TwoPointFive = 0b00000000,
             Two = 0b00000010,
             One = 0b00000011
         }

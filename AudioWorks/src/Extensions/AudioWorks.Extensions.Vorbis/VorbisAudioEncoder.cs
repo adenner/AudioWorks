@@ -24,17 +24,16 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Vorbis
 {
     [AudioEncoderExport("Vorbis", "Ogg Vorbis")]
     public sealed class VorbisAudioEncoder : IAudioEncoder, IDisposable
     {
-        [CanBeNull] Stream _outputStream;
-        [CanBeNull] OggStream _oggStream;
-        [CanBeNull] VorbisEncoder _encoder;
-        [CanBeNull] Export<IAudioFilter> _replayGainExport;
+        Stream? _outputStream;
+        OggStream? _oggStream;
+        VorbisEncoder? _encoder;
+        Export<IAudioFilter>? _replayGainExport;
 
         public SettingInfoDictionary SettingInfo
         {
@@ -101,7 +100,6 @@ namespace AudioWorks.Extensions.Vorbis
             {
                 _outputStream = tempStream;
 
-                // ReSharper disable once PossibleNullReferenceException
                 while (_oggStream.Flush(out var page))
                     WritePage(page);
 
@@ -115,7 +113,6 @@ namespace AudioWorks.Extensions.Vorbis
             _outputStream = stream;
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public unsafe void Submit(SampleBuffer samples)
         {
             if (samples.Frames == 0) return;
@@ -124,7 +121,7 @@ namespace AudioWorks.Extensions.Vorbis
                 samples = _replayGainExport.Value.Process(samples);
 
             // Request an unmanaged buffer for each channel, then copy the samples to them
-            var buffers = new Span<IntPtr>(_encoder.GetBuffer(samples.Frames).ToPointer(), samples.Channels);
+            var buffers = new Span<IntPtr>(_encoder!.GetBuffer(samples.Frames).ToPointer(), samples.Channels);
             if (samples.Channels == 1)
             {
                 var monoBuffer = new Span<float>(buffers[0].ToPointer(), samples.Frames);
@@ -145,8 +142,7 @@ namespace AudioWorks.Extensions.Vorbis
             WriteFrames(0);
 
             // The pre-allocation was based on an estimated bitrate
-            // ReSharper disable once PossibleNullReferenceException
-            _outputStream.SetLength(_outputStream.Position);
+            _outputStream!.SetLength(_outputStream.Position);
         }
 
         public void Dispose()
@@ -156,38 +152,30 @@ namespace AudioWorks.Extensions.Vorbis
             _replayGainExport?.Dispose();
         }
 
-        void InitializeReplayGainFilter(
-            [NotNull] AudioInfo info,
-            [NotNull] AudioMetadata metadata,
-            [NotNull] SettingDictionary settings)
+        void InitializeReplayGainFilter(AudioInfo info, AudioMetadata metadata, SettingDictionary settings)
         {
             var filterFactory =
                 ExtensionProvider.GetFactories<IAudioFilter>("Name", "ReplayGain").FirstOrDefault();
             if (filterFactory == null) return;
 
             _replayGainExport = filterFactory.CreateExport();
-            // ReSharper disable once PossibleNullReferenceException
             _replayGainExport.Value.Initialize(info, metadata, settings);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void WriteFrames(int frames)
         {
-            // ReSharper disable once PossibleNullReferenceException
-            _encoder.Wrote(frames);
+            _encoder!.Wrote(frames);
 
             while (_encoder.BlockOut())
             {
                 _encoder.Analysis(IntPtr.Zero);
                 _encoder.AddBlock();
 
-                // ReSharper disable once PossibleNullReferenceException
                 while (_encoder.FlushPacket(out var packet))
                 {
-                    // ReSharper disable once PossibleNullReferenceException
-                    _oggStream.PacketIn(packet);
+                    _oggStream!.PacketIn(packet);
 
-                    // ReSharper disable once PossibleNullReferenceException
                     while (_oggStream.PageOut(out var page))
                         WritePage(page);
                 }
@@ -220,8 +208,7 @@ namespace AudioWorks.Extensions.Vorbis
                 {
                     var bytesCopied = Math.Min(length - offset, buffer.Length);
                     data.Slice(offset, bytesCopied).CopyTo(buffer);
-                    // ReSharper disable once PossibleNullReferenceException
-                    _outputStream.Write(buffer, 0, bytesCopied);
+                    _outputStream!.Write(buffer, 0, bytesCopied);
                     offset += bytesCopied;
                 }
             }
@@ -230,8 +217,7 @@ namespace AudioWorks.Extensions.Vorbis
                 ArrayPool<byte>.Shared.Return(buffer);
             }
 #else
-            // ReSharper disable once PossibleNullReferenceException
-            _outputStream.Write(new Span<byte>(location.ToPointer(), length));
+            _outputStream!.Write(new Span<byte>(location.ToPointer(), length));
 #endif
         }
     }

@@ -14,7 +14,6 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Common
 {
@@ -22,7 +21,6 @@ namespace AudioWorks.Common
     /// Represents a single track of audio on the filesystem that may or may not contain a metadata "tag".
     /// </summary>
     /// <seealso cref="IAudioFile"/>
-    [PublicAPI]
     public interface ITaggedAudioFile : IAudioFile
     {
         /// <summary>
@@ -30,7 +28,6 @@ namespace AudioWorks.Common
         /// </summary>
         /// <value>The metadata.</value>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is null.</exception>
-        [NotNull]
         AudioMetadata Metadata { get; set; }
 
         /// <summary>
@@ -42,6 +39,6 @@ namespace AudioWorks.Common
         /// Persists the current metadata to disk.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        void SaveMetadata([CanBeNull] SettingDictionary settings = null);
+        void SaveMetadata(SettingDictionary? settings = null);
     }
 }

@@ -17,24 +17,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Mp4
 {
     sealed class Mp4Model
     {
-        [NotNull] readonly Stream _stream;
-        [NotNull] readonly Stack<AtomInfo> _atomInfoStack = new Stack<AtomInfo>();
+        readonly Stream _stream;
+        readonly Stack<AtomInfo> _atomInfoStack = new Stack<AtomInfo>();
 
-        [NotNull]
         internal AtomInfo CurrentAtom => _atomInfoStack.Peek();
 
-        internal Mp4Model([NotNull] Stream stream)
+        internal Mp4Model(Stream stream)
         {
             _stream = stream;
         }
 
-        [NotNull, ItemNotNull]
         internal AtomInfo[] GetChildAtomInfo()
         {
             var result = new List<AtomInfo>();
@@ -67,7 +64,7 @@ namespace AudioWorks.Extensions.Mp4
             return result.ToArray();
         }
 
-        internal bool DescendToAtom([NotNull, ItemNotNull] params string[] hierarchy)
+        internal bool DescendToAtom(params string[] hierarchy)
         {
             Reset();
 
@@ -103,8 +100,7 @@ namespace AudioWorks.Extensions.Mp4
             _atomInfoStack.Clear();
         }
 
-        [NotNull]
-        internal byte[] ReadAtom([NotNull] AtomInfo atom)
+        internal byte[] ReadAtom(AtomInfo atom)
         {
             _stream.Position = atom.Start;
 
@@ -112,7 +108,7 @@ namespace AudioWorks.Extensions.Mp4
                 return reader.ReadBytes((int)atom.Size);
         }
 
-        internal void CopyAtom([NotNull] AtomInfo atom, [NotNull] Stream output)
+        internal void CopyAtom(AtomInfo atom, Stream output)
         {
             _stream.Position = atom.Start;
 
@@ -170,7 +166,7 @@ namespace AudioWorks.Extensions.Mp4
         }
 
         void UpdateTimeStamp(
-            [NotNull, ItemNotNull] string[] hierarchy,
+            string[] hierarchy,
             DateTime? creationTime,
             DateTime? modificationTime)
         {

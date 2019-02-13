@@ -22,34 +22,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using AudioWorks.Api;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Commands
 {
-    [PublicAPI]
     [Cmdlet(VerbsData.Export, "AudioFile"), OutputType(typeof(ITaggedAudioFile))]
     public sealed class ExportAudioFileCommand : LoggingPSCmdlet, IDynamicParameters, IDisposable
     {
-        [NotNull] readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
-        [NotNull, ItemNotNull] readonly List<ITaggedAudioFile> _sourceAudioFiles = new List<ITaggedAudioFile>();
-        [CanBeNull] RuntimeDefinedParameterDictionary _parameters;
+        readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
+        readonly List<ITaggedAudioFile> _sourceAudioFiles = new List<ITaggedAudioFile>();
+        RuntimeDefinedParameterDictionary? _parameters;
 
-        [CanBeNull]
         [Parameter(Mandatory = true, Position = 0)]
         [ArgumentCompleter(typeof(EncoderCompleter))]
-        public string Encoder { get; set; }
+        public string? Encoder { get; set; }
 
-        [CanBeNull]
         [Parameter(Mandatory = true, Position = 1)]
-        public string Path { get; set; }
+        public string? Path { get; set; }
 
-        [CanBeNull]
         [Parameter(Mandatory = true, Position = 2, ValueFromPipeline = true)]
-        public ITaggedAudioFile AudioFile { get; set; }
+        public ITaggedAudioFile? AudioFile { get; set; }
 
-        [CanBeNull]
         [Parameter]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Parameter]
         public SwitchParameter Replace { get; set; }
@@ -59,14 +53,13 @@ namespace AudioWorks.Commands
 
         protected override void ProcessRecord()
         {
-            _sourceAudioFiles.Add(AudioFile);
+            _sourceAudioFiles.Add(AudioFile!);
         }
 
         protected override void EndProcessing()
         {
-            // ReSharper disable once AssignNullToNotNullAttribute
             var encoder = new AudioFileEncoder(
-                Encoder,
+                Encoder!,
                 SessionState.Path.GetUnresolvedProviderPathFromPSPath(Path),
                 Name,
                 SettingAdapter.ParametersToSettings(_parameters))
@@ -104,7 +97,7 @@ namespace AudioWorks.Commands
                     // Send any new log messages to the output queue
                     while (LoggerProvider.TryDequeueMessage(out var logMessage))
                         // ReSharper disable once AccessToDisposedClosure
-                        messageQueue.Add(logMessage);
+                        messageQueue.Add(logMessage!);
                 });
 
                 var encodeTask = encoder.EncodeAsync(_sourceAudioFiles, _cancellationSource.Token, progress);
@@ -124,13 +117,9 @@ namespace AudioWorks.Commands
             }
         }
 
-        protected override void StopProcessing()
-        {
-            _cancellationSource.Cancel();
-        }
+        protected override void StopProcessing() => _cancellationSource.Cancel();
 
-        [CanBeNull]
-        public object GetDynamicParameters()
+        public object? GetDynamicParameters()
         {
             // AudioFile parameter may not be bound yet
             if (Encoder == null) return null;
@@ -139,9 +128,6 @@ namespace AudioWorks.Commands
                 AudioEncoderManager.GetSettingInfo(Encoder));
         }
 
-        public void Dispose()
-        {
-            _cancellationSource.Dispose();
-        }
+        public void Dispose() => _cancellationSource.Dispose();
     }
 }

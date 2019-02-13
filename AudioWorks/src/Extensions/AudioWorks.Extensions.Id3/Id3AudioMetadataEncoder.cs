@@ -20,7 +20,6 @@ using AudioWorks.Common;
 using AudioWorks.Extensibility;
 using Id3Lib;
 using Id3Lib.Exceptions;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Id3
 {
@@ -89,7 +88,7 @@ namespace AudioWorks.Extensions.Id3
                 : tagModel.Header.TagSizeWithHeaderFooter + tagModel.Header.PaddingSize;
         }
 
-        static uint GetExistingTagLength([NotNull] Stream stream)
+        static uint GetExistingTagLength(Stream stream)
         {
             try
             {
@@ -102,7 +101,7 @@ namespace AudioWorks.Extensions.Id3
             }
         }
 
-        static void Overwrite([NotNull] Stream stream, uint existingTagLength, [NotNull] TagModel tagModel)
+        static void Overwrite(Stream stream, uint existingTagLength, TagModel tagModel)
         {
             // Write the new tag over the old one, leaving unused space as padding
             stream.Position = 0;
@@ -110,7 +109,7 @@ namespace AudioWorks.Extensions.Id3
             TagManager.Serialize(tagModel, stream);
         }
 
-        static void FullRewrite([NotNull] Stream stream, uint existingTagLength, [NotNull] TagModel tagModel)
+        static void FullRewrite(Stream stream, uint existingTagLength, TagModel tagModel)
         {
             // Copy the audio to memory, then rewrite the whole stream
             stream.Position = existingTagLength;

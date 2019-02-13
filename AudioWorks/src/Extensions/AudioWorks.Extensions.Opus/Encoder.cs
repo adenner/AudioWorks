@@ -17,28 +17,27 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using AudioWorks.Common;
-using JetBrains.Annotations;
 
 namespace AudioWorks.Extensions.Opus
 {
     sealed class Encoder : IDisposable
     {
-        [NotNull] readonly Stream _realStream;
-        [NotNull] Stream _outputStream;
+        readonly Stream _realStream;
+        Stream _outputStream;
         readonly int _channels;
         readonly int _totalSeconds;
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         readonly OpusEncoderCallbacks _callbacks;
-        [NotNull] readonly OpusEncoderHandle _handle;
+        readonly OpusEncoderHandle _handle;
         int _requestedBitRate;
         bool _headersFlushed;
 
         internal Encoder(
-            [NotNull] Stream stream,
+            Stream stream,
             int sampleRate,
             int channels,
             int totalSeconds,
-            [NotNull] OpusCommentsHandle comments)
+            OpusCommentsHandle comments)
         {
             _realStream = stream;
             _outputStream = new MemoryStream();
