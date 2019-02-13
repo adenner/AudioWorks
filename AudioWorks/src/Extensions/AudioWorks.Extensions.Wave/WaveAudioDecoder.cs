@@ -51,12 +51,12 @@ namespace AudioWorks.Extensions.Wave
         public SampleBuffer DecodeSamples()
         {
 #if NETSTANDARD2_0
-            var length = _audioInfo.Channels * (int) Math.Min(_framesRemaining, _defaultFrameCount) * _bytesPerSample;
+            var length = _audioInfo!.Channels * (int) Math.Min(_framesRemaining, _defaultFrameCount) * _bytesPerSample;
 
             var buffer = ArrayPool<byte>.Shared.Rent(length);
             try
             {
-                if (_reader.Read(buffer, 0, length) < length)
+                if (_reader!.Read(buffer, 0, length) < length)
                     throw new AudioInvalidException("Stream is unexpectedly truncated.");
 
                 var result = new SampleBuffer(
