@@ -27,24 +27,7 @@ namespace AudioWorks.Common
     {
         readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>();
 
-        /// <summary>
-        /// Gets the string value associated with the specified key, if present.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value, or empty string.</param>
-        /// <returns>true, if the value is present in the dictionary. Otherwise, false.</returns>
-        public bool TryGetValue(string key, out string value)
-        {
-            if (TryGetValue(key, out object objectValue) && objectValue is string typedValue)
-            {
-                value = typedValue;
-                return true;
-            }
-
-            value = string.Empty;
-            return false;
-        }
-
+        #nullable disable
         /// <summary>
         /// Gets the value associated with the specified key and of the specified type, if present.
         /// </summary>
@@ -52,7 +35,7 @@ namespace AudioWorks.Common
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <returns>true, if the value is present in the dictionary. Otherwise, false.</returns>
-        public bool TryGetValue<TValue>(string key, out TValue value) where TValue : struct
+        public bool TryGetValue<TValue>(string key, out TValue value)
         {
             if (TryGetValue(key, out object objectValue) && objectValue is TValue typedValue)
             {
@@ -63,6 +46,7 @@ namespace AudioWorks.Common
             value = default;
             return false;
         }
+        #nullable enable
 
         /// <inheritdoc/>
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => _dictionary.GetEnumerator();
