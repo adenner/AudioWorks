@@ -16,16 +16,17 @@ You should have received a copy of the GNU Affero General Public License along w
 using System.Windows;
 using AudioWorks.UI.Views;
 using Prism.Ioc;
-using Prism.Unity;
 
 namespace AudioWorks.UI
 {
-    public partial class App : PrismApplication
+    public partial class App
     {
         protected override Window CreateShell() => Container.Resolve<MainWindow>();
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
+            containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
         }
     }
 }

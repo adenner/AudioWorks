@@ -13,13 +13,12 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-namespace AudioWorks.UI.Views
+using System.Windows;
+
+namespace AudioWorks.UI
 {
-    public partial class MainWindow
+    class WpfAppShutdownService : IAppShutdownService
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        public void Shutdown() => Application.Current.Shutdown();
     }
 }

@@ -13,16 +13,44 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System.Windows;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using AudioWorks.Api;
 using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.ViewModels
 {
+    // ReSharper disable once UnusedMember.Global
     public class MainWindowViewModel : BindableBase
     {
-        public string Title { get; } = "AudioWorks";
+        public ListCollectionView AudioFiles { get; } = new ListCollectionView(new List<TaggedAudioFile>());
 
-        public DelegateCommand ExitCommand { get; } = new DelegateCommand(() => Application.Current.Shutdown());
+        public DelegateCommand SelectFilesCommand { get; }
+
+        public DelegateCommand ExitCommand { get; }
+
+        public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
+        {
+            SelectFilesCommand = new DelegateCommand(async () =>
+            {
+                var newFiles = fileSelectionService.SelectFiles().ToList();
+
+                // Skip files that were added previously
+                foreach (var existingFile in ((List<TaggedAudioFile>) AudioFiles.SourceCollection)
+                    .Select(audioFile => audioFile.Path))
+                    if (newFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
+                        newFiles.Remove(existingFile);
+
+                // Parse the audio files asynchronously
+                foreach (var newAudioFile in await Task.Run(() => newFiles.Select(file => new TaggedAudioFile(file))))
+                    AudioFiles.AddNewItem(newAudioFile);
+            });
+
+            ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
+        }
     }
 }

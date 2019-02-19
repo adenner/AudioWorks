@@ -21,14 +21,34 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="AudioWorks" Height="450" Width="800">
     <Grid>
+
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="9*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontSize="40"/>
-        <Button Content="Exit" Grid.Row="1" FontSize="20" Command="{Binding ExitCommand}"/>
+
+        <Button Content="Browse..." Command="{Binding SelectFilesCommand}"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding AudioFiles}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="ToolTip" Value="{Binding Path}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView AllowsColumnReorder="True">
+                    <GridViewColumn Header="Track #" DisplayMemberBinding="{Binding Metadata.TrackNumber}"/>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Metadata.Title}"/>
+                    <GridViewColumn Header="Artist" DisplayMemberBinding="{Binding Metadata.Artist}"/>
+                    <GridViewColumn Header="Album" DisplayMemberBinding="{Binding Metadata.Album}"/>
+                    <GridViewColumn Header="Year" DisplayMemberBinding="{Binding Metadata.Year}"/>
+                    <GridViewColumn Header="Genre" DisplayMemberBinding="{Binding Metadata.Genre}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Exit" Grid.Row="2" Command="{Binding ExitCommand}"/>
+
     </Grid>
 </Window>
