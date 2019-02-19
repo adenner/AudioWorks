@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.Commands", "src\AudioWorks.Commands\AudioWorks.Commands.csproj", "{53605AC7-B464-478F-ABA4-EBE6CB8BC968}"
 EndProject
@@ -184,6 +184,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.TestUtilities", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.Extensions.Opus", "src\Extensions\AudioWorks.Extensions.Opus\AudioWorks.Extensions.Opus.csproj", "{F5BEBB65-46E4-4599-AD7C-08D7E20160BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioWorks.UI", "src\AudioWorks.UI\AudioWorks.UI.csproj", "{27080BBD-69DC-4F16-85AA-474CD6A87E22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,6 +268,10 @@ Global
 		{F5BEBB65-46E4-4599-AD7C-08D7E20160BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5BEBB65-46E4-4599-AD7C-08D7E20160BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5BEBB65-46E4-4599-AD7C-08D7E20160BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27080BBD-69DC-4F16-85AA-474CD6A87E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27080BBD-69DC-4F16-85AA-474CD6A87E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27080BBD-69DC-4F16-85AA-474CD6A87E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27080BBD-69DC-4F16-85AA-474CD6A87E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
