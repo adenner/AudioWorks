@@ -16,7 +16,6 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using AudioWorks.Api;
 using Prism.Commands;
@@ -35,7 +34,7 @@ namespace AudioWorks.UI.ViewModels
 
         public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
         {
-            SelectFilesCommand = new DelegateCommand(async () =>
+            SelectFilesCommand = new DelegateCommand(() =>
             {
                 var newFiles = fileSelectionService.SelectFiles().ToList();
 
@@ -46,7 +45,7 @@ namespace AudioWorks.UI.ViewModels
                         newFiles.Remove(existingFile);
 
                 // Parse the audio files asynchronously
-                foreach (var newAudioFile in await Task.Run(() => newFiles.Select(file => new TaggedAudioFile(file))))
+                foreach (var newAudioFile in newFiles.Select(file => new TaggedAudioFile(file)))
                     AudioFiles.AddNewItem(newAudioFile);
             });
 
