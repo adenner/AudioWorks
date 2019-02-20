@@ -7,6 +7,13 @@
     <NullableContextOptions>enable</NullableContextOptions>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Revision>$(BUILD_BUILDID)</Revision>
+    <Revision Condition="'$(Revision)'==''">0</Revision>
+    <FileVersion>1.0.0.$(Revision)</FileVersion>
+    <Product>AudioWorks</Product>
+    <Copyright>© 2019 Jeremy Herbison</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
