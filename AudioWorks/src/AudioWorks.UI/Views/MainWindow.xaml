@@ -37,7 +37,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            <Setter Property="ToolTip" Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
