@@ -29,6 +29,9 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand SelectFilesCommand { get; }
 
+        public DelegateCommand<TaggedAudioFile> SaveCommand { get; } =
+            new DelegateCommand<TaggedAudioFile>(audioFile => audioFile.SaveMetadata());
+
         public DelegateCommand ExitCommand { get; }
 
         public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)

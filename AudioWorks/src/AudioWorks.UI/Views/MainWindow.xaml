@@ -31,7 +31,7 @@ You should have received a copy of the GNU Affero General Public License along w
         </Grid.RowDefinitions>
 
         <Button Content="Browse..." Command="{Binding SelectFilesCommand}"/>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
+        <DataGrid x:Name="DataGrid" Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
                   GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -50,6 +50,13 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTextColumn Header="Album" Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Year" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Save" Command="{Binding DataContext.SaveCommand, ElementName=DataGrid}" CommandParameter="{Binding SelectedItem, ElementName=DataGrid}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Exit" Grid.Row="2" Command="{Binding ExitCommand}"/>
