@@ -31,23 +31,27 @@ You should have received a copy of the GNU Affero General Public License along w
         </Grid.RowDefinitions>
 
         <Button Content="Browse..." Command="{Binding SelectFilesCommand}"/>
-        <ListView Grid.Row="1" ItemsSource="{Binding AudioFiles}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="ToolTip" Value="{Binding Path}"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
+                  GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridViewColumn Header="Track #" DisplayMemberBinding="{Binding Metadata.TrackNumber}"/>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Metadata.Title}"/>
-                    <GridViewColumn Header="Artist" DisplayMemberBinding="{Binding Metadata.Artist}"/>
-                    <GridViewColumn Header="Album" DisplayMemberBinding="{Binding Metadata.Album}"/>
-                    <GridViewColumn Header="Year" DisplayMemberBinding="{Binding Metadata.Year}"/>
-                    <GridViewColumn Header="Genre" DisplayMemberBinding="{Binding Metadata.Genre}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            </DataGrid.ItemContainerStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Path" Binding="{Binding Path}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Track #" Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Title" Binding="{Binding Metadata.Title, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Artist" Binding="{Binding Metadata.Artist, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Album" Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Year" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Genre" Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Content="Exit" Grid.Row="2" Command="{Binding ExitCommand}"/>
 
     </Grid>
