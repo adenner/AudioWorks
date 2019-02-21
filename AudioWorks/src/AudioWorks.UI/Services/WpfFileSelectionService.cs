@@ -13,10 +13,22 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-namespace AudioWorks.UI
+using System;
+using System.Collections.Generic;
+using Microsoft.Win32;
+
+namespace AudioWorks.UI.Services
 {
-    public interface IAppShutdownService
+    class WpfFileSelectionService : IFileSelectionService
     {
-        void Shutdown();
+        public IEnumerable<string> SelectFiles()
+        {
+            var dialog = new OpenFileDialog { Multiselect = true };
+
+            var showResult = dialog.ShowDialog();
+            if (showResult.HasValue && showResult.Value)
+                return dialog.FileNames;
+            return Array.Empty<string>();
+        }
     }
 }

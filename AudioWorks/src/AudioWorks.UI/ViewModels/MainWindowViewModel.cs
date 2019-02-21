@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AudioWorks.Api;
+using AudioWorks.UI.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -29,7 +30,8 @@ namespace AudioWorks.UI.ViewModels
     {
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
-        public ObservableCollection<AudioFileViewModel> AudioFiles { get; } = new ObservableCollection<AudioFileViewModel>();
+        public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
+            new ObservableCollection<AudioFileViewModel>();
 
         public DelegateCommand<IList> SelectionChangedCommand { get; }
 

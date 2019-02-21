@@ -47,11 +47,13 @@ namespace AudioWorks.UI.ViewModels
         {
             _audioFile = audioFile;
             Metadata = new AudioMetadataViewModel(audioFile.Metadata);
+
             SaveCommand = new DelegateCommand(() =>
             {
                 _audioFile.SaveMetadata();
                 Metadata = new AudioMetadataViewModel(_audioFile.Metadata);
             });
+
             RevertCommand = new DelegateCommand(() =>
             {
                 _audioFile.LoadMetadata();

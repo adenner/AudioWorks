@@ -14,12 +14,13 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System.Windows;
+using AudioWorks.UI.Services;
 using AudioWorks.UI.Views;
 using Prism.Ioc;
 
 namespace AudioWorks.UI
 {
-    public partial class App
+    public sealed partial class App
     {
         protected override Window CreateShell() => Container.Resolve<MainWindow>();
 

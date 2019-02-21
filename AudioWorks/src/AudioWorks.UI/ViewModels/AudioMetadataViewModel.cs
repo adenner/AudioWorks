@@ -19,7 +19,7 @@ using Prism.Mvvm;
 
 namespace AudioWorks.UI.ViewModels
 {
-    public class AudioMetadataViewModel : BindableBase
+    public sealed class AudioMetadataViewModel : BindableBase
     {
         readonly AudioMetadata _metadata;
         bool _modified;
