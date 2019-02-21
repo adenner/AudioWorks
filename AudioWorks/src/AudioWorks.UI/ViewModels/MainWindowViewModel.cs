@@ -25,12 +25,9 @@ namespace AudioWorks.UI.ViewModels
     // ReSharper disable once UnusedMember.Global
     public class MainWindowViewModel : BindableBase
     {
-        public ObservableCollection<TaggedAudioFile> AudioFiles { get; } = new ObservableCollection<TaggedAudioFile>();
+        public ObservableCollection<AudioFileViewModel> AudioFiles { get; } = new ObservableCollection<AudioFileViewModel>();
 
         public DelegateCommand SelectFilesCommand { get; }
-
-        public DelegateCommand<TaggedAudioFile> SaveCommand { get; } =
-            new DelegateCommand<TaggedAudioFile>(audioFile => audioFile.SaveMetadata());
 
         public DelegateCommand ExitCommand { get; }
 
@@ -45,7 +42,7 @@ namespace AudioWorks.UI.ViewModels
                     if (newFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
                         newFiles.Remove(existingFile);
 
-                AudioFiles.AddRange(newFiles.Select(file => new TaggedAudioFile(file)));
+                AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
             });
 
             ExitCommand = new DelegateCommand(appShutdownService.Shutdown);

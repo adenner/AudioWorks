@@ -31,7 +31,7 @@ You should have received a copy of the GNU Affero General Public License along w
         </Grid.RowDefinitions>
 
         <Button Content="Browse..." Command="{Binding SelectFilesCommand}"/>
-        <DataGrid x:Name="DataGrid" Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
+        <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
                   GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -54,7 +54,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Save" Command="{Binding DataContext.SaveCommand, ElementName=DataGrid}" CommandParameter="{Binding SelectedItem, ElementName=DataGrid}"/>
+                            <Button Content="Save" Command="{Binding SaveCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
