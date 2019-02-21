@@ -14,6 +14,7 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AudioWorks.Api;
@@ -29,6 +30,8 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand SelectFilesCommand { get; }
 
+        public DelegateCommand<IList> RemoveFilesCommand { get; }
+
         public DelegateCommand ExitCommand { get; }
 
         public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
@@ -43,6 +46,12 @@ namespace AudioWorks.UI.ViewModels
                         newFiles.Remove(existingFile);
 
                 AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
+            });
+
+            RemoveFilesCommand = new DelegateCommand<IList>(list =>
+            {
+                foreach (var audioFile in list.Cast<AudioFileViewModel>().ToArray())
+                    AudioFiles.Remove(audioFile);
             });
 
             ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
