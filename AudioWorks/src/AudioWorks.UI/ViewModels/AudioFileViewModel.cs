@@ -29,10 +29,17 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand SaveCommand { get; }
 
+        public DelegateCommand RevertCommand { get; }
+
         public AudioFileViewModel(ITaggedAudioFile audioFile)
         {
             _audioFile = audioFile;
             SaveCommand = new DelegateCommand(() => _audioFile.SaveMetadata());
+            RevertCommand = new DelegateCommand(() =>
+            {
+                _audioFile.LoadMetadata();
+                RaisePropertyChanged("Metadata");
+            });
         }
     }
 }
