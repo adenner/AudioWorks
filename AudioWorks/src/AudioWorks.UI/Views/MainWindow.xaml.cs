@@ -15,7 +15,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 namespace AudioWorks.UI.Views
 {
-    public partial class MainWindow
+    public sealed partial class MainWindow
     {
         public MainWindow()
         {

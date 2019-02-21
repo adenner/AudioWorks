@@ -35,7 +35,7 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand<IList> SelectionChangedCommand { get; }
 
-        public DelegateCommand SelectFilesCommand { get; }
+        public DelegateCommand OpenFilesCommand { get; }
 
         public DelegateCommand RevertFilesCommand { get; }
 
@@ -55,11 +55,11 @@ namespace AudioWorks.UI.ViewModels
                 RemoveFilesCommand.RaiseCanExecuteChanged();
             });
 
-            SelectFilesCommand = new DelegateCommand(() =>
+            OpenFilesCommand = new DelegateCommand(() =>
             {
                 var newFiles = fileSelectionService.SelectFiles().ToList();
 
-                // Skip files that were added previously
+                // Skip files that may have been added previously
                 foreach (var existingFile in AudioFiles.Select(audioFile => audioFile.Path))
                     if (newFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
                         newFiles.Remove(existingFile);

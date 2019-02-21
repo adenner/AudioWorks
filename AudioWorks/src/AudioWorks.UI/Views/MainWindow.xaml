@@ -23,15 +23,34 @@ You should have received a copy of the GNU Affero General Public License along w
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="AudioWorks" Icon="../Resources/Icon.png" Height="600" Width="1000">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding OpenFilesCommand}" Modifiers="Control" Key="O"/>
+    </Window.InputBindings>
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Content="Browse..." Command="{Binding SelectFilesCommand}"/>
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..." Command="{Binding OpenFilesCommand}" InputGestureText="Ctrl+O"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Command="Undo"/>
+                <Separator/>
+                <MenuItem Command="Cut"/>
+                <MenuItem Command="Copy"/>
+                <MenuItem Command="Paste"/>
+                <MenuItem Command="Delete"/>
+                <Separator/>
+                <MenuItem Command="SelectAll"/>
+            </MenuItem>
+        </Menu>
+
         <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
                   GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
             <i:Interaction.Triggers>
@@ -77,7 +96,6 @@ You should have received a copy of the GNU Affero General Public License along w
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Exit" Grid.Row="2" Command="{Binding ExitCommand}"/>
 
     </Grid>
 </Window>
