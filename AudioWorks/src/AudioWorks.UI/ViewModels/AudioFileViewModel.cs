@@ -13,6 +13,7 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using System.ComponentModel;
 using AudioWorks.Common;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -22,10 +23,21 @@ namespace AudioWorks.UI.ViewModels
     public sealed class AudioFileViewModel : BindableBase
     {
         readonly ITaggedAudioFile _audioFile;
+        AudioMetadataViewModel _metadata;
 
         public string Path => _audioFile.Path;
 
-        public AudioMetadata Metadata => _audioFile.Metadata;
+        public AudioMetadataViewModel Metadata
+        {
+            get => _metadata;
+            set
+            {
+                if (_metadata != null)
+                    _metadata.PropertyChanged -= OnMetadataChanged;
+                SetProperty(ref _metadata, value);
+                _metadata.PropertyChanged += OnMetadataChanged;
+            }
+        }
 
         public DelegateCommand SaveCommand { get; }
 
@@ -34,12 +46,23 @@ namespace AudioWorks.UI.ViewModels
         public AudioFileViewModel(ITaggedAudioFile audioFile)
         {
             _audioFile = audioFile;
-            SaveCommand = new DelegateCommand(() => _audioFile.SaveMetadata());
+            Metadata = new AudioMetadataViewModel(audioFile.Metadata);
+            SaveCommand = new DelegateCommand(() =>
+            {
+                _audioFile.SaveMetadata();
+                Metadata = new AudioMetadataViewModel(_audioFile.Metadata);
+            });
             RevertCommand = new DelegateCommand(() =>
             {
                 _audioFile.LoadMetadata();
-                RaisePropertyChanged("Metadata");
-            });
+                Metadata = new AudioMetadataViewModel(_audioFile.Metadata);
+            }, () => _metadata.Modified).ObservesProperty(() => Metadata);
+        }
+
+        void OnMetadataChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Modified"))
+                RevertCommand.RaiseCanExecuteChanged();
         }
     }
 }

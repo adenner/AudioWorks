@@ -51,6 +51,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTextColumn Header="Album" Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Year" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridCheckBoxColumn Header="Modified" Binding="{Binding Metadata.Modified, Mode=OneWay}" IsReadOnly="True"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
