@@ -15,6 +15,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AudioWorks.Api;
@@ -26,16 +27,32 @@ namespace AudioWorks.UI.ViewModels
     // ReSharper disable once UnusedMember.Global
     public class MainWindowViewModel : BindableBase
     {
+        List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
+
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } = new ObservableCollection<AudioFileViewModel>();
+
+        public DelegateCommand<IList> SelectionChangedCommand { get; }
 
         public DelegateCommand SelectFilesCommand { get; }
 
-        public DelegateCommand<IList> RemoveFilesCommand { get; }
+        public DelegateCommand RevertFilesCommand { get; }
+
+        public DelegateCommand SaveFilesCommand { get; }
+
+        public DelegateCommand RemoveFilesCommand { get; }
 
         public DelegateCommand ExitCommand { get; }
 
         public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
         {
+            SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
+            {
+                _selectedAudioFiles = selectedItems.Cast<AudioFileViewModel>().ToList();
+                RevertFilesCommand.RaiseCanExecuteChanged();
+                SaveFilesCommand.RaiseCanExecuteChanged();
+                RemoveFilesCommand.RaiseCanExecuteChanged();
+            });
+
             SelectFilesCommand = new DelegateCommand(() =>
             {
                 var newFiles = fileSelectionService.SelectFiles().ToList();
@@ -48,11 +65,24 @@ namespace AudioWorks.UI.ViewModels
                 AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
             });
 
-            RemoveFilesCommand = new DelegateCommand<IList>(list =>
+            RevertFilesCommand = new DelegateCommand(() =>
             {
-                foreach (var audioFile in list.Cast<AudioFileViewModel>().ToArray())
+                foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
+                    audioFile.RevertCommand.Execute();
+                RevertFilesCommand.RaiseCanExecuteChanged();
+            }, () => _selectedAudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
+
+            SaveFilesCommand = new DelegateCommand(() =>
+            {
+                foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
+                    audioFile.SaveCommand.Execute();
+            }, () => _selectedAudioFiles.Count > 0);
+
+            RemoveFilesCommand = new DelegateCommand(() =>
+            {
+                foreach (var audioFile in _selectedAudioFiles)
                     AudioFiles.Remove(audioFile);
-            });
+            }, () => _selectedAudioFiles.Count > 0);
 
             ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
         }
