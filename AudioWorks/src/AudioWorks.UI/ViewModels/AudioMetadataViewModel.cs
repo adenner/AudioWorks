@@ -24,6 +24,7 @@ namespace AudioWorks.UI.ViewModels
     public sealed class AudioMetadataViewModel : BindableBase
     {
         readonly AudioMetadata _metadata;
+        readonly Lazy<BitmapImage?> _coverImage;
         bool _modified;
 
         public string Title
@@ -96,7 +97,7 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
-        public unsafe BitmapImage? CoverArt { get; }
+        public unsafe BitmapImage? CoverImage => _coverImage.Value;
 
         public bool Modified
         {
@@ -113,16 +114,16 @@ namespace AudioWorks.UI.ViewModels
                     Modified = true;
             };
 
-            CoverArt = LoadImage();
+            _coverImage = new Lazy<BitmapImage?>(() => LoadImage(metadata.CoverArt));
         }
 
-        unsafe BitmapImage? LoadImage()
+        static unsafe BitmapImage? LoadImage(ICoverArt? coverArt)
         {
-            if (_metadata.CoverArt == null) return null;
+            if (coverArt == null) return null;
 
-            fixed (byte* dataAddress = _metadata.CoverArt.Data)
+            fixed (byte* dataAddress = coverArt.Data)
             {
-                using (var stream = new UnmanagedMemoryStream(dataAddress, _metadata.CoverArt.Data.Length))
+                using (var stream = new UnmanagedMemoryStream(dataAddress, coverArt.Data.Length))
                 {
                     var result = new BitmapImage();
                     result.BeginInit();
