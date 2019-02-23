@@ -51,7 +51,7 @@ You should have received a copy of the GNU Affero General Public License along w
             </MenuItem>
         </Menu>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False"
+        <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False" PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">

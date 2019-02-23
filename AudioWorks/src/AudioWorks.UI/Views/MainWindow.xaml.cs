@@ -13,6 +13,11 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
+
 namespace AudioWorks.UI.Views
 {
     public sealed partial class MainWindow
@@ -20,6 +25,20 @@ namespace AudioWorks.UI.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        void DataGrid_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            // Prevent the context menu from showing on column headers
+            var source = (DependencyObject) e.OriginalSource;
+
+            while (source != null && !(source is DataGridColumnHeader))
+                source = VisualTreeHelper.GetParent(source);
+
+            if (source == null) return;
+
+            if (source is DataGridColumnHeader)
+                e.Handled = true;
         }
     }
 }
