@@ -75,8 +75,15 @@ You should have received a copy of the GNU Affero General Public License along w
                 </Style>
             </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Cover">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Metadata.CoverArt}" Height="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Path" Binding="{Binding Path}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Track #" Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Track #" Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Title" Binding="{Binding Metadata.Title, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Artist" Binding="{Binding Metadata.Artist, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Composer" Binding="{Binding Metadata.Composer, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>

@@ -14,6 +14,8 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.IO;
+using System.Windows.Media.Imaging;
 using AudioWorks.Common;
 using Prism.Mvvm;
 
@@ -94,6 +96,8 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
+        public unsafe BitmapImage? CoverArt { get; }
+
         public bool Modified
         {
             get => _modified;
@@ -108,6 +112,27 @@ namespace AudioWorks.UI.ViewModels
                 if (!e.PropertyName.Equals("Modified", StringComparison.Ordinal))
                     Modified = true;
             };
+
+            CoverArt = LoadImage();
+        }
+
+        unsafe BitmapImage? LoadImage()
+        {
+            if (_metadata.CoverArt == null) return null;
+
+            fixed (byte* dataAddress = _metadata.CoverArt.Data)
+            {
+                using (var stream = new UnmanagedMemoryStream(dataAddress, _metadata.CoverArt.Data.Length))
+                {
+                    var result = new BitmapImage();
+                    result.BeginInit();
+                    result.StreamSource = stream;
+                    result.CacheOption = BitmapCacheOption.OnLoad;
+                    result.EndInit();
+                    result.Freeze();
+                    return result;
+                }
+            }
         }
     }
 }
