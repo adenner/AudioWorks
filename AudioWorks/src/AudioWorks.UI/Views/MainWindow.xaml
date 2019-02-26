@@ -12,7 +12,7 @@ details.
 
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. -->
-    
+
 <Window x:Class="AudioWorks.UI.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -20,6 +20,7 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:views="clr-namespace:AudioWorks.UI.Views"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="AudioWorks" Icon="../Resources/Icon.png" Height="600" Width="1000">
@@ -57,12 +58,25 @@ You should have received a copy of the GNU Affero General Public License along w
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                 </i:EventTrigger>
+                <prism:InteractionRequestTrigger SourceObject="{Binding EditNotificationRequest, Mode=OneWay}">
+                    <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                        <prism:PopupWindowAction.WindowContent>
+                            <views:EditControl/>
+                        </prism:PopupWindowAction.WindowContent>
+                    </prism:PopupWindowAction>
+                </prism:InteractionRequestTrigger>
             </i:Interaction.Triggers>
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditSelectionCommand}"/>
+            </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Revert Changes" Command="{Binding RevertFilesCommand}"/>             
-                    <MenuItem Header="Save Changes" Command="{Binding SaveFilesCommand}"/>             
-                    <MenuItem Header="Remove" Command="{Binding RemoveFilesCommand}"/>             
+                    <MenuItem Header="Edit" Command="{Binding EditSelectionCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Revert Changes" Command="{Binding RevertSelectionCommand}"/>
+                    <MenuItem Header="Save Changes" Command="{Binding SaveSelectionCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Remove" Command="{Binding RemoveSelectionCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.ItemContainerStyle>
@@ -95,8 +109,8 @@ You should have received a copy of the GNU Affero General Public License along w
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save" Command="{Binding SaveCommand}"/>
-                                <Button Content="Revert" Command="{Binding RevertCommand}"/>
+                                <Button Content="Save" Command="{Binding SaveSelectionCommand}"/>
+                                <Button Content="Revert" Command="{Binding RevertSelectionCommand}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -21,6 +21,7 @@ using System.Linq;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
 using Prism.Commands;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.ViewModels
@@ -37,22 +38,27 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand OpenFilesCommand { get; }
 
-        public DelegateCommand RevertFilesCommand { get; }
+        public DelegateCommand EditSelectionCommand { get; }
 
-        public DelegateCommand SaveFilesCommand { get; }
+        public DelegateCommand RevertSelectionCommand { get; }
 
-        public DelegateCommand RemoveFilesCommand { get; }
+        public DelegateCommand SaveSelectionCommand { get; }
+
+        public DelegateCommand RemoveSelectionCommand { get; }
 
         public DelegateCommand ExitCommand { get; }
+
+        public InteractionRequest<INotification> EditNotificationRequest { get; } = new InteractionRequest<INotification>();
 
         public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
         {
             SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
             {
                 _selectedAudioFiles = selectedItems.Cast<AudioFileViewModel>().ToList();
-                RevertFilesCommand.RaiseCanExecuteChanged();
-                SaveFilesCommand.RaiseCanExecuteChanged();
-                RemoveFilesCommand.RaiseCanExecuteChanged();
+                EditSelectionCommand.RaiseCanExecuteChanged();
+                RevertSelectionCommand.RaiseCanExecuteChanged();
+                SaveSelectionCommand.RaiseCanExecuteChanged();
+                RemoveSelectionCommand.RaiseCanExecuteChanged();
             });
 
             OpenFilesCommand = new DelegateCommand(() =>
@@ -67,20 +73,24 @@ namespace AudioWorks.UI.ViewModels
                 AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
             });
 
-            RevertFilesCommand = new DelegateCommand(() =>
+            EditSelectionCommand = new DelegateCommand(
+                () => EditNotificationRequest.Raise(new Notification { Title = "Edit", Content = _selectedAudioFiles }),
+                () => _selectedAudioFiles.Count > 0);
+
+            RevertSelectionCommand = new DelegateCommand(() =>
             {
                 foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
                     audioFile.RevertCommand.Execute();
-                RevertFilesCommand.RaiseCanExecuteChanged();
+                RevertSelectionCommand.RaiseCanExecuteChanged();
             }, () => _selectedAudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
 
-            SaveFilesCommand = new DelegateCommand(() =>
+            SaveSelectionCommand = new DelegateCommand(() =>
             {
                 foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
                     audioFile.SaveCommand.Execute();
             }, () => _selectedAudioFiles.Count > 0);
 
-            RemoveFilesCommand = new DelegateCommand(() =>
+            RemoveSelectionCommand = new DelegateCommand(() =>
             {
                 foreach (var audioFile in _selectedAudioFiles)
                     AudioFiles.Remove(audioFile);
