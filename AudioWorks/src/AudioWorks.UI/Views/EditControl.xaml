@@ -20,14 +20,46 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-        Height="300" Width="500">
+        prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label>Title</Label>
+        <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding TitleIsCommon}"/>
+        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Title}" IsEnabled="{Binding TitleIsCommon}"/>
+        <Label Grid.Row="1" Grid.Column="0">Artist</Label>
+        <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding ArtistIsCommon}"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Artist}" IsEnabled="{Binding ArtistIsCommon}"/>
+        <Label Grid.Row="2" Grid.Column="0">Album Artist</Label>
+        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding AlbumArtistIsCommon}"/>
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding AlbumArtist}" IsEnabled="{Binding AlbumArtistIsCommon}"/>
+        <Label Grid.Row="3" Grid.Column="0">Composer</Label>
+        <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding ComposerIsCommon}"/>
+        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Composer}" IsEnabled="{Binding ComposerIsCommon}"/>
+        <Label Grid.Row="4" Grid.Column="0">Album</Label>
+        <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding AlbumIsCommon}"/>
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Album}" IsEnabled="{Binding AlbumIsCommon}"/>
+        <Label Grid.Row="5" Grid.Column="0">Genre</Label>
+        <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding GenreIsCommon}"/>
+        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Genre}" IsEnabled="{Binding GenreIsCommon}"/>
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button IsCancel="True">Cancel</Button>
+            <Button Command="{Binding ApplyCommand}">Apply</Button>
+        </StackPanel>
 
     </Grid>
 </ContentControl>
