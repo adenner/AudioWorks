@@ -57,6 +57,16 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
+        public string AlbumArtist
+        {
+            get => _metadata.AlbumArtist;
+            set
+            {
+                _metadata.AlbumArtist = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public string Composer
         {
             get => _metadata.Composer;
