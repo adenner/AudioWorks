@@ -74,7 +74,13 @@ namespace AudioWorks.UI.ViewModels
             });
 
             EditSelectionCommand = new DelegateCommand(
-                () => EditNotificationRequest.Raise(new Notification { Title = "Edit", Content = _selectedAudioFiles }),
+                () => EditNotificationRequest.Raise(new Notification
+                {
+                    Title = _selectedAudioFiles.Count > 1
+                        ? $"Editing {_selectedAudioFiles.Count} files"
+                        : "Editing 1 file",
+                    Content = _selectedAudioFiles
+                }),
                 () => _selectedAudioFiles.Count > 0);
 
             RevertSelectionCommand = new DelegateCommand(() =>
