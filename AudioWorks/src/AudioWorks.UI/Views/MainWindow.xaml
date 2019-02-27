@@ -60,6 +60,13 @@ You should have received a copy of the GNU Affero General Public License along w
                 </i:EventTrigger>
                 <prism:InteractionRequestTrigger SourceObject="{Binding EditNotificationRequest, Mode=OneWay}">
                     <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                        <prism:PopupWindowAction.WindowStyle>
+                            <Style TargetType="Window">
+                                <Setter Property="ResizeMode" Value="NoResize"/>
+                                <Setter Property="ShowInTaskbar" Value="False"/>
+                                <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                            </Style>
+                        </prism:PopupWindowAction.WindowStyle>
                         <prism:PopupWindowAction.WindowContent>
                             <views:EditControl/>
                         </prism:PopupWindowAction.WindowContent>
