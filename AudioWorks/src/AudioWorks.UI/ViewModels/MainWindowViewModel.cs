@@ -21,8 +21,8 @@ using System.Linq;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
 using Prism.Commands;
-using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.ViewModels
 {
@@ -48,9 +48,10 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand ExitCommand { get; }
 
-        public InteractionRequest<INotification> EditNotificationRequest { get; } = new InteractionRequest<INotification>();
-
-        public MainWindowViewModel(IFileSelectionService fileSelectionService, IAppShutdownService appShutdownService)
+        public MainWindowViewModel(
+            IFileSelectionService fileSelectionService,
+            IAppShutdownService appShutdownService,
+            IDialogService dialogService)
         {
             SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
             {
@@ -74,13 +75,8 @@ namespace AudioWorks.UI.ViewModels
             });
 
             EditSelectionCommand = new DelegateCommand(
-                () => EditNotificationRequest.Raise(new Notification
-                {
-                    Title = _selectedAudioFiles.Count > 1
-                        ? $"Editing {_selectedAudioFiles.Count} files"
-                        : "Editing 1 file",
-                    Content = _selectedAudioFiles
-                }),
+                () => dialogService.ShowDialog("EditControl",
+                    new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
 
             RevertSelectionCommand = new DelegateCommand(() =>

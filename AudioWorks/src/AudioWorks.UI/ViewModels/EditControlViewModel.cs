@@ -23,13 +23,13 @@ using System.Windows.Controls;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.ViewModels
 {
     // ReSharper disable once UnusedMember.Global
-    public class EditControlViewModel : BindableBase, IInteractionRequestAware, INotifyDataErrorInfo
+    public class EditControlViewModel : DialogViewModelBase, INotifyDataErrorInfo
     {
-        INotification? _notification;
         readonly ErrorsContainer<ValidationResult> _errors;
         List<AudioFileViewModel>? _audioFiles;
         bool _isMultiple;
@@ -57,25 +57,6 @@ namespace AudioWorks.UI.ViewModels
         string _trackNumber = string.Empty;
         bool _trackCountIsCommon;
         string _trackCount = string.Empty;
-
-        public INotification? Notification
-        {
-            get => _notification;
-            set
-            {
-                SetProperty(ref _notification, value);
-                _audioFiles = (List<AudioFileViewModel>?) value?.Content;
-                SetProperties();
-            }
-        }
-
-        public Action? FinishInteraction { get; set; }
-
-        public bool HasErrors => _errors.HasErrors;
-
-        public IEnumerable GetErrors(string propertyName) => _errors.GetErrors(propertyName);
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public bool IsMultiple
         {
@@ -269,6 +250,8 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand ApplyCommand { get; }
 
+        public bool HasErrors => _errors.HasErrors;
+
         public EditControlViewModel()
         {
             _errors = new ErrorsContainer<ValidationResult>(RaiseErrorsChanged);
@@ -304,8 +287,18 @@ namespace AudioWorks.UI.ViewModels
                             audioFile.Metadata.TrackCount = TrackCount;
                     }
 
-                FinishInteraction?.Invoke();
+                RaiseRequestClose(new DialogResult(true));
             });
+        }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName) => _errors.GetErrors(propertyName);
+
+        public override void OnDialogOpened(IDialogParameters parameters)
+        {
+            _audioFiles = parameters.GetValue<List<AudioFileViewModel>>("AudioFiles");
+            SetProperties();
         }
 
         void SetProperties()
@@ -316,7 +309,8 @@ namespace AudioWorks.UI.ViewModels
 
             foreach (var propertyName in thisType.GetProperties()
                 .Where(prop => prop.PropertyType == typeof(string))
-                .Select(prop => prop.Name))
+                .Select(prop => prop.Name)
+                .Except(new[] { "IconSource" }))
             {
                 var propertyInfo = typeof(AudioMetadataViewModel).GetProperty(propertyName);
                 var firstValue = (string) propertyInfo.GetValue(_audioFiles[0].Metadata);

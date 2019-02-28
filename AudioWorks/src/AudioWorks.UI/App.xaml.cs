@@ -15,6 +15,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System.Windows;
 using AudioWorks.UI.Services;
+using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
 using Prism.Ioc;
 
@@ -28,6 +29,7 @@ namespace AudioWorks.UI
         {
             containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
             containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
+            containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
         }
     }
 }
