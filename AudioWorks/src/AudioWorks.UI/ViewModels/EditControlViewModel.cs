@@ -18,10 +18,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using Prism.Commands;
-using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
@@ -33,8 +33,8 @@ namespace AudioWorks.UI.ViewModels
         readonly ErrorsContainer<ValidationResult> _errors;
         List<AudioFileViewModel>? _audioFiles;
         bool _isMultiple;
-        bool _titleIsCommon;
-        string _title = string.Empty;
+        bool _songTitleIsCommon;
+        string _songTitle = string.Empty;
         bool _artistIsCommon;
         string _artist = string.Empty;
         bool _albumIsCommon;
@@ -57,7 +57,6 @@ namespace AudioWorks.UI.ViewModels
         string _trackNumber = string.Empty;
         bool _trackCountIsCommon;
         string _trackCount = string.Empty;
-        string _dialogTitle = string.Empty;
 
         public bool IsMultiple
         {
@@ -65,16 +64,16 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _isMultiple, value);
         }
 
-        public bool TitleIsCommon
+        public bool SongTitleIsCommon
         {
-            get => _titleIsCommon;
-            set => SetProperty(ref _titleIsCommon, value);
+            get => _songTitleIsCommon;
+            set => SetProperty(ref _songTitleIsCommon, value);
         }
 
-        public new string Title
+        public string SongTitle
         {
-            get => _title;
-            set => SetProperty(ref _title, value);
+            get => _songTitle;
+            set => SetProperty(ref _songTitle, value);
         }
 
         public bool ArtistIsCommon
@@ -249,12 +248,6 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
-        public string DialogTitle
-        {
-            get => _dialogTitle;
-            set => SetProperty(ref _dialogTitle, value);
-        }
-
         public DelegateCommand ApplyCommand { get; }
 
         public bool HasErrors => _errors.HasErrors;
@@ -268,8 +261,8 @@ namespace AudioWorks.UI.ViewModels
                 if (_audioFiles != null)
                     foreach (var audioFile in _audioFiles)
                     {
-                        if (TitleIsCommon)
-                            audioFile.Metadata.Title = Title;
+                        if (SongTitleIsCommon)
+                            audioFile.Metadata.SongTitle = SongTitle;
                         if (ArtistIsCommon)
                             audioFile.Metadata.Artist = Artist;
                         if (AlbumIsCommon)
@@ -311,14 +304,14 @@ namespace AudioWorks.UI.ViewModels
         void SetProperties()
         {
             IsMultiple = _audioFiles!.Count > 1;
-            DialogTitle = _isMultiple ? $"Editing {_audioFiles.Count} files" : "Editing 1 file";
+            Title = _isMultiple ? $"Editing {_audioFiles.Count} files" : "Editing 1 file";
 
             var thisType = GetType();
 
-            foreach (var propertyName in thisType.GetProperties()
+            foreach (var propertyName in thisType
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
                 .Where(prop => prop.PropertyType == typeof(string))
-                .Select(prop => prop.Name)
-                .Except(new[] { "DialogTitle", "IconSource" }))
+                .Select(prop => prop.Name))
             {
                 var propertyInfo = typeof(AudioMetadataViewModel).GetProperty(propertyName);
                 var firstValue = (string) propertyInfo.GetValue(_audioFiles[0].Metadata);

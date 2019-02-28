@@ -27,7 +27,7 @@ namespace AudioWorks.UI.ViewModels
         readonly Lazy<BitmapImage?> _coverImage;
         bool _modified;
 
-        public string Title
+        public string SongTitle
         {
             get => _metadata.Title;
             set

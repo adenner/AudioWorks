@@ -59,8 +59,8 @@ You should have received a copy of the GNU Affero General Public License along w
             <CheckBox Grid.Row="0" Grid.Column="5" IsChecked="{Binding TrackCountIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="1" Grid.Column="0">Title</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Title, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding TitleIsCommon}"/>
-            <CheckBox Grid.Row="1" Grid.Column="5" IsChecked="{Binding TitleIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding SongTitle, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding SongTitleIsCommon}"/>
+            <CheckBox Grid.Row="1" Grid.Column="5" IsChecked="{Binding SongTitleIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="2" Grid.Column="0">Artist</Label>
             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Artist, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding ArtistIsCommon}"/>
