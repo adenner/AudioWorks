@@ -19,47 +19,89 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:views="clr-namespace:AudioWorks.UI.Views"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
+    <ContentControl.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <views:ReverseBooleanConverter x:Key="ReverseConverter"/>
+    </ContentControl.Resources>
+    <Border BorderThickness="30">
+        <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
 
-        <Label>Title</Label>
-        <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding TitleIsCommon}"/>
-        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Title}" IsEnabled="{Binding TitleIsCommon}"/>
-        <Label Grid.Row="1" Grid.Column="0">Artist</Label>
-        <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding ArtistIsCommon}"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Artist}" IsEnabled="{Binding ArtistIsCommon}"/>
-        <Label Grid.Row="2" Grid.Column="0">Album Artist</Label>
-        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding AlbumArtistIsCommon}"/>
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding AlbumArtist}" IsEnabled="{Binding AlbumArtistIsCommon}"/>
-        <Label Grid.Row="3" Grid.Column="0">Composer</Label>
-        <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding ComposerIsCommon}"/>
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Composer}" IsEnabled="{Binding ComposerIsCommon}"/>
-        <Label Grid.Row="4" Grid.Column="0">Album</Label>
-        <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding AlbumIsCommon}"/>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Album}" IsEnabled="{Binding AlbumIsCommon}"/>
-        <Label Grid.Row="5" Grid.Column="0">Genre</Label>
-        <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding GenreIsCommon}"/>
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Genre}" IsEnabled="{Binding GenreIsCommon}"/>
-        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button IsCancel="True">Cancel</Button>
-            <Button Command="{Binding ApplyCommand}">Apply</Button>
-        </StackPanel>
+            <Label>Track #</Label>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding TrackNumber, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding TrackNumberIsCommon}"/>
+            <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding TrackNumberIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <Label Grid.Row="0" Grid.Column="3">of</Label>
+            <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding TrackCount, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding TrackCountIsCommon}"/>
+            <CheckBox Grid.Row="0" Grid.Column="5" IsChecked="{Binding TrackCountIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
-    </Grid>
+            <Label Grid.Row="1" Grid.Column="0">Title</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Title, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding TitleIsCommon}"/>
+            <CheckBox Grid.Row="1" Grid.Column="5" IsChecked="{Binding TitleIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="2" Grid.Column="0">Artist</Label>
+            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Artist, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding ArtistIsCommon}"/>
+            <CheckBox Grid.Row="2" Grid.Column="5" IsChecked="{Binding ArtistIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="3" Grid.Column="0">Album Artist</Label>
+            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding AlbumArtist, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding AlbumArtistIsCommon}"/>
+            <CheckBox Grid.Row="3" Grid.Column="5" IsChecked="{Binding AlbumArtistIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="4" Grid.Column="0">Composer</Label>
+            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Composer, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding ComposerIsCommon}"/>
+            <CheckBox Grid.Row="4" Grid.Column="5" IsChecked="{Binding ComposerIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="5" Grid.Column="0">Album</Label>
+            <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Album, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding AlbumIsCommon}"/>
+            <CheckBox Grid.Row="5" Grid.Column="5" IsChecked="{Binding AlbumIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="6" Grid.Column="0">Genre</Label>
+            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Genre, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding GenreIsCommon}"/>
+            <CheckBox Grid.Row="6" Grid.Column="5" IsChecked="{Binding GenreIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="7" Grid.Column="0">Year</Label>
+            <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Year, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding YearIsCommon}"/>
+            <CheckBox Grid.Row="7" Grid.Column="5" IsChecked="{Binding YearIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="8" Grid.Column="0">Day</Label>
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Day, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding DayIsCommon}"/>
+            <CheckBox Grid.Row="8" Grid.Column="2" IsChecked="{Binding DayIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <Label Grid.Row="8" Grid.Column="3">Month</Label>
+            <TextBox Grid.Row="8" Grid.Column="4" Text="{Binding Month, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding MonthIsCommon}"/>
+            <CheckBox Grid.Row="8" Grid.Column="5" IsChecked="{Binding MonthIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <Label Grid.Row="9" Grid.Column="0">Comment</Label>
+            <TextBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Comment, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding CommentIsCommon}"/>
+            <CheckBox Grid.Row="9" Grid.Column="5" IsChecked="{Binding CommentIsCommon}" Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+
+            <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding ApplyCommand}" IsEnabled="{Binding HasErrors, Converter={StaticResource ReverseConverter}}">Apply</Button>
+                <Button IsCancel="True">Cancel</Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
 </ContentControl>

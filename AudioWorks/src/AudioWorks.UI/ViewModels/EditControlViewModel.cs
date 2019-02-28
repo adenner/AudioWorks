@@ -14,7 +14,12 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -22,10 +27,12 @@ using Prism.Mvvm;
 namespace AudioWorks.UI.ViewModels
 {
     // ReSharper disable once UnusedMember.Global
-    public class EditControlViewModel : BindableBase, IInteractionRequestAware
+    public class EditControlViewModel : BindableBase, IInteractionRequestAware, INotifyDataErrorInfo
     {
         INotification? _notification;
+        readonly ErrorsContainer<ValidationResult> _errors;
         List<AudioFileViewModel>? _audioFiles;
+        bool _isMultiple;
         bool _titleIsCommon;
         string _title = string.Empty;
         bool _artistIsCommon;
@@ -38,6 +45,18 @@ namespace AudioWorks.UI.ViewModels
         string _composer = string.Empty;
         bool _genreIsCommon;
         string _genre = string.Empty;
+        bool _commentIsCommon;
+        string _comment = string.Empty;
+        bool _dayIsCommon;
+        string _day = string.Empty;
+        bool _monthIsCommon;
+        string _month = string.Empty;
+        bool _yearIsCommon;
+        string _year = string.Empty;
+        bool _trackNumberIsCommon;
+        string _trackNumber = string.Empty;
+        bool _trackCountIsCommon;
+        string _trackCount = string.Empty;
 
         public INotification? Notification
         {
@@ -51,6 +70,18 @@ namespace AudioWorks.UI.ViewModels
         }
 
         public Action? FinishInteraction { get; set; }
+
+        public bool HasErrors => _errors.HasErrors;
+
+        public IEnumerable GetErrors(string propertyName) => _errors.GetErrors(propertyName);
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool IsMultiple
+        {
+            get => _isMultiple;
+            set => SetProperty(ref _isMultiple, value);
+        }
 
         public bool TitleIsCommon
         {
@@ -124,10 +155,124 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _genre, value);
         }
 
+        public bool CommentIsCommon
+        {
+            get => _commentIsCommon;
+            set => SetProperty(ref _commentIsCommon, value);
+        }
+
+        public string Comment
+        {
+            get => _comment;
+            set => SetProperty(ref _comment, value);
+        }
+
+        public bool DayIsCommon
+        {
+            get => _dayIsCommon;
+            set => SetProperty(ref _dayIsCommon, value);
+        }
+
+        public string Day
+        {
+            get => _day;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 31)
+                    _errors.ClearErrors(() => Day);
+                else
+                    _errors.SetErrors(() => Day,
+                        new[] { new ValidationResult(false, "Day must be between 1 and 31.") });
+                SetProperty(ref _day, value);
+            }
+        }
+
+        public bool MonthIsCommon
+        {
+            get => _monthIsCommon;
+            set => SetProperty(ref _monthIsCommon, value);
+        }
+
+        public string Month
+        {
+            get => _month;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 12)
+                    _errors.ClearErrors(() => Month);
+                else
+                    _errors.SetErrors(() => Month,
+                        new[] { new ValidationResult(false, "Month must be between 1 and 12.") });
+                SetProperty(ref _month, value);
+            }
+        }
+
+        public bool YearIsCommon
+        {
+            get => _yearIsCommon;
+            set => SetProperty(ref _yearIsCommon, value);
+        }
+
+        public string Year
+        {
+            get => _year;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || Regex.IsMatch(value, "^[1-9][0-9]{3}$"))
+                    _errors.ClearErrors(() => Year);
+                else
+                    _errors.SetErrors(() => Year,
+                        new[] { new ValidationResult(false, "Year must be between 1000 and 9999.") });
+                SetProperty(ref _year, value);
+            }
+        }
+
+        public bool TrackNumberIsCommon
+        {
+            get => _trackNumberIsCommon;
+            set => SetProperty(ref _trackNumberIsCommon, value);
+        }
+
+        public string TrackNumber
+        {
+            get => _trackNumber;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 99)
+                    _errors.ClearErrors(() => TrackNumber);
+                else
+                    _errors.SetErrors(() => TrackNumber,
+                        new[] { new ValidationResult(false, "Track # must be between 1 and 99.") });
+                SetProperty(ref _trackNumber, value);
+            }
+        }
+
+        public bool TrackCountIsCommon
+        {
+            get => _trackCountIsCommon;
+            set => SetProperty(ref _trackCountIsCommon, value);
+        }
+
+        public string TrackCount
+        {
+            get => _trackCount;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 99)
+                    _errors.ClearErrors(() => TrackCount);
+                else
+                    _errors.SetErrors(() => TrackCount,
+                        new[] { new ValidationResult(false, "Track count must be between 1 and 99.") });
+                SetProperty(ref _trackCount, value);
+            }
+        }
+
         public DelegateCommand ApplyCommand { get; }
 
         public EditControlViewModel()
         {
+            _errors = new ErrorsContainer<ValidationResult>(RaiseErrorsChanged);
+
             ApplyCommand = new DelegateCommand(() =>
             {
                 if (_audioFiles != null)
@@ -145,6 +290,18 @@ namespace AudioWorks.UI.ViewModels
                             audioFile.Metadata.Composer = Composer;
                         if (GenreIsCommon)
                             audioFile.Metadata.Genre = Genre;
+                        if (CommentIsCommon)
+                            audioFile.Metadata.Comment = Comment;
+                        if (DayIsCommon)
+                            audioFile.Metadata.Day = Day;
+                        if (MonthIsCommon)
+                            audioFile.Metadata.Month = Month;
+                        if (YearIsCommon)
+                            audioFile.Metadata.Year = Year;
+                        if (TrackNumberIsCommon)
+                            audioFile.Metadata.TrackNumber = TrackNumber;
+                        if (TrackCountIsCommon)
+                            audioFile.Metadata.TrackCount = TrackCount;
                     }
 
                 FinishInteraction?.Invoke();
@@ -153,78 +310,35 @@ namespace AudioWorks.UI.ViewModels
 
         void SetProperties()
         {
-            if (_audioFiles!.TrueForAll(audioFile =>
-                audioFile.Metadata.Title.Equals(_audioFiles![0].Metadata.Title, StringComparison.Ordinal)))
-            {
-                TitleIsCommon = true;
-                Title = _audioFiles[0].Metadata.Title;
-            }
-            else
-            {
-                TitleIsCommon = false;
-                Title = string.Empty;
-            }
+            IsMultiple = _audioFiles!.Count > 1;
 
-            if (_audioFiles.TrueForAll(audioFile =>
-                audioFile.Metadata.Artist.Equals(_audioFiles![0].Metadata.Artist, StringComparison.Ordinal)))
-            {
-                ArtistIsCommon = true;
-                Artist = _audioFiles[0].Metadata.Artist;
-            }
-            else
-            {
-                ArtistIsCommon = false;
-                Artist = string.Empty;
-            }
+            var thisType = GetType();
 
-            if (_audioFiles.TrueForAll(audioFile =>
-                audioFile.Metadata.Album.Equals(_audioFiles![0].Metadata.Album, StringComparison.Ordinal)))
+            foreach (var propertyName in thisType.GetProperties()
+                .Where(prop => prop.PropertyType == typeof(string))
+                .Select(prop => prop.Name))
             {
-                AlbumIsCommon = true;
-                Album = _audioFiles[0].Metadata.Album;
-            }
-            else
-            {
-                AlbumIsCommon = false;
-                Album = string.Empty;
-            }
+                var propertyInfo = typeof(AudioMetadataViewModel).GetProperty(propertyName);
+                var firstValue = (string) propertyInfo.GetValue(_audioFiles[0].Metadata);
 
-            if (_audioFiles.TrueForAll(audioFile =>
-                audioFile.Metadata.AlbumArtist.Equals(_audioFiles![0].Metadata.AlbumArtist, StringComparison.Ordinal)))
-            {
-                AlbumArtistIsCommon = true;
-                AlbumArtist = _audioFiles[0].Metadata.AlbumArtist;
+                if (_audioFiles.TrueForAll(audioFile =>
+                    ((string) propertyInfo.GetValue(audioFile.Metadata)).Equals(firstValue, StringComparison.Ordinal)))
+                {
+                    thisType.GetProperty($"{propertyName}IsCommon").SetValue(this, true);
+                    thisType.GetProperty(propertyName).SetValue(this, firstValue);
+                }
+                else
+                {
+                    thisType.GetProperty($"{propertyName}IsCommon").SetValue(this, false);
+                    thisType.GetProperty(propertyName).SetValue(this, string.Empty);
+                }
             }
-            else
-            {
-                AlbumArtistIsCommon = false;
-                AlbumArtist = string.Empty;
-            }
+        }
 
-            if (_audioFiles.TrueForAll(audioFile =>
-                audioFile.Metadata.Composer.Equals(_audioFiles![0].Metadata.Composer, StringComparison.Ordinal)))
-            {
-                ComposerIsCommon = true;
-                Composer = _audioFiles[0].Metadata.Composer;
-            }
-            else
-            {
-                ComposerIsCommon = false;
-                Composer = string.Empty;
-            }
-
-            if (_audioFiles.TrueForAll(audioFile =>
-                audioFile.Metadata.Genre.Equals(_audioFiles![0].Metadata.Genre, StringComparison.Ordinal)))
-            {
-                GenreIsCommon = true;
-                Genre = _audioFiles[0].Metadata.Genre;
-            }
-            else
-            {
-                GenreIsCommon = false;
-                Genre = string.Empty;
-            }
-
+        void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            RaisePropertyChanged("HasErrors");
         }
     }
 }
