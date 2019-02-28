@@ -35,9 +35,7 @@ namespace AudioWorks.UI.Views
             while (source != null && !(source is DataGridColumnHeader))
                 source = VisualTreeHelper.GetParent(source);
 
-            if (source == null) return;
-
-            if (source is DataGridColumnHeader)
+            if (source != null)
                 e.Handled = true;
         }
     }
