@@ -13,24 +13,17 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System.Windows;
-using AudioWorks.UI.Services;
-using AudioWorks.UI.ViewModels;
-using AudioWorks.UI.Views;
-using Prism.Ioc;
+using Prism.Services.Dialogs;
 
-namespace AudioWorks.UI
+namespace AudioWorks.UI.Views
 {
-    public sealed partial class App
+    public partial class CustomDialogWindow : IDialogWindow
     {
-        protected override Window CreateShell() => Container.Resolve<MainWindow>();
+        public IDialogResult? Result { get; set; }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        public CustomDialogWindow()
         {
-            containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
-            containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
-            containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
-            containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
+            InitializeComponent();
         }
     }
 }

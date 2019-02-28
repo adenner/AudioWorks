@@ -57,6 +57,7 @@ namespace AudioWorks.UI.ViewModels
         string _trackNumber = string.Empty;
         bool _trackCountIsCommon;
         string _trackCount = string.Empty;
+        string _dialogTitle = string.Empty;
 
         public bool IsMultiple
         {
@@ -70,7 +71,7 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _titleIsCommon, value);
         }
 
-        public string Title
+        public new string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
@@ -248,6 +249,12 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
+        public string DialogTitle
+        {
+            get => _dialogTitle;
+            set => SetProperty(ref _dialogTitle, value);
+        }
+
         public DelegateCommand ApplyCommand { get; }
 
         public bool HasErrors => _errors.HasErrors;
@@ -304,13 +311,14 @@ namespace AudioWorks.UI.ViewModels
         void SetProperties()
         {
             IsMultiple = _audioFiles!.Count > 1;
+            DialogTitle = _isMultiple ? $"Editing {_audioFiles.Count} files" : "Editing 1 file";
 
             var thisType = GetType();
 
             foreach (var propertyName in thisType.GetProperties()
                 .Where(prop => prop.PropertyType == typeof(string))
                 .Select(prop => prop.Name)
-                .Except(new[] { "IconSource" }))
+                .Except(new[] { "DialogTitle", "IconSource" }))
             {
                 var propertyInfo = typeof(AudioMetadataViewModel).GetProperty(propertyName);
                 var firstValue = (string) propertyInfo.GetValue(_audioFiles[0].Metadata);
