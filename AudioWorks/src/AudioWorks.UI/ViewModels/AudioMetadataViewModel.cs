@@ -87,6 +87,39 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
+        public string Comment
+        {
+            get => _metadata.Comment;
+            set
+            {
+                _metadata.Comment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public string Day
+        {
+            get => _metadata.Day;
+            set
+            {
+                _metadata.Day = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public string Month
+        {
+            get => _metadata.Month;
+            set
+            {
+                _metadata.Month = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public string Year
         {
             get => _metadata.Year;
@@ -107,7 +140,17 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
-        public unsafe BitmapImage? CoverImage => _coverImage.Value;
+        public string TrackCount
+        {
+            get => _metadata.TrackCount;
+            set
+            {
+                _metadata.TrackCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public BitmapImage? CoverImage => _coverImage.Value;
 
         public bool Modified
         {
