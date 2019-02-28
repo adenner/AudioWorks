@@ -63,7 +63,7 @@ You should have received a copy of the GNU Affero General Public License along w
             </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Edit" Command="{Binding EditSelectionCommand}"/>
+                    <MenuItem Header="Edit..." Command="{Binding EditSelectionCommand}"/>
                     <Separator/>
                     <MenuItem Header="Revert Changes" Command="{Binding RevertSelectionCommand}"/>
                     <MenuItem Header="Save Changes" Command="{Binding SaveSelectionCommand}"/>
@@ -101,8 +101,8 @@ You should have received a copy of the GNU Affero General Public License along w
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save" Command="{Binding SaveCommand}"/>
-                                <Button Content="Revert" Command="{Binding RevertCommand}"/>
+                                <Button Command="{Binding SaveCommand}">Save</Button>
+                                <Button Command="{Binding RevertCommand}">Revert</Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

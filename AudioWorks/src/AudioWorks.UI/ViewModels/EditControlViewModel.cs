@@ -288,7 +288,7 @@ namespace AudioWorks.UI.ViewModels
                     }
 
                 RaiseRequestClose(new DialogResult(true));
-            });
+            }, () => !HasErrors).ObservesProperty(() => HasErrors);
         }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
