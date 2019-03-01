@@ -22,7 +22,7 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="AudioWorks" Icon="../Resources/Icon.png" Height="600" Width="1000">
+        Title="AudioWorks" Height="600" Width="1000">
     <Window.InputBindings>
         <KeyBinding Command="{Binding OpenFilesCommand}" Modifiers="Control" Key="O"/>
     </Window.InputBindings>
