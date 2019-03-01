@@ -1,4 +1,4 @@
-﻿<!-- Copyright © 2019 Jeremy Herbison
+﻿/* Copyright © 2019 Jeremy Herbison
 
 This file is part of AudioWorks.
 
@@ -11,12 +11,21 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Aff
 details.
 
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
-<https://www.gnu.org/licenses/>. -->
+<https://www.gnu.org/licenses/>. */
 
-<Window x:Class="AudioWorks.UI.Views.CustomDialogWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Title="{Binding Title}"
-             WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight"
-             ShowInTaskbar="False" ResizeMode="NoResize">
-</Window>
+using System;
+using System.Runtime.InteropServices;
+using System.Security;
+
+namespace AudioWorks.UI
+{
+    [SuppressUnmanagedCodeSecurity]
+    static class SafeNativeMethods
+    {
+        [DllImport("user32.dll")]
+        internal static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        internal static extern int SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+    }
+}
