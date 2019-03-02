@@ -17,6 +17,7 @@ using System.Windows;
 using AudioWorks.UI.Services;
 using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
+using MahApps.Metro;
 using Prism.Ioc;
 
 namespace AudioWorks.UI
@@ -31,6 +32,14 @@ namespace AudioWorks.UI
             containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            ThemeManager.IsAutomaticWindowsAppModeSettingSyncEnabled = true;
+            ThemeManager.SyncThemeWithWindowsAppModeSetting();
+
+            base.OnStartup(e);
         }
     }
 }

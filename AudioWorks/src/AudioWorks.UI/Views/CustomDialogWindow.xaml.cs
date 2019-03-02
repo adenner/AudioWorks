@@ -13,33 +13,17 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System;
-using System.Windows.Interop;
 using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.Views
 {
     public partial class CustomDialogWindow : IDialogWindow
     {
-        const int _gwlStyle = -16;
-        const uint _wsSysMenu = 0x80000;
-
         public IDialogResult? Result { get; set; }
 
         public CustomDialogWindow()
         {
             InitializeComponent();
-        }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            // Remove the icon and menu bar buttons
-            var windowHandle = new WindowInteropHelper(this).Handle;
-            var styleHandle = SafeNativeMethods.GetWindowLongPtr(windowHandle, _gwlStyle);
-            SafeNativeMethods.SetWindowLongPtr(windowHandle, _gwlStyle,
-                new IntPtr(styleHandle.ToInt32() & ~_wsSysMenu));
-
-            base.OnSourceInitialized(e);
         }
     }
 }
