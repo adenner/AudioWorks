@@ -19,5 +19,5 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              Title="{Binding Title}"
              WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight"
-             ShowInTaskbar="False" ResizeMode="NoResize">
+             ShowInTaskbar="False" ResizeMode="NoResize" TitleCharacterCasing="Normal">
 </mahapps:MetroWindow>

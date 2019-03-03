@@ -23,7 +23,7 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="AudioWorks" Icon="../Resources/Icon.png" Height="600" Width="1000">
+        Title="AudioWorks" TitleCharacterCasing="Normal" Icon="../Resources/Icon.png" Height="600" Width="1000">
     <Window.InputBindings>
         <KeyBinding Command="{Binding OpenFilesCommand}" Modifiers="Control" Key="O"/>
     </Window.InputBindings>
@@ -53,7 +53,7 @@ You should have received a copy of the GNU Affero General Public License along w
         </Menu>
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False" PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
-                  GridLinesVisibility="Vertical" AlternatingRowBackground="AliceBlue">
+                  GridLinesVisibility="Vertical">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -73,7 +73,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.ItemContainerStyle>
-                <Style TargetType="{x:Type DataGridRow}">
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
                     <Style.Triggers>
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter Property="ToolTip" Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
@@ -97,7 +97,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTextColumn Header="Album" Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Year" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridCheckBoxColumn Header="Modified" Binding="{Binding Metadata.Modified, Mode=OneWay}" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="Modified" Binding="{Binding Metadata.Modified, Mode=OneWay}" IsReadOnly="True" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

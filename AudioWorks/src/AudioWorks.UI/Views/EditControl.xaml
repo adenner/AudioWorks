@@ -19,38 +19,41 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-        <Style TargetType="Label" x:Key="EntryLabel">
-            <Setter Property="FontSize" Value="9"/>
+        <Style TargetType="Label" x:Key="EntryLabel" BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0,0,0,5"/>
         </Style>
-        <Style TargetType="TextBox" x:Key="EntryTextBox">
+        <Style TargetType="TextBox" x:Key="EntryTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Margin" Value="0,0,0,11"/>
-            <Setter Property="Width" Value="250"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="mahapps:TextBoxHelper.ClearTextButton" Value="True"/>
         </Style>
-        <Style TargetType="TextBox" x:Key="TwoDigitTextBox">
+        <Style TargetType="TextBox" x:Key="TwoDigitTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0,0,0,11"/>
-            <Setter Property="Width" Value="20"/>
+            <Setter Property="Width" Value="45"/>
             <Setter Property="MaxLength" Value="2"/>
+            <Setter Property="mahapps:TextBoxHelper.ClearTextButton" Value="True"/>
         </Style>
-        <Style TargetType="TextBox" x:Key="FourDigitTextBox">
+        <Style TargetType="TextBox" x:Key="FourDigitTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0,0,0,11"/>
-            <Setter Property="Width" Value="40"/>
+            <Setter Property="Width" Value="60"/>
             <Setter Property="MaxLength" Value="4"/>
+            <Setter Property="mahapps:TextBoxHelper.ClearTextButton" Value="True"/>
         </Style>
-        <Style TargetType="CheckBox" x:Key="EntryCheckBox">
+        <Style TargetType="CheckBox" x:Key="EntryCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="5,0,0,0"/>
         </Style>
-        <Style TargetType="Button" x:Key="CommandButton">
+        <Style TargetType="Button" x:Key="CommandButton" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Margin" Value="0,0,7,0"/>
             <Setter Property="Width" Value="75"/>
-            <Setter Property="Height" Value="23"/>
         </Style>
     </UserControl.Resources>
     <Border BorderThickness="11">
