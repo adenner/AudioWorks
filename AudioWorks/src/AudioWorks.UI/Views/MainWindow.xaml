@@ -24,13 +24,7 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Loaded="MainWindow_OnLoaded" ShowSystemMenuOnRightClick="False"
         Title="AudioWorks" TitleCharacterCasing="Normal" Icon="../Resources/Icon.png" Height="600" Width="1000">
-    <mahapps:MetroWindow.TitleTemplate>
-        <DataTemplate>
-            <fluent:RibbonTitleBar x:Name="RibbonTitleBar" Header="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        </DataTemplate>
-    </mahapps:MetroWindow.TitleTemplate>
     <Window.InputBindings>
         <KeyBinding Command="{Binding OpenFilesCommand}" Modifiers="Control" Key="O"/>
     </Window.InputBindings>
@@ -41,7 +35,7 @@ You should have received a copy of the GNU Affero General Public License along w
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <fluent:Ribbon>
+        <fluent:Ribbon IsQuickAccessToolBarVisible="False">
             <fluent:Ribbon.Menu>
                 <fluent:ApplicationMenu >
                     <fluent:MenuItem Header="Open" Command="{Binding OpenFilesCommand}"/>
