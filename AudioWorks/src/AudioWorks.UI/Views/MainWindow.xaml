@@ -21,9 +21,16 @@ You should have received a copy of the GNU Affero General Public License along w
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        Loaded="MainWindow_OnLoaded" ShowSystemMenuOnRightClick="False"
         Title="AudioWorks" TitleCharacterCasing="Normal" Icon="../Resources/Icon.png" Height="600" Width="1000">
+    <mahapps:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <fluent:RibbonTitleBar x:Name="RibbonTitleBar" Header="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </DataTemplate>
+    </mahapps:MetroWindow.TitleTemplate>
     <Window.InputBindings>
         <KeyBinding Command="{Binding OpenFilesCommand}" Modifiers="Control" Key="O"/>
     </Window.InputBindings>
@@ -34,26 +41,29 @@ You should have received a copy of the GNU Affero General Public License along w
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Menu>
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Command="{Binding OpenFilesCommand}" InputGestureText="Ctrl+O"/>
-                <Separator/>
-                <MenuItem Header="E_xit" Command="{Binding ExitCommand}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Command="Undo"/>
-                <Separator/>
-                <MenuItem Command="Cut"/>
-                <MenuItem Command="Copy"/>
-                <MenuItem Command="Paste"/>
-                <MenuItem Command="Delete"/>
-                <Separator/>
-                <MenuItem Command="SelectAll"/>
-            </MenuItem>
-        </Menu>
+        <fluent:Ribbon>
+            <fluent:Ribbon.Menu>
+                <fluent:ApplicationMenu >
+                    <fluent:MenuItem Header="Open" Command="{Binding OpenFilesCommand}"/>
+                    <fluent:MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+                </fluent:ApplicationMenu>
+            </fluent:Ribbon.Menu>
+            <fluent:RibbonTabItem Header="Home">
+                <fluent:RibbonGroupBox Header="Clipboard">
+                    <fluent:Button Header="Cut" Command="Cut"/>
+                    <fluent:Button Header="Copy" Command="Copy"/>
+                    <fluent:Button Header="Paste" Command="Paste"/>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+        </fluent:Ribbon>
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding AudioFiles}" AutoGenerateColumns="False" PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridCell" x:Key="NumericStyle" BasedOn="{StaticResource MetroDataGridCell}">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                </Style>
+            </DataGrid.Resources>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -90,12 +100,12 @@ You should have received a copy of the GNU Affero General Public License along w
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Path" Binding="{Binding Path}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Track #" Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Track #" CellStyle="{StaticResource NumericStyle}" Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Title" Binding="{Binding Metadata.SongTitle, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Artist" Binding="{Binding Metadata.Artist, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Composer" Binding="{Binding Metadata.Composer, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Album" Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Year" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Year" CellStyle="{StaticResource NumericStyle}" Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridCheckBoxColumn Header="Modified" Binding="{Binding Metadata.Modified, Mode=OneWay}" IsReadOnly="True" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
                 <DataGridTemplateColumn>

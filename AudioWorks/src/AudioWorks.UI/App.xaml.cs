@@ -13,12 +13,12 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System.Windows;
 using AudioWorks.UI.Services;
 using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
-using MahApps.Metro;
 using Prism.Ioc;
+using System.Windows;
+using Metro = MahApps.Metro;
 
 namespace AudioWorks.UI
 {
@@ -36,8 +36,11 @@ namespace AudioWorks.UI
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            ThemeManager.IsAutomaticWindowsAppModeSettingSyncEnabled = true;
-            ThemeManager.SyncThemeWithWindowsAppModeSetting();
+            Metro.ThemeManager.IsAutomaticWindowsAppModeSettingSyncEnabled = true;
+            Metro.ThemeManager.SyncThemeWithWindowsAppModeSetting();
+
+            Fluent.ThemeManager.IsAutomaticWindowsAppModeSettingSyncEnabled = true;
+            Fluent.ThemeManager.SyncThemeWithWindowsAppModeSetting();
 
             base.OnStartup(e);
         }

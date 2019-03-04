@@ -17,10 +17,12 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using Fluent;
+using MahApps.Metro.Controls;
 
 namespace AudioWorks.UI.Views
 {
-    public sealed partial class MainWindow
+    public sealed partial class MainWindow : IRibbonWindow
     {
         public MainWindow()
         {
@@ -38,5 +40,14 @@ namespace AudioWorks.UI.Views
             if (source != null)
                 e.Handled = true;
         }
+
+        void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            TitleBar = this.FindChild<RibbonTitleBar>("RibbonTitleBar");
+            TitleBar.InvalidateArrange();
+            TitleBar.UpdateLayout();
+        }
+
+        public RibbonTitleBar TitleBar { get; private set; }
     }
 }
