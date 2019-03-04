@@ -58,6 +58,12 @@ You should have received a copy of the GNU Affero General Public License along w
                     <Setter Property="HorizontalAlignment" Value="Right"/>
                 </Style>
             </DataGrid.Resources>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
