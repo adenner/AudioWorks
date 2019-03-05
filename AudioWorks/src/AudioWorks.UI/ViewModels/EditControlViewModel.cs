@@ -17,7 +17,6 @@ using Prism.Commands;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
@@ -242,16 +241,10 @@ namespace AudioWorks.UI.ViewModels
             });
         }
 
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
         public override void OnDialogOpened(IDialogParameters parameters)
         {
             _audioFiles = parameters.GetValue<List<AudioFileViewModel>>("AudioFiles");
-            SetProperties();
-        }
 
-        void SetProperties()
-        {
             IsMultiple = _audioFiles!.Count > 1;
             Title = _isMultiple ? $"Editing {_audioFiles.Count} files" : "Editing 1 file";
 
