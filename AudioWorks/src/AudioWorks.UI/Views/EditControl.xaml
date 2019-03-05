@@ -48,18 +48,24 @@ You should have received a copy of the GNU Affero General Public License along w
                BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
             <Setter Property="HorizontalAlignment"
                     Value="Left"/>
+            <Setter Property="Width"
+                    Value="84"/>
             <Setter Property="Margin"
                     Value="0,0,0,11"/>
             <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
                     Value="True"/>
         </Style>
-        <Style TargetType="CheckBox"
-               x:Key="EntryCheckBox"
-               BasedOn="{StaticResource {x:Type CheckBox}}">
+        <Style TargetType="mahapps:ToggleSwitch"
+               x:Key="EntryToggle"
+               BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
             <Setter Property="VerticalAlignment"
                     Value="Top"/>
             <Setter Property="Margin"
                     Value="5,0,0,0"/>
+            <Setter Property="OnLabel"
+                    Value="{x:Null}"/>
+            <Setter Property="OffLabel"
+                    Value="{x:Null}"/>
         </Style>
         <Style TargetType="Button"
                x:Key="CommandButton"
@@ -98,12 +104,12 @@ You should have received a copy of the GNU Affero General Public License along w
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="23"/>
-                <ColumnDefinition Width="23"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="23"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="23"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.ColumnSpan="5"
@@ -116,11 +122,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Minimum="1"
                      Maximum="99"
                      StringFormat="00"/>
-            <CheckBox Grid.Row="1"
-                      Grid.Column="1"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding TrackNumberIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="1"
+                                  Grid.Column="1"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding TrackNumberIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
             <Label Grid.Row="1"
                    Grid.Column="2"
                    Padding="0"
@@ -134,11 +140,11 @@ You should have received a copy of the GNU Affero General Public License along w
                                    Minimum="1"
                                    Maximum="99"
                                    StringFormat="00"/>
-            <CheckBox Grid.Row="1"
-                      Grid.Column="4"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding TrackCountIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="1"
+                                  Grid.Column="4"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding TrackCountIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="2"
                    Grid.Column="0"
@@ -150,11 +156,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding SongTitle, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding SongTitleIsCommon}"/>
-            <CheckBox Grid.Row="3"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding SongTitleIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="3"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding SongTitleIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="4"
                    Grid.Column="0"
@@ -166,11 +172,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding Artist, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding ArtistIsCommon}"/>
-            <CheckBox Grid.Row="5"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding ArtistIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="5"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding ArtistIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="6"
                    Grid.Column="0"
@@ -182,11 +188,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding AlbumArtist, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding AlbumArtistIsCommon}"/>
-            <CheckBox Grid.Row="7"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding AlbumArtistIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="7"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding AlbumArtistIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="8"
                    Grid.Column="0"
@@ -198,11 +204,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding Composer, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding ComposerIsCommon}"/>
-            <CheckBox Grid.Row="9"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding ComposerIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="9"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding ComposerIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="10"
                    Grid.Column="0"
@@ -214,11 +220,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding Album, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding AlbumIsCommon}"/>
-            <CheckBox Grid.Row="11"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding AlbumIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="11"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding AlbumIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="12"
                    Grid.Column="0"
@@ -230,11 +236,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding Genre, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding GenreIsCommon}"/>
-            <CheckBox Grid.Row="13"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding GenreIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="13"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding GenreIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="14"
                    Grid.Column="0"
@@ -248,11 +254,11 @@ You should have received a copy of the GNU Affero General Public License along w
                                    IsEnabled="{Binding YearIsCommon}"
                                    Minimum="1000"
                                    Maximum="9999"/>
-            <CheckBox Grid.Row="15"
-                      Grid.Column="2"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding YearIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="15"
+                                  Grid.Column="1"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding YearIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="16"
                    Grid.Column="0"
@@ -266,11 +272,11 @@ You should have received a copy of the GNU Affero General Public License along w
                                    Minimum="1"
                                    Maximum="31"
                                    StringFormat="00"/>
-            <CheckBox Grid.Row="17"
-                      Grid.Column="1"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding DayIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="17"
+                                  Grid.Column="1"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding DayIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
             <Label Grid.Row="16"
                    Grid.Column="3"
                    Grid.ColumnSpan="2"
@@ -283,11 +289,11 @@ You should have received a copy of the GNU Affero General Public License along w
                                    Minimum="1"
                                    Maximum="12"
                                    StringFormat="00"/>
-            <CheckBox Grid.Row="17"
-                      Grid.Column="4"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding MonthIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="17"
+                                  Grid.Column="4"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding MonthIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="18"
                    Grid.Column="0"
@@ -299,11 +305,11 @@ You should have received a copy of the GNU Affero General Public License along w
                      Style="{StaticResource EntryTextBox}"
                      Text="{Binding Comment, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding CommentIsCommon}"/>
-            <CheckBox Grid.Row="19"
-                      Grid.Column="6"
-                      Style="{StaticResource EntryCheckBox}"
-                      IsChecked="{Binding CommentIsCommon}"
-                      Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
+            <mahapps:ToggleSwitch Grid.Row="19"
+                                  Grid.Column="6"
+                                  Style="{StaticResource EntryToggle}"
+                                  IsChecked="{Binding CommentIsCommon}"
+                                  Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <StackPanel Grid.Row="20"
                         Grid.Column="0"
