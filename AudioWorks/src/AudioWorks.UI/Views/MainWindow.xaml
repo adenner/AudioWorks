@@ -69,11 +69,11 @@ You should have received a copy of the GNU Affero General Public License along w
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical">
             <DataGrid.Resources>
-                <Style TargetType="DataGridCell"
-                       x:Key="NumericStyle"
-                       BasedOn="{StaticResource MetroDataGridCell}">
-                    <Setter Property="HorizontalAlignment"
-                            Value="Right"/>
+                <Style TargetType="TextBox"
+                       x:Key="EntryTextBox"
+                       BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
+                            Value="True"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.ColumnHeaderStyle>
@@ -109,18 +109,6 @@ You should have received a copy of the GNU Affero General Public License along w
                               Command="{Binding RemoveSelectionCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="{x:Type DataGridRow}"
-                       BasedOn="{StaticResource {x:Type DataGridRow}}">
-                    <Style.Triggers>
-                        <Trigger Property="Validation.HasError"
-                                 Value="True">
-                            <Setter Property="ToolTip"
-                                    Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Cover">
                     <DataGridTemplateColumn.CellTemplate>
@@ -133,22 +121,30 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTextColumn Header="Path"
                                     Binding="{Binding Path}"
                                     IsReadOnly="True"/>
-                <DataGridTextColumn Header="Track #"
-                                    CellStyle="{StaticResource NumericStyle}"
-                                    Binding="{Binding Metadata.TrackNumber, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <mahapps:DataGridNumericUpDownColumn Header="Track #"
+                                                     Binding="{Binding Metadata.TrackNumber}"
+                                                     Minimum="1"
+                                                     Maximum="99"
+                                                     StringFormat="00"/>
                 <DataGridTextColumn Header="Title"
-                                    Binding="{Binding Metadata.SongTitle, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding Metadata.SongTitle}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
                 <DataGridTextColumn Header="Artist"
-                                    Binding="{Binding Metadata.Artist, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding Metadata.Artist}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
                 <DataGridTextColumn Header="Composer"
-                                    Binding="{Binding Metadata.Composer, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding Metadata.Composer}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
                 <DataGridTextColumn Header="Album"
-                                    Binding="{Binding Metadata.Album, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Year"
-                                    CellStyle="{StaticResource NumericStyle}"
-                                    Binding="{Binding Metadata.Year, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding Metadata.Album}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                <mahapps:DataGridNumericUpDownColumn Header="Year"
+                                                     Binding="{Binding Metadata.Year}"
+                                                     Minimum="1000"
+                                                     Maximum="9999"/>
                 <DataGridTextColumn Header="Genre"
-                                    Binding="{Binding Metadata.Genre, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding Metadata.Genre}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
                 <DataGridCheckBoxColumn Header="Modified"
                                         Binding="{Binding Metadata.Modified, Mode=OneWay}"
                                         IsReadOnly="True"
