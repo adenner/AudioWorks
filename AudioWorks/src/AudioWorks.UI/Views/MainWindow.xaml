@@ -37,22 +37,14 @@ You should have received a copy of the GNU Affero General Public License along w
         </Grid.RowDefinitions>
 
         <fluent:Ribbon IsQuickAccessToolBarVisible="False">
-            <fluent:Ribbon.Menu>
-                <fluent:ApplicationMenu >
-                    <fluent:MenuItem Header="Open"
-                                     Command="{Binding OpenFilesCommand}"/>
-                    <fluent:MenuItem Header="Exit"
-                                     Command="{Binding ExitCommand}"/>
-                </fluent:ApplicationMenu>
-            </fluent:Ribbon.Menu>
             <fluent:RibbonTabItem Header="Home">
-                <fluent:RibbonGroupBox Header="Clipboard">
-                    <fluent:Button Header="Cut"
-                                   Command="Cut"/>
-                    <fluent:Button Header="Copy"
-                                   Command="Copy"/>
-                    <fluent:Button Header="Paste"
-                                   Command="Paste"/>
+                <fluent:RibbonGroupBox>
+                    <fluent:Button Header="Open"
+                                   Command="{Binding OpenFilesCommand}"
+                                   LargeIcon="{StaticResource OpenFileImage}" Padding="5"/>
+                    <fluent:Button Header="Exit"
+                                   Command="{Binding ExitCommand}"
+                                   LargeIcon="{StaticResource ExitImage}" Padding="5"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
