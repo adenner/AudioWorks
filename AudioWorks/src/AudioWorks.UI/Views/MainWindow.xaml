@@ -64,6 +64,13 @@ You should have received a copy of the GNU Affero General Public License along w
                             Value="True"/>
                 </Style>
             </DataGrid.Resources>
+            <DataGrid.Style>
+                <Style TargetType="{x:Type DataGrid}"
+                       BasedOn="{StaticResource MetroDataGrid}">
+                    <Setter Property="AlternatingRowBackground"
+                            Value="{DynamicResource GrayBrush10}" />
+                </Style>
+            </DataGrid.Style>
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader"
                        BasedOn="{StaticResource MetroDataGridColumnHeader}">
