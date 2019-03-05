@@ -40,35 +40,17 @@ You should have received a copy of the GNU Affero General Public License along w
                     Value="0,0,0,11"/>
             <Setter Property="Width"
                     Value="300"/>
-            <Setter Property="mahapps:TextBoxHelper.ClearTextButton"
+            <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
                     Value="True"/>
         </Style>
-        <Style TargetType="TextBox"
-               x:Key="TwoDigitTextBox"
-               BasedOn="{StaticResource {x:Type TextBox}}">
+        <Style TargetType="mahapps:NumericUpDown"
+               x:Key="EntryNumeric"
+               BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
             <Setter Property="HorizontalAlignment"
                     Value="Left"/>
             <Setter Property="Margin"
                     Value="0,0,0,11"/>
-            <Setter Property="Width"
-                    Value="45"/>
-            <Setter Property="MaxLength"
-                    Value="2"/>
-            <Setter Property="mahapps:TextBoxHelper.ClearTextButton"
-                    Value="True"/>
-        </Style>
-        <Style TargetType="TextBox"
-               x:Key="FourDigitTextBox"
-               BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="HorizontalAlignment"
-                    Value="Left"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,11"/>
-            <Setter Property="Width"
-                    Value="60"/>
-            <Setter Property="MaxLength"
-                    Value="4"/>
-            <Setter Property="mahapps:TextBoxHelper.ClearTextButton"
+            <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
                     Value="True"/>
         </Style>
         <Style TargetType="CheckBox"
@@ -126,11 +108,14 @@ You should have received a copy of the GNU Affero General Public License along w
 
             <Label Grid.ColumnSpan="5"
                    Style="{StaticResource EntryLabel}">Track #:</Label>
-            <TextBox Grid.Row="1"
-                     Grid.Column="0"
-                     Style="{StaticResource TwoDigitTextBox}"
-                     Text="{Binding TrackNumber, ValidatesOnNotifyDataErrors=True}"
-                     IsEnabled="{Binding TrackNumberIsCommon}"/>
+            <mahapps:NumericUpDown Grid.Row="1"
+                     Grid.Column="0"                   
+                     Style="{StaticResource EntryNumeric}"
+                     Value="{Binding TrackNumber}"
+                     IsEnabled="{Binding TrackNumberIsCommon}"
+                     Minimum="1"
+                     Maximum="99"
+                     StringFormat="00"/>
             <CheckBox Grid.Row="1"
                       Grid.Column="1"
                       Style="{StaticResource EntryCheckBox}"
@@ -141,11 +126,14 @@ You should have received a copy of the GNU Affero General Public License along w
                    Padding="0"
                    Margin="5,0,5,0"
                    HorizontalAlignment="Center">of</Label>
-            <TextBox Grid.Row="1"
-                     Grid.Column="3"
-                     Style="{StaticResource TwoDigitTextBox}"
-                     Text="{Binding TrackCount, ValidatesOnNotifyDataErrors=True}"
-                     IsEnabled="{Binding TrackCountIsCommon}"/>
+            <mahapps:NumericUpDown Grid.Row="1"
+                                   Grid.Column="3"                   
+                                   Style="{StaticResource EntryNumeric}"
+                                   Value="{Binding TrackCount}"
+                                   IsEnabled="{Binding TrackCountIsCommon}"
+                                   Minimum="1"
+                                   Maximum="99"
+                                   StringFormat="00"/>
             <CheckBox Grid.Row="1"
                       Grid.Column="4"
                       Style="{StaticResource EntryCheckBox}"
@@ -252,11 +240,14 @@ You should have received a copy of the GNU Affero General Public License along w
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
                    Style="{StaticResource EntryLabel}">Year:</Label>
-            <TextBox Grid.Row="15"
-                     Grid.Column="0"
-                     Grid.ColumnSpan="2"
-                     Style="{StaticResource FourDigitTextBox}"
-                     Text="{Binding Year, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding YearIsCommon}"/>
+            <mahapps:NumericUpDown Grid.Row="15"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource EntryNumeric}"
+                                   Value="{Binding Year}"
+                                   IsEnabled="{Binding YearIsCommon}"
+                                   Minimum="1000"
+                                   Maximum="9999"/>
             <CheckBox Grid.Row="15"
                       Grid.Column="2"
                       Style="{StaticResource EntryCheckBox}"
@@ -267,11 +258,14 @@ You should have received a copy of the GNU Affero General Public License along w
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
                    Style="{StaticResource EntryLabel}">Day:</Label>
-            <TextBox Grid.Row="17"
-                     Grid.Column="0"
-                     Style="{StaticResource TwoDigitTextBox}"
-                     Text="{Binding Day, ValidatesOnNotifyDataErrors=True}"
-                     IsEnabled="{Binding DayIsCommon}"/>
+            <mahapps:NumericUpDown Grid.Row="17"
+                                   Grid.Column="0"                   
+                                   Style="{StaticResource EntryNumeric}"
+                                   Value="{Binding Day}"
+                                   IsEnabled="{Binding DayIsCommon}"
+                                   Minimum="1"
+                                   Maximum="31"
+                                   StringFormat="00"/>
             <CheckBox Grid.Row="17"
                       Grid.Column="1"
                       Style="{StaticResource EntryCheckBox}"
@@ -281,11 +275,14 @@ You should have received a copy of the GNU Affero General Public License along w
                    Grid.Column="3"
                    Grid.ColumnSpan="2"
                    Style="{StaticResource EntryLabel}">Month:</Label>
-            <TextBox Grid.Row="17"
-                     Grid.Column="3"
-                     Style="{StaticResource TwoDigitTextBox}"
-                     Text="{Binding Month, ValidatesOnNotifyDataErrors=True}"
-                     IsEnabled="{Binding MonthIsCommon}"/>
+            <mahapps:NumericUpDown Grid.Row="17"
+                                   Grid.Column="3"                   
+                                   Style="{StaticResource EntryNumeric}"
+                                   Value="{Binding Month}"
+                                   IsEnabled="{Binding MonthIsCommon}"
+                                   Minimum="1"
+                                   Maximum="12"
+                                   StringFormat="00"/>
             <CheckBox Grid.Row="17"
                       Grid.Column="4"
                       Style="{StaticResource EntryCheckBox}"

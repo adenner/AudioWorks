@@ -13,24 +13,19 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using Prism.Commands;
+using Prism.Services.Dialogs;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
-using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.ViewModels
 {
     // ReSharper disable once UnusedMember.Global
-    public class EditControlViewModel : DialogViewModelBase, INotifyDataErrorInfo
+    public class EditControlViewModel : DialogViewModelBase
     {
-        readonly ErrorsContainer<ValidationResult> _errors;
         List<AudioFileViewModel>? _audioFiles;
         bool _isMultiple;
         bool _songTitleIsCommon;
@@ -157,15 +152,7 @@ namespace AudioWorks.UI.ViewModels
         public string Day
         {
             get => _day;
-            set
-            {
-                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 31)
-                    _errors.ClearErrors(() => Day);
-                else
-                    _errors.SetErrors(() => Day,
-                        new[] { new ValidationResult(false, "Day must be between 1 and 31.") });
-                SetProperty(ref _day, value);
-            }
+            set => SetProperty(ref _day, value);
         }
 
         public bool MonthIsCommon
@@ -177,15 +164,7 @@ namespace AudioWorks.UI.ViewModels
         public string Month
         {
             get => _month;
-            set
-            {
-                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 12)
-                    _errors.ClearErrors(() => Month);
-                else
-                    _errors.SetErrors(() => Month,
-                        new[] { new ValidationResult(false, "Month must be between 1 and 12.") });
-                SetProperty(ref _month, value);
-            }
+            set => SetProperty(ref _month, value);
         }
 
         public bool YearIsCommon
@@ -197,15 +176,7 @@ namespace AudioWorks.UI.ViewModels
         public string Year
         {
             get => _year;
-            set
-            {
-                if (string.IsNullOrEmpty(value) || Regex.IsMatch(value, "^[1-9][0-9]{3}$"))
-                    _errors.ClearErrors(() => Year);
-                else
-                    _errors.SetErrors(() => Year,
-                        new[] { new ValidationResult(false, "Year must be between 1000 and 9999.") });
-                SetProperty(ref _year, value);
-            }
+            set => SetProperty(ref _year, value);
         }
 
         public bool TrackNumberIsCommon
@@ -217,15 +188,7 @@ namespace AudioWorks.UI.ViewModels
         public string TrackNumber
         {
             get => _trackNumber;
-            set
-            {
-                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 99)
-                    _errors.ClearErrors(() => TrackNumber);
-                else
-                    _errors.SetErrors(() => TrackNumber,
-                        new[] { new ValidationResult(false, "Track # must be between 1 and 99.") });
-                SetProperty(ref _trackNumber, value);
-            }
+            set => SetProperty(ref _trackNumber, value);
         }
 
         public bool TrackCountIsCommon
@@ -237,25 +200,13 @@ namespace AudioWorks.UI.ViewModels
         public string TrackCount
         {
             get => _trackCount;
-            set
-            {
-                if (string.IsNullOrEmpty(value) || int.TryParse(value, out var intValue) && intValue >= 1 && intValue <= 99)
-                    _errors.ClearErrors(() => TrackCount);
-                else
-                    _errors.SetErrors(() => TrackCount,
-                        new[] { new ValidationResult(false, "Track count must be between 1 and 99.") });
-                SetProperty(ref _trackCount, value);
-            }
+            set => SetProperty(ref _trackCount, value);
         }
 
         public DelegateCommand ApplyCommand { get; }
 
-        public bool HasErrors => _errors.HasErrors;
-
         public EditControlViewModel()
         {
-            _errors = new ErrorsContainer<ValidationResult>(RaiseErrorsChanged);
-
             ApplyCommand = new DelegateCommand(() =>
             {
                 if (_audioFiles != null)
@@ -288,12 +239,10 @@ namespace AudioWorks.UI.ViewModels
                     }
 
                 RaiseRequestClose(new DialogResult(true));
-            }, () => !HasErrors).ObservesProperty(() => HasErrors);
+            });
         }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        public IEnumerable GetErrors(string propertyName) => _errors.GetErrors(propertyName);
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
@@ -328,12 +277,6 @@ namespace AudioWorks.UI.ViewModels
                     thisType.GetProperty(propertyName).SetValue(this, string.Empty);
                 }
             }
-        }
-
-        void RaiseErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            RaisePropertyChanged("HasErrors");
         }
     }
 }
