@@ -30,12 +30,6 @@ You should have received a copy of the GNU Affero General Public License along w
                      Width="1000"
                      TitleCharacterCasing="Normal">
 
-    <Window.InputBindings>
-        <KeyBinding Command="{Binding OpenFilesCommand}"
-                    Modifiers="Control"
-                    Key="O"/>
-    </Window.InputBindings>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
