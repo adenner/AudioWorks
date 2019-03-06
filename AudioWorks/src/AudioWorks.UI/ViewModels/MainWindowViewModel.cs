@@ -123,17 +123,14 @@ namespace AudioWorks.UI.ViewModels
 
         void AddFiles(IEnumerable<string> newFiles)
         {
-            var uniqueNewFiles = newFiles.ToList();
-            var extensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
+            var validExtensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
+            var existingFiles = AudioFiles.Select(audioFile => audioFile.Path);
 
-            // Skip files that may have been added previously
-            foreach (var existingFile in AudioFiles.Select(audioFile => audioFile.Path))
-                if (uniqueNewFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
-                    uniqueNewFiles.Remove(existingFile);
-
-            AudioFiles.AddRange(uniqueNewFiles
-                .Where(file => extensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase))
-                .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
+            foreach (var newFile in newFiles.Where(file =>
+                    validExtensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase) &&
+                    !existingFiles.Contains(file, StringComparer.OrdinalIgnoreCase))
+                .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))))
+                AudioFiles.Add(newFile);
         }
     }
 }
