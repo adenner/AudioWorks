@@ -17,7 +17,7 @@ using System.Windows;
 
 namespace AudioWorks.UI.Services
 {
-    class WpfAppShutdownService : IAppShutdownService
+    sealed class WpfAppShutdownService : IAppShutdownService
     {
         public void Shutdown() => Application.Current.Shutdown();
     }
