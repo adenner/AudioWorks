@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluent.Ribbon" Version="7.0.0-alpha0623" />
+    <PackageReference Include="Fluent.Ribbon" Version="7.0.0-alpha0624" />
     <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0261" />
     <PackageReference Include="Prism.Unity" Version="7.2.0.1038-pre" />
   </ItemGroup>
