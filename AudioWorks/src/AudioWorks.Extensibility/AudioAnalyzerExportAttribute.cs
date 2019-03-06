@@ -50,10 +50,8 @@ namespace AudioWorks.Extensibility
         public AudioAnalyzerExportAttribute(string name, string description)
             : base(typeof(IAudioAnalyzer))
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(name));
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(description));
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(description)) throw new ArgumentNullException(nameof(description));
 
             Name = name;
             Description = description;

@@ -31,19 +31,19 @@ namespace AudioWorks.Extensibility
     public sealed class AudioMetadataEncoderExportAttribute : ExportAttribute
     {
         /// <summary>
-        /// Gets the file extension that this metadata encoder supports.
+        /// Gets the file extension.
         /// </summary>
         /// <value>The file extension.</value>
         public string Extension { get; }
 
         /// <summary>
-        /// Gets the name of the format written by this metadata encoder.
+        /// Gets the metadata format.
         /// </summary>
         /// <value>The format.</value>
         public string Format { get; }
 
         /// <summary>
-        /// Gets a description of the format written by this metadata encoder.
+        /// Gets a description of the metadata format.
         /// </summary>
         /// <value>The description.</value>
         public string Description { get; }
@@ -61,16 +61,13 @@ namespace AudioWorks.Extensibility
         public AudioMetadataEncoderExportAttribute(string extension, string format, string description)
             : base(typeof(IAudioMetadataEncoder))
         {
-            if (string.IsNullOrEmpty(extension))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(extension));
+            if (string.IsNullOrEmpty(extension)) throw new ArgumentNullException(nameof(extension));
             if (!extension.StartsWith(".", StringComparison.OrdinalIgnoreCase)
                 || extension.Any(char.IsWhiteSpace)
                 || extension.Any(character => Path.GetInvalidFileNameChars().Contains(character)))
                 throw new ArgumentException($"'{extension}' is not a valid file extension.", nameof(extension));
-            if (string.IsNullOrEmpty(format))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(format));
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(description));
+            if (string.IsNullOrEmpty(format)) throw new ArgumentNullException(nameof(format));
+            if (string.IsNullOrEmpty(description)) throw new ArgumentNullException(nameof(description));
 
             Extension = extension;
             Format = format;
