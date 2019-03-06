@@ -59,6 +59,46 @@ You should have received a copy of the GNU Affero General Public License along w
                                    LargeIcon="{StaticResource ExitImage}"
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Options">
+                    <fluent:DropDownButton Header="Add/Remove Columns"
+                                           LargeIcon="{StaticResource AddRemoveColumnsImage}"
+                                           fluent:KeyTip.Keys="C">
+                        <fluent:CheckBox Header="Album"
+                                         IsChecked="True"
+                                         x:Name="AlbumColumnCheckBox"/>
+                        <fluent:CheckBox Header="Album Artist"
+                                         x:Name="AlbumArtistColumnCheckBox"/>
+                        <fluent:CheckBox Header="Artist"
+                                         IsChecked="True"
+                                         x:Name="ArtistColumnCheckBox"/>
+                        <fluent:CheckBox Header="Comment"
+                                         x:Name="CommentColumnCheckBox"/>
+                        <fluent:CheckBox Header="Composer"
+                                         x:Name="ComposerColumnCheckBox"/>
+                        <fluent:CheckBox Header="Day"
+                                         x:Name="DayColumnCheckBox"/>
+                        <fluent:CheckBox Header="Cover Art"
+                                         x:Name="CoverArtColumnCheckBox"/>
+                        <fluent:CheckBox Header="Genre"
+                                         IsChecked="True"
+                                         x:Name="GenreColumnCheckBox"/>
+                        <fluent:CheckBox Header="Month"
+                                         x:Name="MonthColumnCheckBox"/>
+                        <fluent:CheckBox Header="Path"
+                                         x:Name="PathColumnCheckBox"/>
+                        <fluent:CheckBox Header="Title"
+                                         IsChecked="True"
+                                         x:Name="TitleColumnCheckBox"/>
+                        <fluent:CheckBox Header="Track #"
+                                         IsChecked="True"
+                                         x:Name="TrackNumberColumnCheckBox"/>
+                        <fluent:CheckBox Header="Track Count"
+                                         x:Name="TrackCountColumnCheckBox"/>
+                        <fluent:CheckBox Header="Year"
+                                         IsChecked="True"
+                                         x:Name="YearColumnCheckBox"/>
+                    </fluent:DropDownButton>
+                </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
@@ -71,6 +111,7 @@ You should have received a copy of the GNU Affero General Public License along w
                   PreviewDragOver="DataGrid_OnPreviewDragOver"
                   views:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}">
             <DataGrid.Resources>
+                <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
                 <Style TargetType="TextBox"
                        x:Key="EntryTextBox"
                        BasedOn="{StaticResource {x:Type TextBox}}">
@@ -119,7 +160,8 @@ You should have received a copy of the GNU Affero General Public License along w
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Cover">
+                <DataGridTemplateColumn Header="Cover"
+                                        Visibility="{Binding IsChecked, Source={x:Reference CoverArtColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding Metadata.CoverImage}"
@@ -129,31 +171,65 @@ You should have received a copy of the GNU Affero General Public License along w
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Path"
                                     Binding="{Binding Path}"
-                                    IsReadOnly="True"/>
+                                    IsReadOnly="True"
+                                    Visibility="{Binding IsChecked, Source={x:Reference PathColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Track #"
                                                      Binding="{Binding Metadata.TrackNumber}"
                                                      Minimum="1"
                                                      Maximum="99"
-                                                     StringFormat="00"/>
+                                                     StringFormat="00"
+                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackNumberColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <mahapps:DataGridNumericUpDownColumn Header="Track Count"
+                                                     Binding="{Binding Metadata.TrackCount}"
+                                                     Minimum="1"
+                                                     Maximum="99"
+                                                     StringFormat="00"
+                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackCountColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Title"
                                     Binding="{Binding Metadata.SongTitle}"
-                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference TitleColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Artist"
                                     Binding="{Binding Metadata.Artist}"
-                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference ArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Album Artist"
+                                    Binding="{Binding Metadata.AlbumArtist}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Composer"
                                     Binding="{Binding Metadata.Composer}"
-                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference ComposerColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Album"
                                     Binding="{Binding Metadata.Album}"
-                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <mahapps:DataGridNumericUpDownColumn Header="Day"
+                                                     Binding="{Binding Metadata.Day}"
+                                                     Minimum="1"
+                                                     Maximum="99"
+                                                     StringFormat="00"
+                                                     Visibility="{Binding IsChecked, Source={x:Reference DayColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <mahapps:DataGridNumericUpDownColumn Header="Month"
+                                                     Binding="{Binding Metadata.Month}"
+                                                     Minimum="1"
+                                                     Maximum="99"
+                                                     StringFormat="00"
+                                                     Visibility="{Binding IsChecked, Source={x:Reference MonthColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Year"
                                                      Binding="{Binding Metadata.Year}"
                                                      Minimum="1000"
-                                                     Maximum="9999"/>
+                                                     Maximum="9999"
+                                                     Visibility="{Binding IsChecked, Source={x:Reference YearColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Genre"
                                     Binding="{Binding Metadata.Genre}"
-                                    EditingElementStyle="{StaticResource EntryTextBox}"/>
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference GenreColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Comment"
+                                    Binding="{Binding Metadata.Comment}"
+                                    EditingElementStyle="{StaticResource EntryTextBox}"
+                                    Visibility="{Binding IsChecked, Source={x:Reference CommentColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridCheckBoxColumn Header="Modified"
                                         Binding="{Binding Metadata.Modified, Mode=OneWay}"
                                         IsReadOnly="True"
