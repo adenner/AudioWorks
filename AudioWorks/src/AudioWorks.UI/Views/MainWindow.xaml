@@ -22,6 +22,7 @@ You should have received a copy of the GNU Affero General Public License along w
                      xmlns:prism="http://prismlibrary.com/"
                      xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
                      xmlns:fluent="urn:fluent-ribbon"
+                     xmlns:views="clr-namespace:AudioWorks.UI.Views"
                      mc:Ignorable="d"
                      prism:ViewModelLocator.AutoWireViewModel="True"
                      Title="AudioWorks"
@@ -65,7 +66,10 @@ You should have received a copy of the GNU Affero General Public License along w
                   ItemsSource="{Binding AudioFiles}"
                   AutoGenerateColumns="False"
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
-                  GridLinesVisibility="Vertical">
+                  GridLinesVisibility="Vertical"
+                  AllowDrop="True"
+                  PreviewDragOver="DataGrid_OnPreviewDragOver"
+                  views:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}">
             <DataGrid.Resources>
                 <Style TargetType="TextBox"
                        x:Key="EntryTextBox"

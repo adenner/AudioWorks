@@ -38,5 +38,12 @@ namespace AudioWorks.UI.Views
             if (source != null)
                 e.Handled = true;
         }
+
+        void DataGrid_OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (((DataObject) e.Data).ContainsFileDropList())
+                e.Effects = DragDropEffects.Link;
+            e.Handled = true;
+        }
     }
 }

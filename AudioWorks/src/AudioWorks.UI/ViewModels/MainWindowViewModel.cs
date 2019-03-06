@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
 using Prism.Commands;
@@ -40,6 +41,8 @@ namespace AudioWorks.UI.ViewModels
         public DelegateCommand OpenFilesCommand { get; }
 
         public DelegateCommand OpenDirectoryCommand { get; }
+
+        public DelegateCommand<DataObject> PreviewDropCommand { get; }
 
         public DelegateCommand EditSelectionCommand { get; }
 
@@ -68,27 +71,20 @@ namespace AudioWorks.UI.ViewModels
 
             OpenFilesCommand = new DelegateCommand(() =>
             {
-                var newFiles = fileSelectionService.SelectFiles().ToList();
-
-                // Skip files that may have been added previously
-                foreach (var existingFile in AudioFiles.Select(audioFile => audioFile.Path))
-                    if (newFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
-                        newFiles.Remove(existingFile);
-
-                AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
+                AddFiles(fileSelectionService.SelectFiles().ToList());
             });
 
             OpenDirectoryCommand = new DelegateCommand(() =>
             {
-                var directoryRoot = directorySelectionService.SelectDirectory();
-                if (string.IsNullOrEmpty(directoryRoot)) return;
+                AddFilesRecursively(directorySelectionService.SelectDirectory());
+            });
 
-                // Recursively search for all supported file types
-                var extensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
-                var newFiles = Directory.EnumerateFiles(directoryRoot, "*.*", SearchOption.AllDirectories)
-                    .Where(file => extensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase));
-
-                AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
+            PreviewDropCommand = new DelegateCommand<DataObject>(data =>
+            {
+                var paths = data.GetFileDropList().Cast<string>().ToList();
+                AddFiles(paths.Where(File.Exists));
+                foreach (var path in paths.Where(Directory.Exists))
+                    AddFilesRecursively(path);
             });
 
             EditSelectionCommand = new DelegateCommand(
@@ -116,6 +112,28 @@ namespace AudioWorks.UI.ViewModels
             }, () => _selectedAudioFiles.Count > 0);
 
             ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
+        }
+
+        void AddFilesRecursively(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return;
+
+            AddFiles(Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories));
+        }
+
+        void AddFiles(IEnumerable<string> newFiles)
+        {
+            var uniqueNewFiles = newFiles.ToList();
+            var extensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
+
+            // Skip files that may have been added previously
+            foreach (var existingFile in AudioFiles.Select(audioFile => audioFile.Path))
+                if (uniqueNewFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
+                    uniqueNewFiles.Remove(existingFile);
+
+            AudioFiles.AddRange(uniqueNewFiles
+                .Where(file => extensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase))
+                .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
         }
     }
 }
