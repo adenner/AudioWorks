@@ -29,6 +29,7 @@ namespace AudioWorks.UI
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
+            containerRegistry.RegisterSingleton<IDirectorySelectionService, WpfDirectorySelectionService>();
             containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();

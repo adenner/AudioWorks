@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
@@ -38,6 +39,8 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand OpenFilesCommand { get; }
 
+        public DelegateCommand OpenDirectoryCommand { get; }
+
         public DelegateCommand EditSelectionCommand { get; }
 
         public DelegateCommand RevertSelectionCommand { get; }
@@ -50,6 +53,7 @@ namespace AudioWorks.UI.ViewModels
 
         public MainWindowViewModel(
             IFileSelectionService fileSelectionService,
+            IDirectorySelectionService directorySelectionService,
             IAppShutdownService appShutdownService,
             IDialogService dialogService)
         {
@@ -70,6 +74,19 @@ namespace AudioWorks.UI.ViewModels
                 foreach (var existingFile in AudioFiles.Select(audioFile => audioFile.Path))
                     if (newFiles.Contains(existingFile, StringComparer.OrdinalIgnoreCase))
                         newFiles.Remove(existingFile);
+
+                AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
+            });
+
+            OpenDirectoryCommand = new DelegateCommand(() =>
+            {
+                var directoryRoot = directorySelectionService.SelectDirectory();
+                if (string.IsNullOrEmpty(directoryRoot)) return;
+
+                // Recursively search for all supported file types
+                var extensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
+                var newFiles = Directory.EnumerateFiles(directoryRoot, "*.*", SearchOption.AllDirectories)
+                    .Where(file => extensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase));
 
                 AudioFiles.AddRange(newFiles.Select(file => new AudioFileViewModel(new TaggedAudioFile(file))));
             });
