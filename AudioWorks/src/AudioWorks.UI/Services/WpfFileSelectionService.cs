@@ -15,20 +15,39 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+using AudioWorks.Api;
 using Microsoft.Win32;
 
 namespace AudioWorks.UI.Services
 {
-    class WpfFileSelectionService : IFileSelectionService
+    sealed class WpfFileSelectionService : IFileSelectionService
     {
         public IEnumerable<string> SelectFiles()
         {
-            var dialog = new OpenFileDialog { Multiselect = true };
+            var dialog = new OpenFileDialog { Multiselect = true, Filter = GetFilter() };
 
             var showResult = dialog.ShowDialog();
             if (showResult.HasValue && showResult.Value)
                 return dialog.FileNames;
             return Array.Empty<string>();
+        }
+
+        static string GetFilter()
+        {
+            var formatInfos = AudioFileManager.GetFormatInfo();
+            var patterns = new List<string>();
+            var filterOptions = new List<string>();
+
+            foreach (var formatInfo in formatInfos)
+            {
+                var pattern = $"*{formatInfo.Extension}";
+                patterns.Add($"*{formatInfo.Extension}");
+                filterOptions.Add($"{formatInfo.Format} Files|{pattern}");
+            }
+
+            return new StringBuilder("All Audio Files|").AppendJoin(";", patterns).Append('|')
+                .AppendJoin('|', filterOptions).ToString();
         }
     }
 }
