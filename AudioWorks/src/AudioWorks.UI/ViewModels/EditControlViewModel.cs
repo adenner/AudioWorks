@@ -13,12 +13,12 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using Prism.Commands;
-using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Prism.Commands;
+using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.ViewModels
 {

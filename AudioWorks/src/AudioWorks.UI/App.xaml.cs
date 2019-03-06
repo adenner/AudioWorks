@@ -13,11 +13,11 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using System.Windows;
 using AudioWorks.UI.Services;
 using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
 using Prism.Ioc;
-using System.Windows;
 using Metro = MahApps.Metro;
 
 namespace AudioWorks.UI
