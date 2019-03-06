@@ -13,9 +13,9 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using AudioWorks.Extensibility;
 using System.Collections.Generic;
 using System.Linq;
+using AudioWorks.Extensibility;
 
 namespace AudioWorks.Api
 {
