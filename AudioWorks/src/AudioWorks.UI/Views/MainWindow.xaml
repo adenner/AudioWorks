@@ -212,39 +212,39 @@ You should have received a copy of the GNU Affero General Public License along w
                                                      StringFormat="00"
                                                      Visibility="{Binding IsChecked, Source={x:Reference TrackCountColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Title"
-                                    Binding="{Binding Metadata.SongTitle}"
+                                    Binding="{Binding Metadata.SongTitle, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference TitleColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Artist"
-                                    Binding="{Binding Metadata.Artist}"
+                                    Binding="{Binding Metadata.Artist, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference ArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Album Artist"
-                                    Binding="{Binding Metadata.AlbumArtist}"
+                                    Binding="{Binding Metadata.AlbumArtist, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference AlbumArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Composer"
-                                    Binding="{Binding Metadata.Composer}"
+                                    Binding="{Binding Metadata.Composer, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference ComposerColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Album"
-                                    Binding="{Binding Metadata.Album}"
+                                    Binding="{Binding Metadata.Album, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference AlbumColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Day"
-                                                     Binding="{Binding Metadata.Day}"
+                                                     Binding="{Binding Metadata.Day, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
                                                      Visibility="{Binding IsChecked, Source={x:Reference DayColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Month"
-                                                     Binding="{Binding Metadata.Month}"
+                                                     Binding="{Binding Metadata.Month, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
                                                      Visibility="{Binding IsChecked, Source={x:Reference MonthColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Year"
-                                                     Binding="{Binding Metadata.Year}"
+                                                     Binding="{Binding Metadata.Year, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1000"
                                                      Maximum="9999"
                                                      Visibility="{Binding IsChecked, Source={x:Reference YearColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
@@ -258,11 +258,11 @@ You should have received a copy of the GNU Affero General Public License along w
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Genre"
-                                    Binding="{Binding Metadata.Genre}"
+                                    Binding="{Binding Metadata.Genre, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference GenreColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Comment"
-                                    Binding="{Binding Metadata.Comment}"
+                                    Binding="{Binding Metadata.Comment, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
                                     Visibility="{Binding IsChecked, Source={x:Reference CommentColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Track Gain"
