@@ -27,6 +27,8 @@ namespace AudioWorks.UI.ViewModels
 
         public string Path => _audioFile.Path;
 
+        public AudioInfo Info => _audioFile.Info;
+
         public AudioMetadataViewModel Metadata
         {
             get => _metadata;
