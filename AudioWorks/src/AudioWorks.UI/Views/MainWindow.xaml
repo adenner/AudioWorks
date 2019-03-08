@@ -41,17 +41,17 @@ You should have received a copy of the GNU Affero General Public License along w
             <fluent:RibbonTabItem Header="Home">
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:DropDownButton Header="Open"
-                                           LargeIcon="{StaticResource OpenImage}"
+                                           LargeIcon="{StaticResource OpenFileDialogImage}"
                                            fluent:KeyTip.Keys="O">
-                        <fluent:Button Header="Specific File(s)"
+                        <fluent:Button Header="Select File(s)"
                                        Command="{Binding OpenFilesCommand}"
                                        SizeDefinition="Middle"
-                                       Icon="{StaticResource AudioFileImage}"
+                                       Icon="{StaticResource OpenFileImage}"
                                        fluent:KeyTip.Keys="F"/>
                         <fluent:Button Header="Search a Directory"
                                        Command="{Binding OpenDirectoryCommand}"
                                        SizeDefinition="Middle"
-                                       Icon="{StaticResource FolderImage}"
+                                       Icon="{StaticResource OpenFolderImage}"
                                        fluent:KeyTip.Keys="D"/>
                     </fluent:DropDownButton>
                     <fluent:Button Header="Exit"
