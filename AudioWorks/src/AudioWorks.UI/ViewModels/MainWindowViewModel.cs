@@ -102,7 +102,7 @@ namespace AudioWorks.UI.ViewModels
                 AddFiles(fileSelectionService.SelectFiles().ToList()));
 
             OpenDirectoryCommand = new DelegateCommand(() =>
-                AddFilesRecursively(directorySelectionService.SelectDirectory()));
+                AddFiles(GetFilesRecursively(directorySelectionService.SelectDirectory())));
 
             KeyDownCommand = new DelegateCommand<KeyEventArgs>(e =>
             {
@@ -116,10 +116,8 @@ namespace AudioWorks.UI.ViewModels
 
             DropCommand = new DelegateCommand<DragEventArgs>(e =>
             {
-                var paths = ((DataObject) e.Data).GetFileDropList().Cast<string>().ToList();
-                AddFiles(paths.Where(File.Exists));
-                foreach (var path in paths.Where(Directory.Exists))
-                    AddFilesRecursively(path);
+                AddFiles(((DataObject) e.Data).GetFileDropList().Cast<string>().SelectMany(path =>
+                    Directory.Exists(path) ? GetFilesRecursively(path) : new[] { path }));
             });
 
             EditSelectionCommand = new DelegateCommand(
@@ -214,12 +212,10 @@ namespace AudioWorks.UI.ViewModels
             SaveModifiedCommand.RaiseCanExecuteChanged();
         }
 
-        void AddFilesRecursively(string path)
-        {
-            if (string.IsNullOrEmpty(path)) return;
-
-            AddFiles(Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories));
-        }
+        static IEnumerable<string> GetFilesRecursively(string path) =>
+            string.IsNullOrEmpty(path)
+                ? Enumerable.Empty<string>()
+                : Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
 
         void AddFiles(IEnumerable<string> newFiles)
         {
