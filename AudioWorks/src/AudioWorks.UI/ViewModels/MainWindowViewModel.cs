@@ -53,6 +53,10 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand SaveSelectionCommand { get; }
 
+        public DelegateCommand SaveModifiedCommand { get; }
+
+        public DelegateCommand SaveAllCommand { get; }
+
         public DelegateCommand RemoveSelectionCommand { get; }
 
         public DelegateCommand ExitCommand { get; }
@@ -67,13 +71,18 @@ namespace AudioWorks.UI.ViewModels
             {
                 if (e.NewItems != null)
                     foreach (var newItem in e.NewItems)
+                    {
                         ((AudioFileViewModel) newItem).Metadata.PropertyChanged += Metadata_PropertyChanged;
+                        SaveAllCommand.RaiseCanExecuteChanged();
+                    }
 
                 if (e.OldItems != null)
                     foreach (var oldItem in e.OldItems)
                     {
                         ((AudioFileViewModel) oldItem).Metadata.PropertyChanged -= Metadata_PropertyChanged;
                         RevertModifiedCommand.RaiseCanExecuteChanged();
+                        SaveModifiedCommand.RaiseCanExecuteChanged();
+                        SaveAllCommand.RaiseCanExecuteChanged();
                     }
             };
             SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
@@ -126,6 +135,19 @@ namespace AudioWorks.UI.ViewModels
                     audioFile.SaveCommand.Execute();
             }, () => _selectedAudioFiles.Count > 0);
 
+            SaveModifiedCommand = new DelegateCommand(() =>
+            {
+                foreach (var audioFile in AudioFiles.Where(audioFile =>
+                    audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
+                    audioFile.SaveCommand.Execute();
+            }, () => AudioFiles.Any(audioFile => audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()));
+
+            SaveAllCommand = new DelegateCommand(() =>
+            {
+                foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
+                    audioFile.SaveCommand.Execute();
+            }, () => AudioFiles.Count > 0);
+
             RemoveSelectionCommand = new DelegateCommand(() =>
             {
                 foreach (var audioFile in _selectedAudioFiles)
@@ -139,6 +161,7 @@ namespace AudioWorks.UI.ViewModels
         {
             RevertSelectionCommand.RaiseCanExecuteChanged();
             RevertModifiedCommand.RaiseCanExecuteChanged();
+            SaveModifiedCommand.RaiseCanExecuteChanged();
         }
 
         void AddFilesRecursively(string path)

@@ -60,6 +60,14 @@ You should have received a copy of the GNU Affero General Public License along w
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Metadata">
+                    <fluent:Button Header="Save All"
+                                   Command="{Binding SaveAllCommand}"
+                                   LargeIcon="{StaticResource SaveAllImage}"
+                                   fluent:KeyTip.Keys="A"/>
+                    <fluent:Button Header="Save Changes"
+                                   Command="{Binding SaveModifiedCommand}"
+                                   LargeIcon="{StaticResource SaveTableImage}"
+                                   fluent:KeyTip.Keys="S"/>
                     <fluent:Button Header="Revert Changes"
                                    Command="{Binding RevertModifiedCommand}"
                                    LargeIcon="{StaticResource UndoImage}"
@@ -329,13 +337,6 @@ You should have received a copy of the GNU Affero General Public License along w
                                         Binding="{Binding Metadata.Modified, Mode=OneWay}"
                                         IsReadOnly="True"
                                         ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Command="{Binding SaveCommand}">Save</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
