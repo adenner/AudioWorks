@@ -95,14 +95,10 @@ namespace AudioWorks.UI.ViewModels
             });
 
             OpenFilesCommand = new DelegateCommand(() =>
-            {
-                AddFiles(fileSelectionService.SelectFiles().ToList());
-            });
+                AddFiles(fileSelectionService.SelectFiles().ToList()));
 
             OpenDirectoryCommand = new DelegateCommand(() =>
-            {
-                AddFilesRecursively(directorySelectionService.SelectDirectory());
-            });
+                AddFilesRecursively(directorySelectionService.SelectDirectory()));
 
             PreviewDropCommand = new DelegateCommand<DataObject>(data =>
             {
