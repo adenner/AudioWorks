@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -48,6 +49,8 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand RevertSelectionCommand { get; }
 
+        public DelegateCommand RevertModifiedCommand { get; }
+
         public DelegateCommand SaveSelectionCommand { get; }
 
         public DelegateCommand RemoveSelectionCommand { get; }
@@ -60,6 +63,19 @@ namespace AudioWorks.UI.ViewModels
             IAppShutdownService appShutdownService,
             IDialogService dialogService)
         {
+            AudioFiles.CollectionChanged += (sender, e) =>
+            {
+                if (e.NewItems != null)
+                    foreach (var newItem in e.NewItems)
+                        ((AudioFileViewModel) newItem).Metadata.PropertyChanged += Metadata_PropertyChanged;
+
+                if (e.OldItems != null)
+                    foreach (var oldItem in e.OldItems)
+                    {
+                        ((AudioFileViewModel) oldItem).Metadata.PropertyChanged -= Metadata_PropertyChanged;
+                        RevertModifiedCommand.RaiseCanExecuteChanged();
+                    }
+            };
             SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
             {
                 _selectedAudioFiles = selectedItems.Cast<AudioFileViewModel>().ToList();
@@ -96,8 +112,13 @@ namespace AudioWorks.UI.ViewModels
             {
                 foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
                     audioFile.RevertCommand.Execute();
-                RevertSelectionCommand.RaiseCanExecuteChanged();
             }, () => _selectedAudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
+
+            RevertModifiedCommand = new DelegateCommand(() =>
+            {
+                foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
+                    audioFile.RevertCommand.Execute();
+            }, () => AudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
 
             SaveSelectionCommand = new DelegateCommand(() =>
             {
@@ -112,6 +133,12 @@ namespace AudioWorks.UI.ViewModels
             }, () => _selectedAudioFiles.Count > 0);
 
             ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
+        }
+
+        void Metadata_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RevertSelectionCommand.RaiseCanExecuteChanged();
+            RevertModifiedCommand.RaiseCanExecuteChanged();
         }
 
         void AddFilesRecursively(string path)
