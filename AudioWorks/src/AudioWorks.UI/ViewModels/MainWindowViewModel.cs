@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
 using MahApps.Metro.Controls.Dialogs;
@@ -43,6 +44,8 @@ namespace AudioWorks.UI.ViewModels
         public DelegateCommand OpenFilesCommand { get; }
 
         public DelegateCommand OpenDirectoryCommand { get; }
+
+        public DelegateCommand<KeyEventArgs> KeyDownCommand { get; }
 
         public DelegateCommand<DragEventArgs> DropCommand { get; }
 
@@ -101,6 +104,16 @@ namespace AudioWorks.UI.ViewModels
             OpenDirectoryCommand = new DelegateCommand(() =>
                 AddFilesRecursively(directorySelectionService.SelectDirectory()));
 
+            KeyDownCommand = new DelegateCommand<KeyEventArgs>(e =>
+            {
+                if (e.Key == Key.Delete)
+                {
+                    if (RemoveSelectionCommand.CanExecute())
+                        RemoveSelectionCommand.Execute();
+                    e.Handled = true;
+                }
+            });
+
             DropCommand = new DelegateCommand<DragEventArgs>(e =>
             {
                 var paths = ((DataObject) e.Data).GetFileDropList().Cast<string>().ToList();
@@ -147,6 +160,26 @@ namespace AudioWorks.UI.ViewModels
 
             RemoveSelectionCommand = new DelegateCommand(() =>
             {
+                var modifications = _selectedAudioFiles.Count(audioFile => audioFile.Metadata.Modified);
+                if (modifications > 0)
+                {
+                    var result = metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
+                        $"There are {modifications} unsaved change(s) in the files you're removing. Do you want to save them now?",
+                        MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary,
+                        new MetroDialogSettings
+                        {
+                            AffirmativeButtonText = "Yes",
+                            NegativeButtonText = "No",
+                            FirstAuxiliaryButtonText = "Cancel",
+                            DefaultButtonFocus = MessageDialogResult.FirstAuxiliary
+                        });
+
+                    if (result == MessageDialogResult.Affirmative)
+                        SaveSelectionCommand.Execute();
+                    if (result == MessageDialogResult.FirstAuxiliary)
+                        return;
+                }
+
                 foreach (var audioFile in _selectedAudioFiles)
                     AudioFiles.Remove(audioFile);
             }, () => _selectedAudioFiles.Count > 0);
@@ -163,7 +196,8 @@ namespace AudioWorks.UI.ViewModels
                     {
                         AffirmativeButtonText = "Yes",
                         NegativeButtonText = "No",
-                        FirstAuxiliaryButtonText = "Cancel"
+                        FirstAuxiliaryButtonText = "Cancel",
+                        DefaultButtonFocus = MessageDialogResult.FirstAuxiliary
                     });
 
                 if (result == MessageDialogResult.Affirmative)

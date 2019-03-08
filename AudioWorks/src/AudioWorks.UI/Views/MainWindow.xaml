@@ -194,6 +194,9 @@ You should have received a copy of the GNU Affero General Public License along w
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
                                            CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewKeyDown">
+                    <prism:InvokeCommandAction Command="{Binding KeyDownCommand}"/>
+                </i:EventTrigger>
                 <i:EventTrigger EventName="PreviewDrop">
                     <prism:InvokeCommandAction Command="{Binding DropCommand}"/>
                 </i:EventTrigger>
