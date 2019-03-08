@@ -44,7 +44,7 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand OpenDirectoryCommand { get; }
 
-        public DelegateCommand<DataObject> PreviewDropCommand { get; }
+        public DelegateCommand<DragEventArgs> DropCommand { get; }
 
         public DelegateCommand EditSelectionCommand { get; }
 
@@ -101,9 +101,9 @@ namespace AudioWorks.UI.ViewModels
             OpenDirectoryCommand = new DelegateCommand(() =>
                 AddFilesRecursively(directorySelectionService.SelectDirectory()));
 
-            PreviewDropCommand = new DelegateCommand<DataObject>(data =>
+            DropCommand = new DelegateCommand<DragEventArgs>(e =>
             {
-                var paths = data.GetFileDropList().Cast<string>().ToList();
+                var paths = ((DataObject) e.Data).GetFileDropList().Cast<string>().ToList();
                 AddFiles(paths.Where(File.Exists));
                 foreach (var path in paths.Where(Directory.Exists))
                     AddFilesRecursively(path);

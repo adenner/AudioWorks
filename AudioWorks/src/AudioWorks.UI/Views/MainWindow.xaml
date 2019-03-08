@@ -156,8 +156,7 @@ You should have received a copy of the GNU Affero General Public License along w
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical"
                   AllowDrop="True"
-                  PreviewDragOver="DataGrid_OnPreviewDragOver"
-                  views:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}">
+                  PreviewDragOver="DataGrid_OnPreviewDragOver">
             <DataGrid.Resources>
                 <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
                 <views:BitRateConverter x:Key="BitRateConverter"/>
@@ -194,6 +193,9 @@ You should have received a copy of the GNU Affero General Public License along w
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
                                            CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDrop">
+                    <prism:InvokeCommandAction Command="{Binding DropCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.InputBindings>
