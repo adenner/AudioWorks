@@ -21,7 +21,11 @@ namespace AudioWorks.UI.Services
     {
         public string SelectDirectory()
         {
-            var dialog = new FolderBrowserDialog();
+            var dialog = new FolderBrowserDialog
+            {
+                Description = "Select a Directory to Search",
+                UseDescriptionForTitle = true
+            };
             var showResult = dialog.ShowDialog();
             return showResult == DialogResult.OK ? dialog.SelectedPath : string.Empty;
         }

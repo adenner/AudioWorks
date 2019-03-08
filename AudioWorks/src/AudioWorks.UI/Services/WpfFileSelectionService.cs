@@ -25,7 +25,12 @@ namespace AudioWorks.UI.Services
     {
         public IEnumerable<string> SelectFiles()
         {
-            var dialog = new OpenFileDialog { Multiselect = true, Filter = GetFilter() };
+            var dialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = GetFilter(),
+                Title = "Select Audio File(s)"
+            };
 
             var showResult = dialog.ShowDialog();
             if (showResult.HasValue && showResult.Value)
