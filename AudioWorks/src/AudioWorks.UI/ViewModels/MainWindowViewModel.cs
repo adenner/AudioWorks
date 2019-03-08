@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
+using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -59,13 +60,13 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand RemoveSelectionCommand { get; }
 
-        public DelegateCommand ExitCommand { get; }
+        public DelegateCommand<CancelEventArgs> ExitCommand { get; }
 
         public MainWindowViewModel(
             IFileSelectionService fileSelectionService,
             IDirectorySelectionService directorySelectionService,
-            IAppShutdownService appShutdownService,
-            IDialogService dialogService)
+            IDialogService prismDialogService,
+            IDialogCoordinator metroDialogCoordinator)
         {
             AudioFiles.CollectionChanged += (sender, e) =>
             {
@@ -109,7 +110,7 @@ namespace AudioWorks.UI.ViewModels
             });
 
             EditSelectionCommand = new DelegateCommand(
-                () => dialogService.ShowDialog("EditControl",
+                () => prismDialogService.ShowDialog("EditControl",
                     new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
 
@@ -150,7 +151,26 @@ namespace AudioWorks.UI.ViewModels
                     AudioFiles.Remove(audioFile);
             }, () => _selectedAudioFiles.Count > 0);
 
-            ExitCommand = new DelegateCommand(appShutdownService.Shutdown);
+            ExitCommand = new DelegateCommand<CancelEventArgs>(e =>
+            {
+                var modifications = AudioFiles.Count(audioFile => audioFile.Metadata.Modified);
+                if (modifications == 0) return;
+
+                var result = metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
+                    $"There are {modifications} unsaved change(s). Do you want to save them now?",
+                    MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = "Yes",
+                        NegativeButtonText = "No",
+                        FirstAuxiliaryButtonText = "Cancel"
+                    });
+
+                if (result == MessageDialogResult.Affirmative)
+                    SaveAllCommand.Execute();
+                else if (result == MessageDialogResult.FirstAuxiliary)
+                    e.Cancel = true;
+            });
         }
 
         void Metadata_PropertyChanged(object sender, PropertyChangedEventArgs e)

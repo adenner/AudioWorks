@@ -17,6 +17,7 @@ using System.Windows;
 using AudioWorks.UI.Services;
 using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
+using MahApps.Metro.Controls.Dialogs;
 using Prism.Ioc;
 using Metro = MahApps.Metro;
 
@@ -30,9 +31,11 @@ namespace AudioWorks.UI
         {
             containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
             containerRegistry.RegisterSingleton<IDirectorySelectionService, WpfDirectorySelectionService>();
-            containerRegistry.RegisterSingleton<IAppShutdownService, WpfAppShutdownService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
+
+            // MahApps.Metro dialog service
+            containerRegistry.RegisterInstance(DialogCoordinator.Instance);
         }
 
         protected override void OnStartup(StartupEventArgs e)

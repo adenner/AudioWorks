@@ -25,11 +25,17 @@ You should have received a copy of the GNU Affero General Public License along w
                      xmlns:views="clr-namespace:AudioWorks.UI.Views"
                      mc:Ignorable="d"
                      prism:ViewModelLocator.AutoWireViewModel="True"
+                     mahapps:DialogParticipation.Register="{Binding}"
                      Title="AudioWorks"
                      Icon="../Resources/Icon.png"
                      Height="600"
                      Width="1000"
                      TitleCharacterCasing="Normal">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding ExitCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -55,7 +61,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                        fluent:KeyTip.Keys="D"/>
                     </fluent:DropDownButton>
                     <fluent:Button Header="Exit"
-                                   Command="{Binding ExitCommand}"
+                                   Click="ExitButton_OnClick"
                                    LargeIcon="{StaticResource ExitImage}"
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
