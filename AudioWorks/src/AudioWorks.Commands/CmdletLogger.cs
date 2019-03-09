@@ -17,7 +17,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Management.Automation;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions.Internal;
 
 namespace AudioWorks.Commands
 {
