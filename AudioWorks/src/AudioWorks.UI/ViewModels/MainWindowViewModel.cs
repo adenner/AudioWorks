@@ -152,6 +152,11 @@ namespace AudioWorks.UI.ViewModels
 
             SaveAllCommand = new DelegateCommand(() =>
             {
+                if (metroDialogCoordinator.ShowModalMessageExternal(this, "Are You Sure?",
+                        "All files will be re-written according to the current metadata encoder settings.",
+                        MessageDialogStyle.AffirmativeAndNegative) != MessageDialogResult.Affirmative)
+                    return;
+
                 foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
                     audioFile.SaveCommand.Execute();
             }, () => AudioFiles.Count > 0);
@@ -160,8 +165,7 @@ namespace AudioWorks.UI.ViewModels
             {
                 var modifications = _selectedAudioFiles.Count(audioFile => audioFile.Metadata.Modified);
                 if (modifications > 0)
-                {
-                    var result = metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
+                    switch (metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
                         $"There are {modifications} unsaved change(s) in the files you're removing. Do you want to save them now?",
                         MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary,
                         new MetroDialogSettings
@@ -170,13 +174,14 @@ namespace AudioWorks.UI.ViewModels
                             NegativeButtonText = "No",
                             FirstAuxiliaryButtonText = "Cancel",
                             DefaultButtonFocus = MessageDialogResult.FirstAuxiliary
-                        });
-
-                    if (result == MessageDialogResult.Affirmative)
-                        SaveSelectionCommand.Execute();
-                    if (result == MessageDialogResult.FirstAuxiliary)
-                        return;
-                }
+                        }))
+                    {
+                        case MessageDialogResult.Affirmative:
+                            SaveSelectionCommand.Execute();
+                            break;
+                        case MessageDialogResult.FirstAuxiliary:
+                            return;
+                    }
 
                 foreach (var audioFile in _selectedAudioFiles)
                     AudioFiles.Remove(audioFile);
@@ -187,7 +192,7 @@ namespace AudioWorks.UI.ViewModels
                 var modifications = AudioFiles.Count(audioFile => audioFile.Metadata.Modified);
                 if (modifications == 0) return;
 
-                var result = metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
+                switch (metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
                     $"There are {modifications} unsaved change(s). Do you want to save them now?",
                     MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary,
                     new MetroDialogSettings
@@ -196,12 +201,15 @@ namespace AudioWorks.UI.ViewModels
                         NegativeButtonText = "No",
                         FirstAuxiliaryButtonText = "Cancel",
                         DefaultButtonFocus = MessageDialogResult.FirstAuxiliary
-                    });
-
-                if (result == MessageDialogResult.Affirmative)
-                    SaveAllCommand.Execute();
-                else if (result == MessageDialogResult.FirstAuxiliary)
-                    e.Cancel = true;
+                    }))
+                {
+                    case MessageDialogResult.Affirmative:
+                        SaveAllCommand.Execute();
+                        break;
+                    case MessageDialogResult.FirstAuxiliary:
+                        e.Cancel = true;
+                        break;
+                }
             });
         }
 
