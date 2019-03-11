@@ -28,6 +28,12 @@ You should have received a copy of the GNU Affero General Public License along w
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Light.Teal.xaml" />
                 <ResourceDictionary>
+                    <Style TargetType="Button"
+                           x:Key="CommandButton"
+                           BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Width"
+                                Value="75"/>
+                    </Style>
                     <DrawingImage x:Key="OpenFileDialogImage"
                                   options:Freeze="True">
                         <DrawingImage.Drawing>
