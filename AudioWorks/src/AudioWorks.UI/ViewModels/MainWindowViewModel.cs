@@ -155,9 +155,9 @@ namespace AudioWorks.UI.ViewModels
                     audioFile.SaveCommand.Execute();
             }, () => AudioFiles.Any(audioFile => audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()));
 
-            SaveAllCommand = new DelegateCommand(() =>
+            SaveAllCommand = new DelegateCommand(async () =>
             {
-                if (metroDialogCoordinator.ShowModalMessageExternal(this, "Are You Sure?",
+                if (await metroDialogCoordinator.ShowMessageAsync(this, "Are You Sure?",
                         "All files will be re-written according to the current metadata encoder settings.",
                         MessageDialogStyle.AffirmativeAndNegative) != MessageDialogResult.Affirmative)
                     return;
@@ -166,11 +166,11 @@ namespace AudioWorks.UI.ViewModels
                     audioFile.SaveCommand.Execute();
             }, () => AudioFiles.Count > 0);
 
-            RemoveSelectionCommand = new DelegateCommand(() =>
+            RemoveSelectionCommand = new DelegateCommand(async () =>
             {
                 var modifications = _selectedAudioFiles.Count(audioFile => audioFile.Metadata.Modified);
                 if (modifications > 0)
-                    switch (metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
+                    switch (await metroDialogCoordinator.ShowMessageAsync(this, "Unsaved Changes",
                         $"There are {modifications} unsaved change(s) in the files you're removing. Do you want to save them now?",
                         MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary,
                         new MetroDialogSettings
