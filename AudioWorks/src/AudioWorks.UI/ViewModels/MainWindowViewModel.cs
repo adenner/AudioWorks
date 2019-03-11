@@ -20,7 +20,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
@@ -34,6 +36,7 @@ namespace AudioWorks.UI.ViewModels
     // ReSharper disable once UnusedMember.Global
     public class MainWindowViewModel : BindableBase
     {
+        readonly object _lock = new object();
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
@@ -73,6 +76,7 @@ namespace AudioWorks.UI.ViewModels
             IDialogService prismDialogService,
             IDialogCoordinator metroDialogCoordinator)
         {
+            BindingOperations.EnableCollectionSynchronization(AudioFiles, _lock);
             AudioFiles.CollectionChanged += (sender, e) =>
             {
                 if (e.NewItems != null)
@@ -91,6 +95,7 @@ namespace AudioWorks.UI.ViewModels
                         SaveAllCommand.RaiseCanExecuteChanged();
                     }
             };
+
             SelectionChangedCommand = new DelegateCommand<IList>(selectedItems =>
             {
                 _selectedAudioFiles = selectedItems.Cast<AudioFileViewModel>().ToList();
@@ -100,11 +105,10 @@ namespace AudioWorks.UI.ViewModels
                 RemoveSelectionCommand.RaiseCanExecuteChanged();
             });
 
-            OpenFilesCommand = new DelegateCommand(() =>
-                AddFiles(fileSelectionService.SelectFiles().ToList()));
+            OpenFilesCommand = new DelegateCommand(async () => await AddFilesAsync(fileSelectionService.SelectFiles()));
 
-            OpenDirectoryCommand = new DelegateCommand(() =>
-                AddFiles(GetFilesRecursively(directorySelectionService.SelectDirectory())));
+            OpenDirectoryCommand = new DelegateCommand(async () =>
+                await AddFilesAsync(GetFilesRecursively(directorySelectionService.SelectDirectory())));
 
             KeyDownCommand = new DelegateCommand<KeyEventArgs>(e =>
             {
@@ -116,19 +120,17 @@ namespace AudioWorks.UI.ViewModels
                 }
             });
 
-            DropCommand = new DelegateCommand<DragEventArgs>(e =>
-            {
-                AddFiles(((DataObject) e.Data).GetFileDropList().Cast<string>().SelectMany(path =>
-                    Directory.Exists(path) ? GetFilesRecursively(path) : new[] { path }));
-            });
+            DropCommand = new DelegateCommand<DragEventArgs>(async e =>
+                await AddFilesAsync(((DataObject) e.Data).GetFileDropList().Cast<string>().SelectMany(path =>
+                    Directory.Exists(path) ? GetFilesRecursively(path) : new[] { path })));
 
-            EditSelectionCommand = new DelegateCommand(
-                () => prismDialogService.ShowDialog("EditControl",
-                    new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
+            EditSelectionCommand = new DelegateCommand(() =>
+                    prismDialogService.ShowDialog("EditControl",
+                        new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
 
-            OpenMetadataSettingsCommand = new DelegateCommand(
-                () => prismDialogService.ShowDialog("MetadataSettingsControl", new DialogParameters(), null));
+            OpenMetadataSettingsCommand = new DelegateCommand(() =>
+                prismDialogService.ShowDialog("MetadataSettingsControl", new DialogParameters(), null));
 
             RevertSelectionCommand = new DelegateCommand(() =>
             {
@@ -225,21 +227,22 @@ namespace AudioWorks.UI.ViewModels
             SaveModifiedCommand.RaiseCanExecuteChanged();
         }
 
-        static IEnumerable<string> GetFilesRecursively(string path) =>
-            string.IsNullOrEmpty(path)
+        static IEnumerable<string> GetFilesRecursively(string directoryPath) =>
+            string.IsNullOrEmpty(directoryPath)
                 ? Enumerable.Empty<string>()
-                : Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                : Directory.EnumerateFiles(directoryPath, "*.*", SearchOption.AllDirectories);
 
-        void AddFiles(IEnumerable<string> newFiles)
-        {
-            var validExtensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
-            var existingFiles = AudioFiles.Select(audioFile => audioFile.Path);
+        async Task AddFilesAsync(IEnumerable<string> filePaths) =>
+            await Task.Run(() =>
+            {
+                var validExtensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
+                var existingFiles = AudioFiles.Select(audioFile => audioFile.Path);
 
-            foreach (var newFile in newFiles.Where(file =>
-                    validExtensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase) &&
-                    !existingFiles.Contains(file, StringComparer.OrdinalIgnoreCase))
-                .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))))
-                AudioFiles.Add(newFile);
-        }
+                foreach (var newFile in filePaths.Where(file =>
+                        validExtensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase) &&
+                        !existingFiles.Contains(file, StringComparer.OrdinalIgnoreCase))
+                    .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))))
+                    AudioFiles.Add(newFile);
+            });
     }
 }
