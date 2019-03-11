@@ -51,6 +51,8 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand EditSelectionCommand { get; }
 
+        public DelegateCommand OpenMetadataSettingsCommand { get; }
+
         public DelegateCommand RevertSelectionCommand { get; }
 
         public DelegateCommand RevertModifiedCommand { get; }
@@ -124,6 +126,9 @@ namespace AudioWorks.UI.ViewModels
                 () => prismDialogService.ShowDialog("EditControl",
                     new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
+
+            OpenMetadataSettingsCommand = new DelegateCommand(
+                () => prismDialogService.ShowDialog("MetadataSettingsControl", new DialogParameters(), null));
 
             RevertSelectionCommand = new DelegateCommand(() =>
             {

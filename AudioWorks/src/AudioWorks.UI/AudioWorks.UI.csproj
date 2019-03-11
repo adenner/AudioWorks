@@ -18,6 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\MetadataSettingsControl.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Icon.png" />
   </ItemGroup>
 

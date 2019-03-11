@@ -146,6 +146,10 @@ You should have received a copy of the GNU Affero General Public License along w
                         <fluent:CheckBox Header="Sample Rate"
                                          x:Name="SampleRateColumnCheckBox"/>
                     </fluent:DropDownButton>
+                    <fluent:Button Header="Metadata Settings"
+                                   Command="{Binding OpenMetadataSettingsCommand}"
+                                   LargeIcon="{StaticResource ConfigurationEditorImage}"
+                                   fluent:KeyTip.Keys="M"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
