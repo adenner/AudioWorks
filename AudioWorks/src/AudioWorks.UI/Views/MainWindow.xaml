@@ -34,13 +34,9 @@ You should have received a copy of the GNU Affero General Public License along w
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
 
-        <fluent:Ribbon IsQuickAccessToolBarVisible="False">
+        <fluent:Ribbon DockPanel.Dock="Top" IsQuickAccessToolBarVisible="False">
             <fluent:RibbonTabItem Header="Home">
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:DropDownButton Header="Open"
@@ -352,5 +348,5 @@ You should have received a copy of the GNU Affero General Public License along w
             </DataGrid.Columns>
         </DataGrid>
 
-    </Grid>
+    </DockPanel>
 </mahapps:MetroWindow>
