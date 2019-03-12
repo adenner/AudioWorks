@@ -13,20 +13,12 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using AudioWorks.UI.Services;
 using Prism.Commands;
-using Prism.Services.Dialogs;
 
-namespace AudioWorks.UI.ViewModels
+namespace AudioWorks.UI.Services
 {
-    // ReSharper disable once UnusedMember.Global
-    public class MetadataSettingsControlViewModel : DialogViewModelBase
+    sealed class CommandService : ICommandService
     {
-        public CompositeCommand SaveCommand { get; }
-
-        public MetadataSettingsControlViewModel(ICommandService commandService)
-        {
-            SaveCommand = commandService.SaveMetadataSettingsCommand;
-        }
+        public CompositeCommand SaveMetadataSettingsCommand { get; } = new CompositeCommand();
     }
 }

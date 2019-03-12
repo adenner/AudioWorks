@@ -17,14 +17,18 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using Prism.Regions;
 
 namespace AudioWorks.UI.Views
 {
     public sealed partial class MainWindow
     {
-        public MainWindow()
+        public MainWindow(IRegionManager regionManager)
         {
             InitializeComponent();
+
+            //TODO This is a placeholder
+            regionManager.RegisterViewWithRegion("SettingsRegion", typeof(FlacMetadataSettingsControl));
         }
 
         void DataGrid_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

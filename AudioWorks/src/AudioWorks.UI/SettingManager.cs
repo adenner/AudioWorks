@@ -13,20 +13,15 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using AudioWorks.UI.Services;
-using Prism.Commands;
-using Prism.Services.Dialogs;
+using System.Collections.Generic;
+using AudioWorks.Common;
 
-namespace AudioWorks.UI.ViewModels
+namespace AudioWorks.UI
 {
-    // ReSharper disable once UnusedMember.Global
-    public class MetadataSettingsControlViewModel : DialogViewModelBase
+    static class SettingManager
     {
-        public CompositeCommand SaveCommand { get; }
-
-        public MetadataSettingsControlViewModel(ICommandService commandService)
-        {
-            SaveCommand = commandService.SaveMetadataSettingsCommand;
-        }
+        //TODO initialize this properly
+        internal static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } =
+            new Dictionary<string, SettingDictionary> { ["FLAC"] = new SettingDictionary() };
     }
 }

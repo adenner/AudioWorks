@@ -16,17 +16,39 @@ You should have received a copy of the GNU Affero General Public License along w
 <UserControl x:Class="AudioWorks.UI.Views.MetadataSettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
-             mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <TabControl>
-        <TabControl
-            Height="500"
-            Width="500">
 
-        </TabControl>
-    </TabControl>
+    <Border BorderThickness="11">
+        <DockPanel>
+
+            <TabControl DockPanel.Dock="Top"
+                        SelectedIndex="0"
+                        Width="400"
+                        Height="400"
+                        Margin="0,0,0,11"
+                        prism:RegionManager.RegionName="SettingsRegion">
+                <TabControl.ItemContainerStyle>
+                    <Style TargetType="TabItem"
+                           BasedOn="{StaticResource {x:Type TabItem}}">
+                        <Setter Property="Header"
+                                Value="{Binding DataContext.Title}"/>
+                    </Style>
+                </TabControl.ItemContainerStyle>
+            </TabControl>
+
+            <StackPanel HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button Style="{StaticResource CommandButton}"
+                        Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Margin="0,0,11,0"/>
+                <Button IsCancel="True"
+                        IsDefault="True"
+                        Style="{StaticResource CommandButton}"
+                        Content="Cancel"/>
+            </StackPanel>
+
+        </DockPanel>
+    </Border>
 </UserControl>
