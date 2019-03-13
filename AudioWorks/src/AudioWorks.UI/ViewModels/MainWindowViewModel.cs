@@ -36,8 +36,15 @@ namespace AudioWorks.UI.ViewModels
     // ReSharper disable once UnusedMember.Global
     public class MainWindowViewModel : BindableBase
     {
+        bool _isBusy;
         readonly object _lock = new object();
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
 
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
             new ObservableCollection<AudioFileViewModel>();
@@ -105,24 +112,39 @@ namespace AudioWorks.UI.ViewModels
                 RemoveSelectionCommand.RaiseCanExecuteChanged();
             });
 
-            OpenFilesCommand = new DelegateCommand(async () => await AddFilesAsync(fileSelectionService.SelectFiles()));
+            OpenFilesCommand = new DelegateCommand(async () =>
+                {
+                    IsBusy = true;
+                    await AddFilesAsync(fileSelectionService.SelectFiles());
+                    IsBusy = false;
+                }, () => !IsBusy)
+                .ObservesProperty(() => IsBusy);
 
             OpenDirectoryCommand = new DelegateCommand(async () =>
-                await AddFilesAsync(GetFilesRecursively(directorySelectionService.SelectDirectory())));
+                {
+                    IsBusy = true;
+                    await AddFilesAsync(GetFilesRecursively(directorySelectionService.SelectDirectory()));
+                    IsBusy = false;
+                }, () => !IsBusy)
+                .ObservesProperty(() => IsBusy);
 
             KeyDownCommand = new DelegateCommand<KeyEventArgs>(e =>
             {
-                if (e.Key == Key.Delete)
-                {
-                    if (RemoveSelectionCommand.CanExecute())
-                        RemoveSelectionCommand.Execute();
-                    e.Handled = true;
-                }
+                if (e.Key != Key.Delete) return;
+
+                if (RemoveSelectionCommand.CanExecute())
+                    RemoveSelectionCommand.Execute();
+                e.Handled = true;
             });
 
             DropCommand = new DelegateCommand<DragEventArgs>(async e =>
-                await AddFilesAsync(((DataObject) e.Data).GetFileDropList().Cast<string>().SelectMany(path =>
-                    Directory.Exists(path) ? GetFilesRecursively(path) : new[] { path })));
+                {
+                    IsBusy = true;
+                    await AddFilesAsync(((DataObject) e.Data).GetFileDropList().Cast<string>().SelectMany(path =>
+                        Directory.Exists(path) ? GetFilesRecursively(path) : new[] { path }));
+                    IsBusy = false;
+                }, e => !IsBusy)
+                .ObservesProperty(() => IsBusy);
 
             EditSelectionCommand = new DelegateCommand(() =>
                     prismDialogService.ShowDialog("EditControl",
@@ -133,40 +155,56 @@ namespace AudioWorks.UI.ViewModels
                 prismDialogService.ShowDialog("MetadataSettingsControl", new DialogParameters(), null));
 
             RevertSelectionCommand = new DelegateCommand(() =>
-            {
-                foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
-                    audioFile.RevertCommand.Execute();
-            }, () => _selectedAudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
+                {
+                    IsBusy = true;
+                    foreach (var audioFile in _selectedAudioFiles.Where(audioFile =>
+                        audioFile.RevertCommand.CanExecute()))
+                        audioFile.RevertCommand.Execute();
+                    IsBusy = false;
+                }, () => !IsBusy && _selectedAudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()))
+                .ObservesProperty(() => IsBusy);
 
             RevertModifiedCommand = new DelegateCommand(() =>
-            {
-                foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
-                    audioFile.RevertCommand.Execute();
-            }, () => AudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()));
+                {
+                    IsBusy = true;
+                    foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
+                        audioFile.RevertCommand.Execute();
+                    IsBusy = false;
+                }, () => !IsBusy && AudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()))
+                .ObservesProperty(() => IsBusy);
 
             SaveSelectionCommand = new DelegateCommand(() =>
-            {
-                foreach (var audioFile in _selectedAudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
-                    audioFile.SaveCommand.Execute();
-            }, () => _selectedAudioFiles.Count > 0);
+                {
+                    IsBusy = true;
+                    foreach (var audioFile in _selectedAudioFiles.Where(audioFile =>
+                        audioFile.SaveCommand.CanExecute()))
+                        audioFile.SaveCommand.Execute();
+                    IsBusy = false;
+                }, () => !IsBusy && _selectedAudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
 
             SaveModifiedCommand = new DelegateCommand(() =>
-            {
-                foreach (var audioFile in AudioFiles.Where(audioFile =>
-                    audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
-                    audioFile.SaveCommand.Execute();
-            }, () => AudioFiles.Any(audioFile => audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()));
+                {
+                    IsBusy = true;
+                    foreach (var audioFile in AudioFiles.Where(audioFile =>
+                        audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
+                        audioFile.SaveCommand.Execute();
+                    IsBusy = false;
+                }, () => !IsBusy && AudioFiles.Any(audioFile =>
+                             audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
+                .ObservesProperty(() => IsBusy);
 
             SaveAllCommand = new DelegateCommand(async () =>
-            {
-                if (await metroDialogCoordinator.ShowMessageAsync(this, "Are You Sure?",
-                        "All files will be re-written according to the current metadata encoder settings.",
-                        MessageDialogStyle.AffirmativeAndNegative) != MessageDialogResult.Affirmative)
-                    return;
-
-                foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
-                    audioFile.SaveCommand.Execute();
-            }, () => AudioFiles.Count > 0);
+                {
+                    IsBusy = true;
+                    if (await metroDialogCoordinator.ShowMessageAsync(this, "Are You Sure?",
+                            "All files will be re-written according to the current metadata encoder settings.",
+                            MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+                        foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
+                            audioFile.SaveCommand.Execute();
+                    IsBusy = false;
+                }, () => !IsBusy && AudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
 
             RemoveSelectionCommand = new DelegateCommand(async () =>
             {

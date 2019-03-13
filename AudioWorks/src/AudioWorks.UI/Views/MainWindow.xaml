@@ -147,12 +147,12 @@ You should have received a copy of the GNU Affero General Public License along w
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding AudioFiles}"
+        <DataGrid ItemsSource="{Binding AudioFiles}"
                   AutoGenerateColumns="False"
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical"
                   AllowDrop="True"
+                  IsReadOnly="{Binding IsBusy}"
                   PreviewDragOver="DataGrid_OnPreviewDragOver">
             <DataGrid.Resources>
                 <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
