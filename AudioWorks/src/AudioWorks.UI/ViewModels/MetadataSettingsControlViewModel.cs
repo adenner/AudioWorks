@@ -22,11 +22,16 @@ namespace AudioWorks.UI.ViewModels
     // ReSharper disable once UnusedMember.Global
     public class MetadataSettingsControlViewModel : DialogViewModelBase
     {
-        public CompositeCommand SaveCommand { get; }
+        public DelegateCommand SaveCommand { get; }
 
         public MetadataSettingsControlViewModel(ICommandService commandService)
         {
-            SaveCommand = commandService.SaveMetadataSettingsCommand;
+            SaveCommand = new DelegateCommand(() =>
+            {
+                if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
+                    commandService.SaveMetadataSettingsCommand.Execute(null);
+                RaiseRequestClose(new DialogResult(true));
+            });
         }
     }
 }
