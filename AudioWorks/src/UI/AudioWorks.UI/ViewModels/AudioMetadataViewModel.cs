@@ -190,7 +190,7 @@ namespace AudioWorks.UI.ViewModels
             _coverImage = new Lazy<BitmapImage?>(() => LoadImage(metadata.CoverArt));
         }
 
-        internal void Update(AudioMetadata metadata)
+        internal void UpdateModel(AudioMetadata metadata)
         {
             _metadata = metadata;
             _coverImage = new Lazy<BitmapImage?>(() => LoadImage(metadata.CoverArt));
