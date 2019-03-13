@@ -13,12 +13,10 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System;
-using System.Linq;
-using AudioWorks.Api;
 using AudioWorks.Common;
 using Prism.Commands;
 using Prism.Mvvm;
+using IO = System.IO;
 
 namespace AudioWorks.UI.ViewModels
 {
@@ -49,7 +47,7 @@ namespace AudioWorks.UI.ViewModels
 
             SaveCommand = new DelegateCommand(() =>
             {
-                SettingManager.MetadataEncoderSettings.TryGetValue(_audioFile.Info.Format, out var settings);
+                SettingManager.MetadataEncoderSettings.TryGetValue(IO.Path.GetExtension(Path), out var settings);
                 _audioFile.SaveMetadata(settings);
                 _metadata.Update(_audioFile.Metadata);
             });

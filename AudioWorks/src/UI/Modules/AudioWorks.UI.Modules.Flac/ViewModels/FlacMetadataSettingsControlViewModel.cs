@@ -13,11 +13,12 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using AudioWorks.Common;
 using AudioWorks.UI.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 
-namespace AudioWorks.UI.ViewModels
+namespace AudioWorks.UI.Modules.Flac.ViewModels
 {
     public class FlacMetadataSettingsControlViewModel : BindableBase
     {
@@ -42,13 +43,20 @@ namespace AudioWorks.UI.ViewModels
         {
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(() =>
             {
+                if (!SettingManager.MetadataEncoderSettings.TryGetValue(".flac", out var settings))
+                {
+                    settings = new SettingDictionary();
+                    SettingManager.MetadataEncoderSettings.Add(".flac", settings);
+                }
+
                 if (_configurePadding)
-                    SettingManager.MetadataEncoderSettings["FLAC"]["Padding"] = _padding;
+                    settings["Padding"] = _padding;
                 else
-                    SettingManager.MetadataEncoderSettings["FLAC"].Remove("Padding");
+                    settings.Remove("Padding");
             }));
 
-            if (SettingManager.MetadataEncoderSettings["FLAC"].TryGetValue("Padding", out int padding))
+            if (SettingManager.MetadataEncoderSettings.TryGetValue(".flac", out var settings) &&
+                settings.TryGetValue("Padding", out int padding))
             {
                 _padding = padding;
                 _configurePadding = true;

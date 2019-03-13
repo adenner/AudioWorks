@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 
 namespace AudioWorks.UI
 {
-    static class SettingManager
+    public static class SettingManager
     {
         static readonly string _settingsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -29,16 +29,15 @@ namespace AudioWorks.UI
             "UI",
             "Settings");
 
-        //TODO initialize this properly
-        internal static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } =
-            new Dictionary<string, SettingDictionary> { ["FLAC"] = new SettingDictionary() };
+        public static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } =
+            new Dictionary<string, SettingDictionary>();
 
         internal static void SaveToDisk()
         {
             Directory.CreateDirectory(_settingsPath);
 
-            foreach (var (format, settings) in MetadataEncoderSettings)
-                using (var writer = new StreamWriter(Path.Combine(_settingsPath, $"{format}.json")))
+            foreach (var (extension, settings) in MetadataEncoderSettings)
+                using (var writer = new StreamWriter(Path.Combine(_settingsPath, $"{extension.TrimStart('.')}.json")))
                     writer.Write(JsonConvert.SerializeObject(settings));
         }
 
@@ -48,8 +47,9 @@ namespace AudioWorks.UI
 
             foreach (var file in Directory.EnumerateFiles(_settingsPath, "*.json"))
                 using (var reader = new StreamReader(file))
-                    MetadataEncoderSettings[Path.GetFileNameWithoutExtension(file)] =
-                        JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(), new SettingDictionaryConverter());
+                    MetadataEncoderSettings[$".{Path.GetFileNameWithoutExtension(file)}"] =
+                        JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(),
+                            new SettingDictionaryConverter());
         }
     }
 }

@@ -13,7 +13,7 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-namespace AudioWorks.UI.Views
+namespace AudioWorks.UI.Modules.Flac.Views
 {
     public sealed partial class FlacMetadataSettingsControl
     {

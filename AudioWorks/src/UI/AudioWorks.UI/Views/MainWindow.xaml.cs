@@ -23,12 +23,9 @@ namespace AudioWorks.UI.Views
 {
     public sealed partial class MainWindow
     {
-        public MainWindow(IRegionManager regionManager)
+        public MainWindow()
         {
             InitializeComponent();
-
-            //TODO This is a placeholder
-            regionManager.RegisterViewWithRegion("SettingsRegion", typeof(FlacMetadataSettingsControl));
         }
 
         void DataGrid_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

@@ -19,6 +19,7 @@ using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
 using MahApps.Metro.Controls.Dialogs;
 using Prism.Ioc;
+using Prism.Modularity;
 using Metro = MahApps.Metro;
 
 namespace AudioWorks.UI
@@ -39,6 +40,8 @@ namespace AudioWorks.UI
             // MahApps.Metro dialog service
             containerRegistry.RegisterInstance(DialogCoordinator.Instance);
         }
+
+        protected override IModuleCatalog CreateModuleCatalog() => new ConfigurationModuleCatalog();
 
         protected override void OnStartup(StartupEventArgs e)
         {
