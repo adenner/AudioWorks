@@ -23,7 +23,7 @@ namespace AudioWorks.UI.ViewModels
     public sealed class AudioFileViewModel : BindableBase
     {
         readonly ITaggedAudioFile _audioFile;
-        AudioMetadataViewModel _metadata;
+        readonly AudioMetadataViewModel _metadata;
 
         public string Path => _audioFile.Path;
 
@@ -49,13 +49,13 @@ namespace AudioWorks.UI.ViewModels
             {
                 SettingManager.MetadataEncoderSettings.TryGetValue(IO.Path.GetExtension(Path), out var settings);
                 _audioFile.SaveMetadata(settings);
-                _metadata.Update(_audioFile.Metadata);
+                _metadata.UpdateModel(_audioFile.Metadata);
             });
 
             RevertCommand = new DelegateCommand(() =>
             {
                 _audioFile.LoadMetadata();
-                _metadata.Update(_audioFile.Metadata);
+                _metadata.UpdateModel(_audioFile.Metadata);
             }, () => _metadata.Modified);
         }
     }
