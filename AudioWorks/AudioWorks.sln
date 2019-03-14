@@ -192,6 +192,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{B26A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Flac", "src\UI\Modules\AudioWorks.UI.Modules.Flac\AudioWorks.UI.Modules.Flac.csproj", "{F9A4110A-00DE-4288-B394-ADF3DDAAC0EA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Id3", "src\UI\Modules\AudioWorks.UI.Modules.Id3\AudioWorks.UI.Modules.Id3.csproj", "{EBA034C8-E71A-435A-A959-6451843FB1BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Mp4", "src\UI\Modules\AudioWorks.UI.Modules.Mp4\AudioWorks.UI.Modules.Mp4.csproj", "{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -282,6 +286,14 @@ Global
 		{F9A4110A-00DE-4288-B394-ADF3DDAAC0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9A4110A-00DE-4288-B394-ADF3DDAAC0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9A4110A-00DE-4288-B394-ADF3DDAAC0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA034C8-E71A-435A-A959-6451843FB1BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA034C8-E71A-435A-A959-6451843FB1BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA034C8-E71A-435A-A959-6451843FB1BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA034C8-E71A-435A-A959-6451843FB1BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -303,6 +315,8 @@ Global
 		{0D88CC1A-21FC-4854-9794-496E3F052249} = {DF225B4E-3279-424C-B9E8-AE1A814BF746}
 		{B26A7811-E489-4EA4-B95D-2350AC681D7D} = {DF225B4E-3279-424C-B9E8-AE1A814BF746}
 		{F9A4110A-00DE-4288-B394-ADF3DDAAC0EA} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
+		{EBA034C8-E71A-435A-A959-6451843FB1BD} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
+		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73104514-BD86-4575-A404-A192C2B5BF6D}

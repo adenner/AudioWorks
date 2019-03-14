@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <NullableContextOptions>enable</NullableContextOptions>
+    <UseWPF>true</UseWPF>
+    <Version>1.0.0</Version>
+    <Revision>$(BUILD_BUILDID)</Revision>
+    <Revision Condition="'$(Revision)'==''">0</Revision>
+    <FileVersion>1.0.0.$(Revision)</FileVersion>
+    <Product>AudioWorks</Product>
+    <Copyright>© 2019 Jeremy Herbison</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Id3MetadataSettingsControl.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AudioWorks.UI\AudioWorks.UI.csproj" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)src\UI\AudioWorks.UI\bin\Debug\$(TargetFramework)" /Y</PostBuildEvent>
+  </PropertyGroup>
+
+</Project>
