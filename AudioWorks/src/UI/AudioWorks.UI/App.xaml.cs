@@ -51,16 +51,7 @@ namespace AudioWorks.UI
             Fluent.ThemeManager.IsAutomaticWindowsAppModeSettingSyncEnabled = true;
             Fluent.ThemeManager.SyncThemeWithWindowsAppModeSetting();
 
-            SettingManager.LoadFromDisk();
-
             base.OnStartup(e);
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            SettingManager.SaveToDisk();
-
-            base.OnExit(e);
         }
     }
 }

@@ -29,8 +29,7 @@ namespace AudioWorks.UI
             "UI",
             "Settings");
 
-        public static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } =
-            new Dictionary<string, SettingDictionary>();
+        public static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } = LoadFromDisk();
 
         internal static void SaveToDisk()
         {
@@ -41,15 +40,16 @@ namespace AudioWorks.UI
                     writer.Write(JsonConvert.SerializeObject(settings));
         }
 
-        internal static void LoadFromDisk()
+        static Dictionary<string, SettingDictionary> LoadFromDisk()
         {
-            if (!Directory.Exists(_settingsPath)) return;
-
-            foreach (var file in Directory.EnumerateFiles(_settingsPath, "*.json"))
-                using (var reader = new StreamReader(file))
-                    MetadataEncoderSettings[$".{Path.GetFileNameWithoutExtension(file)}"] =
-                        JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(),
-                            new SettingDictionaryConverter());
+            var result = new Dictionary<string, SettingDictionary>();
+            if (Directory.Exists(_settingsPath))
+                foreach (var file in Directory.EnumerateFiles(_settingsPath, "*.json"))
+                    using (var reader = new StreamReader(file))
+                        result[$".{Path.GetFileNameWithoutExtension(file)}"] =
+                            JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(),
+                                new SettingDictionaryConverter());
+            return result;
         }
     }
 }

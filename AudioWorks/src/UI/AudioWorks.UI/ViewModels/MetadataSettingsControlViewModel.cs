@@ -30,6 +30,7 @@ namespace AudioWorks.UI.ViewModels
             {
                 if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
                     commandService.SaveMetadataSettingsCommand.Execute(null);
+                SettingManager.SaveToDisk();
                 RaiseRequestClose(new DialogResult(true));
             });
         }
