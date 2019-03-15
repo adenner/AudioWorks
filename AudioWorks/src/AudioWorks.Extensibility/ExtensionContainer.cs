@@ -30,7 +30,8 @@ namespace AudioWorks.Extensibility
         internal static ExtensionContainer<T> Instance => _lazyInstance.Value;
 
         [ImportMany]
-        internal IEnumerable<ExportFactory<T, IDictionary<string, object>>> Factories { get; private set; }
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        internal IEnumerable<ExportFactory<T, IDictionary<string, object>>> Factories { get; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
         ExtensionContainer()

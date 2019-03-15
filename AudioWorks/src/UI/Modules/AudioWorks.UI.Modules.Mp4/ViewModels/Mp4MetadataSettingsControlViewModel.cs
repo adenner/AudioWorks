@@ -41,19 +41,7 @@ namespace AudioWorks.UI.Modules.Mp4.ViewModels
 
         public Mp4MetadataSettingsControlViewModel(ICommandService commandService)
         {
-            commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-            {
-                if (!SettingManager.MetadataEncoderSettings.TryGetValue(".m4a", out var settings))
-                {
-                    settings = new SettingDictionary();
-                    SettingManager.MetadataEncoderSettings.Add(".m4a", settings);
-                }
-
-                if (_configurePadding)
-                    settings["Padding"] = _padding;
-                else
-                    settings.Remove("Padding");
-            }));
+            commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
 
             if (SettingManager.MetadataEncoderSettings.TryGetValue(".m4a", out var settings) &&
                 settings.TryGetValue("Padding", out int padding))
@@ -66,6 +54,20 @@ namespace AudioWorks.UI.Modules.Mp4.ViewModels
                 _padding = 2048;
                 _configurePadding = false;
             }
+        }
+
+        void SaveSettings()
+        {
+            if (!SettingManager.MetadataEncoderSettings.TryGetValue(".m4a", out var settings))
+            {
+                settings = new SettingDictionary();
+                SettingManager.MetadataEncoderSettings.Add(".m4a", settings);
+            }
+
+            if (_configurePadding)
+                settings["Padding"] = _padding;
+            else
+                settings.Remove("Padding");
         }
     }
 }
