@@ -37,7 +37,7 @@ namespace AudioWorks.Common
         /// <returns>true, if the value is present in the dictionary. Otherwise, false.</returns>
         public bool TryGetValue<TValue>(string key, out TValue value)
         {
-            if (TryGetValue(key, out object objectValue) && objectValue is TValue typedValue)
+            if (TryGetValue(key, out var objectValue) && objectValue is TValue typedValue)
             {
                 value = typedValue;
                 return true;
