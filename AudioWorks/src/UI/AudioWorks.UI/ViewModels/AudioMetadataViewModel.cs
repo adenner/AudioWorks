@@ -150,32 +150,20 @@ namespace AudioWorks.UI.ViewModels
             }
         }
 
-        public string TrackPeak
-        {
-            get => _metadata.TrackPeak;
-        }
+        public string TrackPeak => _metadata.TrackPeak;
 
-        public string AlbumPeak
-        {
-            get => _metadata.AlbumPeak;
-        }
+        public string AlbumPeak => _metadata.AlbumPeak;
 
-        public string TrackGain
-        {
-            get => _metadata.TrackGain;
-        }
+        public string TrackGain => _metadata.TrackGain;
 
-        public string AlbumGain
-        {
-            get => _metadata.AlbumGain;
-        }
+        public string AlbumGain => _metadata.AlbumGain;
 
         public BitmapImage? CoverImage => _coverImage.Value;
 
         public bool Modified
         {
             get => _modified;
-            private set { SetProperty(ref _modified, value); }
+            private set => SetProperty(ref _modified, value);
         }
 
         public AudioMetadataViewModel(AudioMetadata metadata)

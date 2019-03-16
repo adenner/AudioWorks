@@ -17,7 +17,7 @@ using Prism.Services.Dialogs;
 
 namespace AudioWorks.UI.Views
 {
-    public partial class CustomDialogWindow : IDialogWindow
+    public sealed partial class CustomDialogWindow : IDialogWindow
     {
         public IDialogResult? Result { get; set; }
 

@@ -19,7 +19,7 @@ using System.Windows.Data;
 
 namespace AudioWorks.UI.Views
 {
-    public class BitRateConverter : IValueConverter
+    public sealed class BitRateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             ((int) value / 1000f).ToString("0 kb/s", CultureInfo.CurrentUICulture);
