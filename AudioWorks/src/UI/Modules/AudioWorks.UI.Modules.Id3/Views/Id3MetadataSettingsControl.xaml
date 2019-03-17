@@ -19,20 +19,37 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:prism="http://prismlibrary.com/"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
+    <StackPanel VerticalAlignment="Center">
+
+        <GroupBox Header="Tag Version"
+                  Padding="11">
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Versions}"
+                          SelectedIndex="{Binding VersionIndex}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Character Encoding"
+                  Padding="11">
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Encodings}"
+                          SelectedIndex="{Binding EncodingIndex}"/>
+            </StackPanel>
+        </GroupBox>
     
-    <GroupBox Header="Padding"
-              VerticalAlignment="Center"
-              Padding="11">
-        <StackPanel>
-            <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
-                                  IsChecked="{Binding ConfigurePadding}"
-                                  Padding="0"
-                                  Margin="0,0,0,11"/>
-            <mahapps:NumericUpDown Value="{Binding Padding}"
-                                   IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
-                                   Minimum="0"
-                                   Maximum="16777216"/>
-        </StackPanel>
-    </GroupBox>
-    
+        <GroupBox Header="Padding"
+                  Padding="11">
+            <StackPanel>
+                <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
+                                      IsChecked="{Binding ConfigurePadding}"
+                                      Padding="0"
+                                      Margin="0,0,0,11"/>
+                <mahapps:NumericUpDown Value="{Binding Padding}"
+                                       IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
+                                       Minimum="0"
+                                       Maximum="16777216"/>
+            </StackPanel>
+        </GroupBox>
+
+    </StackPanel>
 </UserControl>

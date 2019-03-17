@@ -13,6 +13,7 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
 using Prism.Commands;
@@ -22,10 +23,28 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
 {
     public class Id3MetadataSettingsControlViewModel : BindableBase
     {
+        int _versionIndex;
+        int _encodingIndex;
         bool _configurePadding;
         int _padding;
 
         public string Title { get; } = "ID3";
+
+        public string[] Versions => new[] { "2.3", "2.4" };
+
+        public int VersionIndex
+        {
+            get => _versionIndex;
+            set => SetProperty(ref _versionIndex, value);
+        }
+
+        public string[] Encodings => new[] { "Latin-1", "UTF-16" };
+
+        public int EncodingIndex
+        {
+            get => _encodingIndex;
+            set => SetProperty(ref _encodingIndex, value);
+        }
 
         public bool ConfigurePadding
         {
@@ -43,11 +62,26 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
         {
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
 
-            if (SettingManager.MetadataEncoderSettings.TryGetValue(".mp3", out var settings) &&
-                settings.TryGetValue("Padding", out int padding))
+            if (SettingManager.MetadataEncoderSettings.TryGetValue(".mp3", out var settings))
             {
-                _padding = padding;
-                _configurePadding = true;
+                if (settings.TryGetValue("TagVersion", out string version) &&
+                    version.Equals("2.4", StringComparison.Ordinal))
+                    _versionIndex = 1;
+
+                if (settings.TryGetValue("TagEncoding", out string encoding) &&
+                    encoding.Equals("UTF16", StringComparison.Ordinal))
+                    _encodingIndex = 1;
+
+                if (settings.TryGetValue("Padding", out int padding))
+                {
+                    _padding = padding;
+                    _configurePadding = true;
+                }
+                else
+                {
+                    _padding = 2048;
+                    _configurePadding = false;
+                }
             }
             else
             {
@@ -61,8 +95,19 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
             if (!SettingManager.MetadataEncoderSettings.TryGetValue(".mp3", out var settings))
             {
                 settings = new SettingDictionary();
-                SettingManager.MetadataEncoderSettings.Add(".mp3", settings);
+                SettingManager.MetadataEncoderSettings.Add(".mp3", new SettingDictionary());
             }
+
+            if (_versionIndex == 1)
+                settings["TagVersion"] = "2.4";
+            else
+                settings.Remove("TagVersion");
+
+
+            if (_encodingIndex == 1)
+                settings["TagEncoding"] = "UTF16";
+            else
+                settings.Remove("TagEncoding");
 
             if (_configurePadding)
                 settings["Padding"] = _padding;
