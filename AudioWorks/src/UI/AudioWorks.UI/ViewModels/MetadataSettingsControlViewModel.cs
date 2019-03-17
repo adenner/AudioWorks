@@ -26,6 +26,8 @@ namespace AudioWorks.UI.ViewModels
 
         public MetadataSettingsControlViewModel(ICommandService commandService)
         {
+            Title = "Metadata Settings";
+
             SaveCommand = new DelegateCommand(() =>
             {
                 if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
