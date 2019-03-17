@@ -19,25 +19,42 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:prism="http://prismlibrary.com/"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <StackPanel VerticalAlignment="Center">
+    <Grid VerticalAlignment="Center">
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
         <GroupBox Header="Tag Version"
-                  Padding="11">
+                  Padding="11"
+                  Margin="0,0,11,11">
             <StackPanel>
                 <ComboBox ItemsSource="{Binding Versions}"
                           SelectedIndex="{Binding VersionIndex}"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Character Encoding"
-                  Padding="11">
+        <GroupBox Grid.Row="0"
+                  Grid.Column="1"
+                  Header="Character Encoding"
+                  Padding="11"
+                  Margin="0,0,0,11">
             <StackPanel>
                 <ComboBox ItemsSource="{Binding Encodings}"
                           SelectedIndex="{Binding EncodingIndex}"/>
             </StackPanel>
         </GroupBox>
     
-        <GroupBox Header="Padding"
+        <GroupBox Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Header="Padding"
                   Padding="11">
             <StackPanel>
                 <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
@@ -51,5 +68,5 @@ You should have received a copy of the GNU Affero General Public License along w
             </StackPanel>
         </GroupBox>
 
-    </StackPanel>
+    </Grid>
 </UserControl>
