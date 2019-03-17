@@ -32,6 +32,7 @@ You should have received a copy of the GNU Affero General Public License along w
         </Grid.ColumnDefinitions>
 
         <GroupBox Header="Tag Version"
+                  ToolTip="The ID3 tag version to use. Version 2.3 provides the widest compatibility."
                   Padding="11"
                   Margin="0,0,11,11">
             <StackPanel>
@@ -43,6 +44,7 @@ You should have received a copy of the GNU Affero General Public License along w
         <GroupBox Grid.Row="0"
                   Grid.Column="1"
                   Header="Character Encoding"
+                  ToolTip="UTF-16 encoding supports a wider range of characters. Latin-1 may be more compatible."
                   Padding="11"
                   Margin="0,0,0,11">
             <StackPanel>
@@ -55,6 +57,7 @@ You should have received a copy of the GNU Affero General Public License along w
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
                   Header="Padding"
+                  ToolTip="Setting a fixed padding size usually results in a full re-write of the file whenever metadata is modified."
                   Padding="11">
             <StackPanel>
                 <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
