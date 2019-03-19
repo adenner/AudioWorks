@@ -23,7 +23,7 @@ You should have received a copy of the GNU Affero General Public License along w
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
         <Style TargetType="Label"
-               x:Key="EntryLabel"
+               x:Key="Label"
                BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="Padding"
                     Value="0"/>
@@ -31,17 +31,17 @@ You should have received a copy of the GNU Affero General Public License along w
                     Value="0,0,0,5"/>
         </Style>
         <Style TargetType="TextBox"
-               x:Key="EntryTextBox"
+               x:Key="TextBox"
                BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Margin"
                     Value="0,0,0,11"/>
             <Setter Property="Width"
-                    Value="300"/>
+                    Value="320"/>
             <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
                     Value="True"/>
         </Style>
         <Style TargetType="mahapps:NumericUpDown"
-               x:Key="EntryNumeric"
+               x:Key="NumericUpDown"
                BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
             <Setter Property="HorizontalAlignment"
                     Value="Left"/>
@@ -53,12 +53,12 @@ You should have received a copy of the GNU Affero General Public License along w
                     Value="True"/>
         </Style>
         <Style TargetType="mahapps:ToggleSwitch"
-               x:Key="EntryToggle"
+               x:Key="ToggleSwitch"
                BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
             <Setter Property="VerticalAlignment"
                     Value="Top"/>
             <Setter Property="Margin"
-                    Value="5,0,0,0"/>
+                    Value="5,3,0,0"/>
             <Setter Property="OnLabel"
                     Value="{x:Null}"/>
             <Setter Property="OffLabel"
@@ -102,10 +102,10 @@ You should have received a copy of the GNU Affero General Public License along w
             </Grid.ColumnDefinitions>
 
             <Label Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Track #:</Label>
+                   Style="{StaticResource Label}">Track #:</Label>
             <mahapps:NumericUpDown Grid.Row="1"
                      Grid.Column="0"                   
-                     Style="{StaticResource EntryNumeric}"
+                     Style="{StaticResource NumericUpDown}"
                      Value="{Binding TrackNumber}"
                      IsEnabled="{Binding TrackNumberIsCommon}"
                      Minimum="1"
@@ -113,18 +113,18 @@ You should have received a copy of the GNU Affero General Public License along w
                      StringFormat="00"/>
             <mahapps:ToggleSwitch Grid.Row="1"
                                   Grid.Column="1"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding TrackNumberIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
             <Label Grid.Row="1"
                    Grid.Column="2"
                    Padding="0"
-                   Margin="5,0,5,11"
+                   Margin="9,0,9,11"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Center">of</Label>
             <mahapps:NumericUpDown Grid.Row="1"
                                    Grid.Column="3"                   
-                                   Style="{StaticResource EntryNumeric}"
+                                   Style="{StaticResource NumericUpDown}"
                                    Value="{Binding TrackCount}"
                                    IsEnabled="{Binding TrackCountIsCommon}"
                                    Minimum="1"
@@ -132,131 +132,131 @@ You should have received a copy of the GNU Affero General Public License along w
                                    StringFormat="00"/>
             <mahapps:ToggleSwitch Grid.Row="1"
                                   Grid.Column="4"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding TrackCountIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="2"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Title:</Label>
+                   Style="{StaticResource Label}">Title:</Label>
             <TextBox Grid.Row="3"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding SongTitle, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding SongTitleIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="3"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding SongTitleIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="4"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Artist:</Label>
+                   Style="{StaticResource Label}">Artist:</Label>
             <TextBox Grid.Row="5"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding Artist, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding ArtistIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="5"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding ArtistIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="6"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Album Artist:</Label>
+                   Style="{StaticResource Label}">Album Artist:</Label>
             <TextBox Grid.Row="7"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding AlbumArtist, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding AlbumArtistIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="7"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding AlbumArtistIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="8"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Composer:</Label>
+                   Style="{StaticResource Label}">Composer:</Label>
             <TextBox Grid.Row="9"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding Composer, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding ComposerIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="9"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding ComposerIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="10"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Album:</Label>
+                   Style="{StaticResource Label}">Album:</Label>
             <TextBox Grid.Row="11"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding Album, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding AlbumIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="11"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding AlbumIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="12"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Genre:</Label>
+                   Style="{StaticResource Label}">Genre:</Label>
             <TextBox Grid.Row="13"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding Genre, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding GenreIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="13"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding GenreIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="14"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
-                   Style="{StaticResource EntryLabel}">Year:</Label>
+                   Style="{StaticResource Label}">Year:</Label>
             <mahapps:NumericUpDown Grid.Row="15"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
-                                   Style="{StaticResource EntryNumeric}"
+                                   Style="{StaticResource NumericUpDown}"
                                    Value="{Binding Year}"
                                    IsEnabled="{Binding YearIsCommon}"
                                    Minimum="1000"
                                    Maximum="9999"/>
             <mahapps:ToggleSwitch Grid.Row="15"
                                   Grid.Column="1"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding YearIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="16"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Style="{StaticResource EntryLabel}">Day:</Label>
+                   Style="{StaticResource Label}">Day:</Label>
             <mahapps:NumericUpDown Grid.Row="17"
                                    Grid.Column="0"                   
-                                   Style="{StaticResource EntryNumeric}"
+                                   Style="{StaticResource NumericUpDown}"
                                    Value="{Binding Day}"
                                    IsEnabled="{Binding DayIsCommon}"
                                    Minimum="1"
@@ -264,16 +264,16 @@ You should have received a copy of the GNU Affero General Public License along w
                                    StringFormat="00"/>
             <mahapps:ToggleSwitch Grid.Row="17"
                                   Grid.Column="1"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding DayIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
             <Label Grid.Row="16"
                    Grid.Column="3"
                    Grid.ColumnSpan="2"
-                   Style="{StaticResource EntryLabel}">Month:</Label>
+                   Style="{StaticResource Label}">Month:</Label>
             <mahapps:NumericUpDown Grid.Row="17"
                                    Grid.Column="3"                   
-                                   Style="{StaticResource EntryNumeric}"
+                                   Style="{StaticResource NumericUpDown}"
                                    Value="{Binding Month}"
                                    IsEnabled="{Binding MonthIsCommon}"
                                    Minimum="1"
@@ -281,23 +281,23 @@ You should have received a copy of the GNU Affero General Public License along w
                                    StringFormat="00"/>
             <mahapps:ToggleSwitch Grid.Row="17"
                                   Grid.Column="4"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding MonthIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
             <Label Grid.Row="18"
                    Grid.Column="0"
                    Grid.ColumnSpan="5"
-                   Style="{StaticResource EntryLabel}">Comment:</Label>
+                   Style="{StaticResource Label}">Comment:</Label>
             <TextBox Grid.Row="19"
                      Grid.Column="0"
                      Grid.ColumnSpan="6"
-                     Style="{StaticResource EntryTextBox}"
+                     Style="{StaticResource TextBox}"
                      Text="{Binding Comment, ValidatesOnNotifyDataErrors=True}"
                      IsEnabled="{Binding CommentIsCommon}"/>
             <mahapps:ToggleSwitch Grid.Row="19"
                                   Grid.Column="6"
-                                  Style="{StaticResource EntryToggle}"
+                                  Style="{StaticResource ToggleSwitch}"
                                   IsChecked="{Binding CommentIsCommon}"
                                   Visibility="{Binding IsMultiple, Converter={StaticResource VisibilityConverter}}"/>
 
