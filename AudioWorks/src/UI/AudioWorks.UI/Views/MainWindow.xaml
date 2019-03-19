@@ -39,8 +39,7 @@ You should have received a copy of the GNU Affero General Public License along w
             <mahapps:Flyout Header="Encoder Settings"
                             IsOpen="{Binding ShowEncoderSettings}"
                             CloseCommand="{Binding ToggleEncoderSettingsCommand}"
-                            Position="Right"
-                            Theme="Adapt">
+                            Position="Right">
                 <TabControl SelectedIndex="0"
                             VerticalAlignment="Top"
                             Width="400"
@@ -60,8 +59,7 @@ You should have received a copy of the GNU Affero General Public License along w
             <mahapps:Flyout Header="Metadata Settings"
                             IsOpen="{Binding ShowMetadataSettings}"
                             CloseCommand="{Binding ToggleMetadataSettingsCommand}"
-                            Position="Right"
-                            Theme="Adapt">
+                            Position="Right">
                 <TabControl SelectedIndex="0"
                             VerticalAlignment="Top"
                             Width="400"
