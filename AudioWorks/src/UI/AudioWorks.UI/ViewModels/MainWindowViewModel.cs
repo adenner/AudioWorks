@@ -26,12 +26,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
-using CommonServiceLocator;
 using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using Unity;
 
 namespace AudioWorks.UI.ViewModels
 {
