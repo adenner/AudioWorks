@@ -28,6 +28,36 @@ You should have received a copy of the GNU Affero General Public License along w
                      Height="600"
                      Width="1000"
                      TitleCharacterCasing="Normal">
+
+    <mahapps:MetroWindow.Resources>
+        <Style TargetType="mahapps:Flyout"
+               x:Key="Flyout"
+               BasedOn="{StaticResource {x:Type mahapps:Flyout}}">
+            <Setter Property="Position"
+                    Value="Right"/>
+            <Setter Property="AnimateOpacity"
+                    Value="True"/>
+            <Setter Property="Margin"
+                    Value="0,31,0,0"/>
+        </Style>
+        <Style TargetType="TabControl"
+               x:Key="FlyoutTabControl"
+               BasedOn="{StaticResource {x:Type TabControl}}">
+            <Setter Property="SelectedIndex"
+                    Value="0"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Top"/>
+            <Setter Property="Width"
+                    Value="300"/>
+            <Setter Property="Margin"
+                    Value="22,0,22,0"/>
+            <Setter Property="Padding"
+                    Value="0,22,0,0"/>
+            <Setter Property="mahapps:TabControlHelper.Underlined"
+                    Value="SelectedTabItem"/>
+        </Style>
+    </mahapps:MetroWindow.Resources>
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <prism:InvokeCommandAction Command="{Binding ExitCommand}"/>
@@ -39,14 +69,9 @@ You should have received a copy of the GNU Affero General Public License along w
             <mahapps:Flyout Header="Encoder Settings"
                             IsOpen="{Binding ShowEncoderSettings}"
                             CloseCommand="{Binding ToggleEncoderSettingsCommand}"
-                            Position="Right">
-                <TabControl SelectedIndex="0"
-                            VerticalAlignment="Top"
-                            Width="300"
-                            Margin="22,0,22,0"
-                            Padding="0,22,0,0"
-                            prism:RegionManager.RegionName="EncoderSettings"
-                            mahapps:TabControlHelper.Underlined="SelectedTabItem">
+                            Style="{StaticResource Flyout}">
+                <TabControl prism:RegionManager.RegionName="EncoderSettings"
+                            Style="{StaticResource FlyoutTabControl}">
                     <TabControl.ItemContainerStyle>
                         <Style TargetType="TabItem"
                                BasedOn="{StaticResource {x:Type TabItem}}">
@@ -59,14 +84,9 @@ You should have received a copy of the GNU Affero General Public License along w
             <mahapps:Flyout Header="Metadata Settings"
                             IsOpen="{Binding ShowMetadataSettings}"
                             CloseCommand="{Binding ToggleMetadataSettingsCommand}"
-                            Position="Right">
-                <TabControl SelectedIndex="0"
-                            VerticalAlignment="Top"
-                            Width="300"
-                            Margin="22,0,22,0"
-                            Padding="0,22,0,0"
-                            prism:RegionManager.RegionName="MetadataSettings"
-                            mahapps:TabControlHelper.Underlined="SelectedTabItem">
+                            Style="{StaticResource Flyout}">
+                <TabControl prism:RegionManager.RegionName="MetadataSettings"
+                            Style="{StaticResource FlyoutTabControl}">
                     <TabControl.ItemContainerStyle>
                         <Style TargetType="TabItem"
                                BasedOn="{StaticResource {x:Type TabItem}}">
