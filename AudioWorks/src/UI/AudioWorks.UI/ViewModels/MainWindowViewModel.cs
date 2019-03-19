@@ -26,10 +26,12 @@ using System.Windows.Data;
 using System.Windows.Input;
 using AudioWorks.Api;
 using AudioWorks.UI.Services;
+using CommonServiceLocator;
 using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using Unity;
 
 namespace AudioWorks.UI.ViewModels
 {
@@ -98,6 +100,8 @@ namespace AudioWorks.UI.ViewModels
             IDirectorySelectionService directorySelectionService,
             IDialogService prismDialogService,
             ICommandService commandService,
+            IEncoderSettingService encoderSettingService,
+            IMetadataSettingService metadataSettingService,
             IDialogCoordinator metroDialogCoordinator)
         {
             BindingOperations.EnableCollectionSynchronization(AudioFiles, _lock);
@@ -174,7 +178,7 @@ namespace AudioWorks.UI.ViewModels
                 {
                     if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
                         commandService.SaveEncoderSettingsCommand.Execute(null);
-                    SettingManager.SaveToDisk();
+                    encoderSettingService.Save();
 
                     ShowEncoderSettings = false;
                 }
@@ -188,7 +192,7 @@ namespace AudioWorks.UI.ViewModels
                 {
                     if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
                         commandService.SaveMetadataSettingsCommand.Execute(null);
-                    SettingManager.SaveToDisk();
+                    metadataSettingService.Save();
 
                     ShowMetadataSettings = false;
                 }

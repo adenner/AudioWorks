@@ -14,6 +14,8 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using AudioWorks.Common;
+using AudioWorks.UI.Services;
+using CommonServiceLocator;
 using Prism.Commands;
 using Prism.Mvvm;
 using IO = System.IO;
@@ -46,8 +48,8 @@ namespace AudioWorks.UI.ViewModels
 
             SaveCommand = new DelegateCommand(() =>
             {
-                SettingManager.MetadataSettings.TryGetValue(IO.Path.GetExtension(Path), out var settings);
-                _audioFile.SaveMetadata(settings);
+                _audioFile.SaveMetadata(
+                    ServiceLocator.Current.GetInstance<IMetadataSettingService>()[IO.Path.GetExtension(Path)]);
                 Metadata.UpdateModel(_audioFile.Metadata);
             });
 

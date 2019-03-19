@@ -13,45 +13,42 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using AudioWorks.Common;
 using Newtonsoft.Json;
 
-namespace AudioWorks.UI
+namespace AudioWorks.UI.Services
 {
-    public static class SettingManager
+    public abstract class SettingService : ISettingService
     {
-        static readonly string _encoderSettingsPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "AudioWorks",
-            "UI",
-            "Settings",
-            "Encoder");
-        static readonly string _metadataSettingsPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "AudioWorks",
-            "UI",
-            "Settings",
-            "Metadata");
+        readonly string _path;
+        readonly Dictionary<string, SettingDictionary> _settingDictionaries;
 
-        public static IDictionary<string, SettingDictionary> EncoderSettings { get; } =
-            LoadFromDisk(_encoderSettingsPath);
-
-        public static IDictionary<string, SettingDictionary> MetadataSettings { get; } =
-            LoadFromDisk(_metadataSettingsPath);
-
-        internal static void SaveToDisk()
+        internal SettingService(string path)
         {
-            Directory.CreateDirectory(_encoderSettingsPath);
-            foreach (var (extension, settings) in EncoderSettings)
-                using (var writer = new StreamWriter(Path.Combine(_encoderSettingsPath, $"{extension.TrimStart('.')}.json")))
-                    writer.Write(JsonConvert.SerializeObject(settings));
+            _path = path;
+            _settingDictionaries = LoadFromDisk(path);
+        }
 
-            Directory.CreateDirectory(_metadataSettingsPath);
-            foreach (var (extension, settings) in MetadataSettings)
-                using (var writer = new StreamWriter(Path.Combine(_metadataSettingsPath, $"{extension.TrimStart('.')}.json")))
+        public SettingDictionary this[string extension]
+        {
+            get
+            {
+                if (_settingDictionaries.TryGetValue(extension, out var result))
+                    return result;
+
+                result = new SettingDictionary();
+                _settingDictionaries.Add(extension, result);
+                return result;
+            }
+        }
+
+        public void Save()
+        {
+            Directory.CreateDirectory(_path);
+            foreach (var (extension, settings) in _settingDictionaries)
+                using (var writer = new StreamWriter(Path.Combine(_path, $"{extension.TrimStart('.')}.json")))
                     writer.Write(JsonConvert.SerializeObject(settings));
         }
 

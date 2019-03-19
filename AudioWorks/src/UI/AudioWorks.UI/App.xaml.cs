@@ -33,6 +33,8 @@ namespace AudioWorks.UI
             containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
             containerRegistry.RegisterSingleton<IDirectorySelectionService, WpfDirectorySelectionService>();
             containerRegistry.RegisterSingleton<ICommandService, CommandService>();
+            containerRegistry.RegisterSingleton<IEncoderSettingService, EncoderSettingService>();
+            containerRegistry.RegisterSingleton<IMetadataSettingService, MetadataSettingService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
 

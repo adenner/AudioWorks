@@ -58,30 +58,27 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
             set => SetProperty(ref _padding, value);
         }
 
-        public Id3MetadataSettingsControlViewModel(ICommandService commandService)
+        public Id3MetadataSettingsControlViewModel(
+            ICommandService commandService,
+            IMetadataSettingService settingService)
         {
-            commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
+            var settings = settingService[".mp3"];
 
-            if (SettingManager.MetadataSettings.TryGetValue(".mp3", out var settings))
+            commandService.SaveMetadataSettingsCommand.RegisterCommand(
+                new DelegateCommand(() => SaveSettings(settings)));
+
+            if (settings.TryGetValue("TagVersion", out string version) &&
+                version.Equals("2.4", StringComparison.Ordinal))
+                _versionIndex = 1;
+
+            if (settings.TryGetValue("TagEncoding", out string encoding) &&
+                encoding.Equals("UTF16", StringComparison.Ordinal))
+                _encodingIndex = 1;
+
+            if (settings.TryGetValue("Padding", out int padding))
             {
-                if (settings.TryGetValue("TagVersion", out string version) &&
-                    version.Equals("2.4", StringComparison.Ordinal))
-                    _versionIndex = 1;
-
-                if (settings.TryGetValue("TagEncoding", out string encoding) &&
-                    encoding.Equals("UTF16", StringComparison.Ordinal))
-                    _encodingIndex = 1;
-
-                if (settings.TryGetValue("Padding", out int padding))
-                {
-                    _padding = padding;
-                    _configurePadding = true;
-                }
-                else
-                {
-                    _padding = 2048;
-                    _configurePadding = false;
-                }
+                _padding = padding;
+                _configurePadding = true;
             }
             else
             {
@@ -90,14 +87,8 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
             }
         }
 
-        void SaveSettings()
+        void SaveSettings(SettingDictionary settings)
         {
-            if (!SettingManager.MetadataSettings.TryGetValue(".mp3", out var settings))
-            {
-                settings = new SettingDictionary();
-                SettingManager.MetadataSettings.Add(".mp3", new SettingDictionary());
-            }
-
             if (_versionIndex == 1)
                 settings["TagVersion"] = "2.4";
             else

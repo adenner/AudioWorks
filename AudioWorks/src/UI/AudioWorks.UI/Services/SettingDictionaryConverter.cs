@@ -17,7 +17,7 @@ using System;
 using AudioWorks.Common;
 using Newtonsoft.Json;
 
-namespace AudioWorks.UI
+namespace AudioWorks.UI.Services
 {
     sealed class SettingDictionaryConverter : JsonConverter
     {

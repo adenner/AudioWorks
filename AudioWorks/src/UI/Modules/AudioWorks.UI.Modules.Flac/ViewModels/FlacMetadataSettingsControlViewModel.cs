@@ -39,12 +39,16 @@ namespace AudioWorks.UI.Modules.Flac.ViewModels
             set => SetProperty(ref _padding, value);
         }
 
-        public FlacMetadataSettingsControlViewModel(ICommandService commandService)
+        public FlacMetadataSettingsControlViewModel(
+            ICommandService commandService,
+            IMetadataSettingService settingService)
         {
-            commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
+            var settings = settingService[".flac"];
 
-            if (SettingManager.MetadataSettings.TryGetValue(".flac", out var settings) &&
-                settings.TryGetValue("Padding", out int padding))
+            commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(() =>
+                SaveSettings(settings)));
+
+            if (settings.TryGetValue("Padding", out int padding))
             {
                 _padding = padding;
                 _configurePadding = true;
@@ -56,14 +60,8 @@ namespace AudioWorks.UI.Modules.Flac.ViewModels
             }
         }
 
-        void SaveSettings()
+        void SaveSettings(SettingDictionary settings)
         {
-            if (!SettingManager.MetadataSettings.TryGetValue(".flac", out var settings))
-            {
-                settings = new SettingDictionary();
-                SettingManager.MetadataSettings.Add(".flac", settings);
-            }
-
             if (_configurePadding)
                 settings["Padding"] = _padding;
             else
