@@ -19,57 +19,54 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:prism="http://prismlibrary.com/"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid VerticalAlignment="Center">
 
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <Style TargetType="Label"
+               x:Key="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="FontSize"
+                    Value="14"/>
+            <Setter Property="Padding"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,9"/>
+        </Style>
+        <Style TargetType="ComboBox"
+               x:Key="ComboBox"
+               BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Margin"
+                    Value="0,0,0,24"/>
+        </Style>
+        <Style TargetType="mahapps:ToggleSwitch"
+               x:Key="ToggleSwitch"
+               BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
+            <Setter Property="Margin"
+                    Value="0,0,0,24"/>
+        </Style>
+    </UserControl.Resources>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+    <StackPanel>
+        <Label Content="Tag Version"
+               Style="{StaticResource Label}"/>
+        <ComboBox ItemsSource="{Binding Versions}"
+                  SelectedIndex="{Binding VersionIndex}"
+                  Style="{StaticResource ComboBox}"/>
+        <Label Content="Character Encoding"
+               Style="{StaticResource Label}"/>
+        <ComboBox ItemsSource="{Binding Encodings}"
+                  SelectedIndex="{Binding EncodingIndex}"
+                  Style="{StaticResource ComboBox}"/>
+        <Label Content="Set a fixed padding size"
+               Style="{StaticResource Label}"/>
+        <mahapps:ToggleSwitch IsChecked="{Binding ConfigurePadding}"
+                              Style="{StaticResource ToggleSwitch}"/>
+        <Label Content="Padding (in bytes)"
+               Style="{StaticResource Label}"/>
+        <mahapps:NumericUpDown Value="{Binding Padding}"
+                               IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
+                               Minimum="0"
+                               Maximum="16777216"
+                               mahapps:TextBoxHelper.SelectAllOnFocus="True"/>
+    </StackPanel>
 
-        <GroupBox Header="Tag Version"
-                  ToolTip="The ID3 tag version to use. Version 2.3 provides the widest compatibility."
-                  Padding="11"
-                  Margin="0,0,11,11">
-            <StackPanel>
-                <ComboBox ItemsSource="{Binding Versions}"
-                          SelectedIndex="{Binding VersionIndex}"/>
-            </StackPanel>
-        </GroupBox>
-
-        <GroupBox Grid.Row="0"
-                  Grid.Column="1"
-                  Header="Character Encoding"
-                  ToolTip="UTF-16 encoding supports a wider range of characters. Latin-1 may be more compatible."
-                  Padding="11"
-                  Margin="0,0,0,11">
-            <StackPanel>
-                <ComboBox ItemsSource="{Binding Encodings}"
-                          SelectedIndex="{Binding EncodingIndex}"/>
-            </StackPanel>
-        </GroupBox>
-    
-        <GroupBox Grid.Row="1"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Header="Padding"
-                  ToolTip="Setting a fixed padding size usually results in a full re-write of the file whenever metadata is modified."
-                  Padding="11">
-            <StackPanel>
-                <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
-                                      IsChecked="{Binding ConfigurePadding}"
-                                      Padding="0"
-                                      Margin="0,0,0,11"/>
-                <mahapps:NumericUpDown Value="{Binding Padding}"
-                                       IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
-                                       Minimum="0"
-                                       Maximum="16777216"/>
-            </StackPanel>
-        </GroupBox>
-
-    </Grid>
 </UserControl>

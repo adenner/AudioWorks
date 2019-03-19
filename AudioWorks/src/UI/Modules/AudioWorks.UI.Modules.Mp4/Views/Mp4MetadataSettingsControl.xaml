@@ -20,20 +20,37 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
     
-    <GroupBox Header="Padding"
-              ToolTip="Setting a fixed padding size usually results in a full re-write of the file whenever metadata is modified."
-              VerticalAlignment="Center"
-              Padding="11">
-        <StackPanel>
-            <mahapps:ToggleSwitch Header="Set a fixed padding size (in bytes)"
-                                  IsChecked="{Binding ConfigurePadding}"
-                                  Padding="0"
-                                  Margin="0,0,0,11"/>
-            <mahapps:NumericUpDown Value="{Binding Padding}"
-                                   IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
-                                   Minimum="0"
-                                   Maximum="16777216"/>
-        </StackPanel>
-    </GroupBox>
-    
+    <UserControl.Resources>
+        <Style TargetType="Label"
+               x:Key="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="FontSize"
+                    Value="14"/>
+            <Setter Property="Padding"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,9"/>
+        </Style>
+        <Style TargetType="mahapps:ToggleSwitch"
+               x:Key="ToggleSwitch"
+               BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
+            <Setter Property="Margin"
+                    Value="0,0,0,24"/>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <Label Content="Set a fixed padding size"
+               Style="{StaticResource Label}"/>
+        <mahapps:ToggleSwitch IsChecked="{Binding ConfigurePadding}"
+                              Style="{StaticResource ToggleSwitch}"/>
+        <Label Content="Padding (in bytes)"
+               Style="{StaticResource Label}"/>
+        <mahapps:NumericUpDown Value="{Binding Padding}"
+                               IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
+                               Minimum="0"
+                               Maximum="16777216"
+                               mahapps:TextBoxHelper.SelectAllOnFocus="True"/>
+    </StackPanel>
+
 </UserControl>
