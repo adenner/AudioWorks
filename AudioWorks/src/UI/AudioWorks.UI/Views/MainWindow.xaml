@@ -42,9 +42,9 @@ You should have received a copy of the GNU Affero General Public License along w
                             Position="Right">
                 <TabControl SelectedIndex="0"
                             VerticalAlignment="Top"
-                            Width="400"
-                            Height="400"
-                            Margin="0,0,0,11"
+                            Width="300"
+                            Margin="22,0,22,0"
+                            Padding="0,22,0,0"
                             prism:RegionManager.RegionName="EncoderSettings"
                             mahapps:TabControlHelper.Underlined="SelectedTabItem">
                     <TabControl.ItemContainerStyle>
@@ -62,9 +62,9 @@ You should have received a copy of the GNU Affero General Public License along w
                             Position="Right">
                 <TabControl SelectedIndex="0"
                             VerticalAlignment="Top"
-                            Width="400"
-                            Height="400"
-                            Margin="0,0,0,11"
+                            Width="300"
+                            Margin="22,0,22,0"
+                            Padding="0,22,0,0"
                             prism:RegionManager.RegionName="MetadataSettings"
                             mahapps:TabControlHelper.Underlined="SelectedTabItem">
                     <TabControl.ItemContainerStyle>
