@@ -37,6 +37,8 @@ namespace AudioWorks.UI.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         bool _isBusy;
+        bool _showEncoderSettings;
+        bool _showMetadataSettings;
         readonly object _lock = new object();
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
@@ -44,6 +46,18 @@ namespace AudioWorks.UI.ViewModels
         {
             get => _isBusy;
             set => SetProperty(ref _isBusy, value);
+        }
+
+        public bool ShowEncoderSettings
+        {
+            get => _showEncoderSettings;
+            set => SetProperty(ref _showEncoderSettings, value);
+        }
+
+        public bool ShowMetadataSettings
+        {
+            get => _showMetadataSettings;
+            set => SetProperty(ref _showMetadataSettings, value);
         }
 
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
@@ -61,7 +75,9 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand EditSelectionCommand { get; }
 
-        public DelegateCommand OpenMetadataSettingsCommand { get; }
+        public DelegateCommand ToggleEncoderSettingsCommand { get; }
+
+        public DelegateCommand ToggleMetadataSettingsCommand { get; }
 
         public DelegateCommand RevertSelectionCommand { get; }
 
@@ -81,6 +97,7 @@ namespace AudioWorks.UI.ViewModels
             IFileSelectionService fileSelectionService,
             IDirectorySelectionService directorySelectionService,
             IDialogService prismDialogService,
+            ICommandService commandService,
             IDialogCoordinator metroDialogCoordinator)
         {
             BindingOperations.EnableCollectionSynchronization(AudioFiles, _lock);
@@ -151,8 +168,33 @@ namespace AudioWorks.UI.ViewModels
                         new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
 
-            OpenMetadataSettingsCommand = new DelegateCommand(() =>
-                prismDialogService.ShowDialog("MetadataSettingsControl", new DialogParameters(), null));
+            ToggleEncoderSettingsCommand = new DelegateCommand(() =>
+            {
+                if (ShowEncoderSettings)
+                {
+                    if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
+                        commandService.SaveEncoderSettingsCommand.Execute(null);
+                    SettingManager.SaveToDisk();
+
+                    ShowEncoderSettings = false;
+                }
+                else
+                    ShowEncoderSettings = true;
+            });
+
+            ToggleMetadataSettingsCommand = new DelegateCommand(() =>
+            {
+                if (ShowMetadataSettings)
+                {
+                    if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
+                        commandService.SaveMetadataSettingsCommand.Execute(null);
+                    SettingManager.SaveToDisk();
+
+                    ShowMetadataSettings = false;
+                }
+                else
+                    ShowMetadataSettings = true;
+            });
 
             RevertSelectionCommand = new DelegateCommand(() =>
                 {

@@ -43,7 +43,7 @@ namespace AudioWorks.UI.Modules.Flac.ViewModels
         {
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
 
-            if (SettingManager.MetadataEncoderSettings.TryGetValue(".flac", out var settings) &&
+            if (SettingManager.MetadataSettings.TryGetValue(".flac", out var settings) &&
                 settings.TryGetValue("Padding", out int padding))
             {
                 _padding = padding;
@@ -58,10 +58,10 @@ namespace AudioWorks.UI.Modules.Flac.ViewModels
 
         void SaveSettings()
         {
-            if (!SettingManager.MetadataEncoderSettings.TryGetValue(".flac", out var settings))
+            if (!SettingManager.MetadataSettings.TryGetValue(".flac", out var settings))
             {
                 settings = new SettingDictionary();
-                SettingManager.MetadataEncoderSettings.Add(".flac", settings);
+                SettingManager.MetadataSettings.Add(".flac", settings);
             }
 
             if (_configurePadding)

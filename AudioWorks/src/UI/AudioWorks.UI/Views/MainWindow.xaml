@@ -34,6 +34,53 @@ You should have received a copy of the GNU Affero General Public License along w
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <mahapps:MetroWindow.Flyouts>
+        <mahapps:FlyoutsControl>
+            <mahapps:Flyout Header="Encoder Settings"
+                            IsOpen="{Binding ShowEncoderSettings}"
+                            CloseCommand="{Binding ToggleEncoderSettingsCommand}"
+                            Position="Right"
+                            Theme="Adapt">
+                <TabControl SelectedIndex="0"
+                            VerticalAlignment="Top"
+                            Width="400"
+                            Height="400"
+                            Margin="0,0,0,11"
+                            prism:RegionManager.RegionName="EncoderSettings"
+                            mahapps:TabControlHelper.Underlined="SelectedTabItem">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem"
+                               BasedOn="{StaticResource {x:Type TabItem}}">
+                            <Setter Property="Header"
+                                    Value="{Binding DataContext.Title}"/>
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                </TabControl>
+            </mahapps:Flyout>
+            <mahapps:Flyout Header="Metadata Settings"
+                            IsOpen="{Binding ShowMetadataSettings}"
+                            CloseCommand="{Binding ToggleMetadataSettingsCommand}"
+                            Position="Right"
+                            Theme="Adapt">
+                <TabControl SelectedIndex="0"
+                            VerticalAlignment="Top"
+                            Width="400"
+                            Height="400"
+                            Margin="0,0,0,11"
+                            prism:RegionManager.RegionName="MetadataSettings"
+                            mahapps:TabControlHelper.Underlined="SelectedTabItem">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem"
+                               BasedOn="{StaticResource {x:Type TabItem}}">
+                            <Setter Property="Header"
+                                    Value="{Binding DataContext.Title}"/>
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                </TabControl>
+            </mahapps:Flyout>
+        </mahapps:FlyoutsControl>
+    </mahapps:MetroWindow.Flyouts>
+
     <DockPanel>
 
         <fluent:Ribbon DockPanel.Dock="Top" IsQuickAccessToolBarVisible="False">
@@ -139,8 +186,12 @@ You should have received a copy of the GNU Affero General Public License along w
                         <fluent:CheckBox Header="Sample Rate"
                                          x:Name="SampleRateColumnCheckBox"/>
                     </fluent:DropDownButton>
+                    <fluent:Button Header="Encoder Settings"
+                                   Command="{Binding ToggleEncoderSettingsCommand}"
+                                   LargeIcon="{StaticResource ShowAllConfigurationsImage}"
+                                   fluent:KeyTip.Keys="E"/>
                     <fluent:Button Header="Metadata Settings"
-                                   Command="{Binding OpenMetadataSettingsCommand}"
+                                   Command="{Binding ToggleMetadataSettingsCommand}"
                                    LargeIcon="{StaticResource ConfigurationEditorImage}"
                                    fluent:KeyTip.Keys="M"/>
                 </fluent:RibbonGroupBox>

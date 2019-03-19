@@ -46,7 +46,7 @@ namespace AudioWorks.UI.ViewModels
 
             SaveCommand = new DelegateCommand(() =>
             {
-                SettingManager.MetadataEncoderSettings.TryGetValue(IO.Path.GetExtension(Path), out var settings);
+                SettingManager.MetadataSettings.TryGetValue(IO.Path.GetExtension(Path), out var settings);
                 _audioFile.SaveMetadata(settings);
                 Metadata.UpdateModel(_audioFile.Metadata);
             });

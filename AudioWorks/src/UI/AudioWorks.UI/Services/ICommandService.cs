@@ -19,6 +19,8 @@ namespace AudioWorks.UI.Services
 {
     public interface ICommandService
     {
+        CompositeCommand SaveEncoderSettingsCommand { get; }
+
         CompositeCommand SaveMetadataSettingsCommand { get; }
     }
 }

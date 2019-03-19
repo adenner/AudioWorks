@@ -62,7 +62,7 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
         {
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
 
-            if (SettingManager.MetadataEncoderSettings.TryGetValue(".mp3", out var settings))
+            if (SettingManager.MetadataSettings.TryGetValue(".mp3", out var settings))
             {
                 if (settings.TryGetValue("TagVersion", out string version) &&
                     version.Equals("2.4", StringComparison.Ordinal))
@@ -92,10 +92,10 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
 
         void SaveSettings()
         {
-            if (!SettingManager.MetadataEncoderSettings.TryGetValue(".mp3", out var settings))
+            if (!SettingManager.MetadataSettings.TryGetValue(".mp3", out var settings))
             {
                 settings = new SettingDictionary();
-                SettingManager.MetadataEncoderSettings.Add(".mp3", new SettingDictionary());
+                SettingManager.MetadataSettings.Add(".mp3", new SettingDictionary());
             }
 
             if (_versionIndex == 1)

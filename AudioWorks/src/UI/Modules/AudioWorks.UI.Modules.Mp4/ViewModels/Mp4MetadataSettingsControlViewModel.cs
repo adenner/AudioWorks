@@ -43,7 +43,7 @@ namespace AudioWorks.UI.Modules.Mp4.ViewModels
         {
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(SaveSettings));
 
-            if (SettingManager.MetadataEncoderSettings.TryGetValue(".m4a", out var settings) &&
+            if (SettingManager.MetadataSettings.TryGetValue(".m4a", out var settings) &&
                 settings.TryGetValue("Padding", out int padding))
             {
                 _padding = padding;
@@ -58,10 +58,10 @@ namespace AudioWorks.UI.Modules.Mp4.ViewModels
 
         void SaveSettings()
         {
-            if (!SettingManager.MetadataEncoderSettings.TryGetValue(".m4a", out var settings))
+            if (!SettingManager.MetadataSettings.TryGetValue(".m4a", out var settings))
             {
                 settings = new SettingDictionary();
-                SettingManager.MetadataEncoderSettings.Add(".m4a", settings);
+                SettingManager.MetadataSettings.Add(".m4a", settings);
             }
 
             if (_configurePadding)

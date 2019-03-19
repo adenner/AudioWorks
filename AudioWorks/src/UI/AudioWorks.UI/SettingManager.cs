@@ -23,28 +23,43 @@ namespace AudioWorks.UI
 {
     public static class SettingManager
     {
-        static readonly string _settingsPath = Path.Combine(
+        static readonly string _encoderSettingsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "AudioWorks",
             "UI",
-            "Settings");
+            "Settings",
+            "Encoder");
+        static readonly string _metadataSettingsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "AudioWorks",
+            "UI",
+            "Settings",
+            "Metadata");
 
-        public static IDictionary<string, SettingDictionary> MetadataEncoderSettings { get; } = LoadFromDisk();
+        public static IDictionary<string, SettingDictionary> EncoderSettings { get; } =
+            LoadFromDisk(_encoderSettingsPath);
+
+        public static IDictionary<string, SettingDictionary> MetadataSettings { get; } =
+            LoadFromDisk(_metadataSettingsPath);
 
         internal static void SaveToDisk()
         {
-            Directory.CreateDirectory(_settingsPath);
+            Directory.CreateDirectory(_encoderSettingsPath);
+            foreach (var (extension, settings) in EncoderSettings)
+                using (var writer = new StreamWriter(Path.Combine(_encoderSettingsPath, $"{extension.TrimStart('.')}.json")))
+                    writer.Write(JsonConvert.SerializeObject(settings));
 
-            foreach (var (extension, settings) in MetadataEncoderSettings)
-                using (var writer = new StreamWriter(Path.Combine(_settingsPath, $"{extension.TrimStart('.')}.json")))
+            Directory.CreateDirectory(_metadataSettingsPath);
+            foreach (var (extension, settings) in MetadataSettings)
+                using (var writer = new StreamWriter(Path.Combine(_metadataSettingsPath, $"{extension.TrimStart('.')}.json")))
                     writer.Write(JsonConvert.SerializeObject(settings));
         }
 
-        static Dictionary<string, SettingDictionary> LoadFromDisk()
+        static Dictionary<string, SettingDictionary> LoadFromDisk(string path)
         {
             var result = new Dictionary<string, SettingDictionary>();
-            if (Directory.Exists(_settingsPath))
-                foreach (var file in Directory.EnumerateFiles(_settingsPath, "*.json"))
+            if (Directory.Exists(path))
+                foreach (var file in Directory.EnumerateFiles(path, "*.json"))
                     using (var reader = new StreamReader(file))
                         result[$".{Path.GetFileNameWithoutExtension(file)}"] =
                             JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(),

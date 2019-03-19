@@ -34,7 +34,6 @@ namespace AudioWorks.UI
             containerRegistry.RegisterSingleton<IDirectorySelectionService, WpfDirectorySelectionService>();
             containerRegistry.RegisterSingleton<ICommandService, CommandService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
-            containerRegistry.RegisterDialog<MetadataSettingsControl, MetadataSettingsControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
 
             // MahApps.Metro dialog service

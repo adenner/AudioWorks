@@ -25,7 +25,7 @@ namespace AudioWorks.UI.Modules.Flac
         public void OnInitialized(IContainerProvider containerProvider)
         {
             containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("SettingsRegion", typeof(FlacMetadataSettingsControl));
+                .RegisterViewWithRegion("MetadataSettings", typeof(FlacMetadataSettingsControl));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

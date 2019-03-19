@@ -25,7 +25,7 @@ namespace AudioWorks.UI.Modules.Id3
         public void OnInitialized(IContainerProvider containerProvider)
         {
             containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("SettingsRegion", typeof(Id3MetadataSettingsControl));
+                .RegisterViewWithRegion("MetadataSettings", typeof(Id3MetadataSettingsControl));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

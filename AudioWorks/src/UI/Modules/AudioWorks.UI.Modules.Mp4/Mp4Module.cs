@@ -25,7 +25,7 @@ namespace AudioWorks.UI.Modules.Mp4
         public void OnInitialized(IContainerProvider containerProvider)
         {
             containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("SettingsRegion", typeof(Mp4MetadataSettingsControl));
+                .RegisterViewWithRegion("MetadataSettings", typeof(Mp4MetadataSettingsControl));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
