@@ -43,15 +43,23 @@ You should have received a copy of the GNU Affero General Public License along w
             <Setter Property="Margin"
                     Value="0,0,0,24"/>
         </Style>
+        <Style TargetType="mahapps:NumericUpDown"
+               x:Key="NumericUpDown"
+               BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
+            <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
+                    Value="True"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,24"/>
+        </Style>
     </UserControl.Resources>
 
     <StackPanel>
-        <Label Content="Tag Version"
+        <Label Content="Tag version"
                Style="{StaticResource Label}"/>
         <ComboBox ItemsSource="{Binding Versions}"
                   SelectedIndex="{Binding VersionIndex}"
                   Style="{StaticResource ComboBox}"/>
-        <Label Content="Character Encoding"
+        <Label Content="Character encoding"
                Style="{StaticResource Label}"/>
         <ComboBox ItemsSource="{Binding Encodings}"
                   SelectedIndex="{Binding EncodingIndex}"
@@ -66,7 +74,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
                                Minimum="0"
                                Maximum="16777216"
-                               mahapps:TextBoxHelper.SelectAllOnFocus="True"/>
+                               Style="{StaticResource NumericUpDown}"/>
     </StackPanel>
 
 </UserControl>
