@@ -80,7 +80,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 TickFrequency="1"
                 IsDirectionReversed="True"
                 Style="{StaticResource Slider}"/>
-        <Label Content="Bit Rate"
+        <Label Content="Bit Rate (in kB/s)"
                Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                Style="{StaticResource Label}"/>
         <Slider Value="{Binding BitRate}"

@@ -22,7 +22,7 @@ namespace AudioWorks.UI.Views
     public sealed class BitRateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            ((int) value / 1000f).ToString("0 kb/s", CultureInfo.CurrentUICulture);
+            ((int) value / 1000f).ToString("0 kB/s", CultureInfo.CurrentUICulture);
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotImplementedException();
