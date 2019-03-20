@@ -141,7 +141,7 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
                         settings["ControlMode"] = "Constant";
                         break;
                     default:
-                        settings.Remove("ForceCBR");
+                        settings.Remove("ControlMode");
                         break;
                 }
             }
