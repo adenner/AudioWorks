@@ -138,7 +138,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                    fluent:KeyTip.Keys="R"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Options">
-                    <fluent:DropDownButton Header="Add/Remove Columns"
+                    <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">
                         <fluent:CheckBox Header="Path"
