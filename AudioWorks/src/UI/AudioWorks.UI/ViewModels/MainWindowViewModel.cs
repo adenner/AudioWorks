@@ -95,7 +95,6 @@ namespace AudioWorks.UI.ViewModels
 
         public MainWindowViewModel(
             IFileSelectionService fileSelectionService,
-            IDirectorySelectionService directorySelectionService,
             IDialogService prismDialogService,
             ICommandService commandService,
             IEncoderSettingService encoderSettingService,
@@ -142,7 +141,7 @@ namespace AudioWorks.UI.ViewModels
             OpenDirectoryCommand = new DelegateCommand(async () =>
                 {
                     IsBusy = true;
-                    await AddFilesAsync(GetFilesRecursively(directorySelectionService.SelectDirectory()));
+                    await AddFilesAsync(GetFilesRecursively(fileSelectionService.SelectDirectory()));
                     IsBusy = false;
                 }, () => !IsBusy)
                 .ObservesProperty(() => IsBusy);

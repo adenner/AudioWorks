@@ -20,5 +20,7 @@ namespace AudioWorks.UI.Services
     public interface IFileSelectionService
     {
         IEnumerable<string> SelectFiles();
+
+        string SelectDirectory();
     }
 }

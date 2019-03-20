@@ -30,8 +30,7 @@ namespace AudioWorks.UI
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<IFileSelectionService, WpfFileSelectionService>();
-            containerRegistry.RegisterSingleton<IDirectorySelectionService, WpfDirectorySelectionService>();
+            containerRegistry.RegisterSingleton<IFileSelectionService, FileSelectionService>();
             containerRegistry.RegisterSingleton<ICommandService, CommandService>();
             containerRegistry.RegisterSingleton<IEncoderSettingService, EncoderSettingService>();
             containerRegistry.RegisterSingleton<IMetadataSettingService, MetadataSettingService>();

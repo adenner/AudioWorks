@@ -16,12 +16,13 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 using AudioWorks.Api;
-using Microsoft.Win32;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace AudioWorks.UI.Services
 {
-    sealed class WpfFileSelectionService : IFileSelectionService
+    sealed class FileSelectionService : IFileSelectionService
     {
         public IEnumerable<string> SelectFiles()
         {
@@ -36,6 +37,17 @@ namespace AudioWorks.UI.Services
             if (showResult.HasValue && showResult.Value)
                 return dialog.FileNames;
             return Array.Empty<string>();
+        }
+
+        public string SelectDirectory()
+        {
+            var dialog = new FolderBrowserDialog
+            {
+                Description = "Select a Directory to Search",
+                UseDescriptionForTitle = true
+            };
+            var showResult = dialog.ShowDialog();
+            return showResult == DialogResult.OK ? dialog.SelectedPath : string.Empty;
         }
 
         static string GetFilter()
