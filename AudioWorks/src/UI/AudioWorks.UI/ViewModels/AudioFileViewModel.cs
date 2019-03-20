@@ -49,7 +49,8 @@ namespace AudioWorks.UI.ViewModels
             SaveCommand = new DelegateCommand(() =>
             {
                 _audioFile.SaveMetadata(
-                    ServiceLocator.Current.GetInstance<IMetadataSettingService>()[IO.Path.GetExtension(Path)]);
+                    ServiceLocator.Current.GetInstance<IMetadataSettingService>()
+                        [IO.Path.GetExtension(Path).TrimStart('.')]);
                 Metadata.UpdateModel(_audioFile.Metadata);
             });
 

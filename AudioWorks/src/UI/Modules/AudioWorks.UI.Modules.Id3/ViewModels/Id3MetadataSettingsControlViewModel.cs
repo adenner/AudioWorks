@@ -62,7 +62,7 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
             ICommandService commandService,
             IMetadataSettingService settingService)
         {
-            var settings = settingService[".mp3"];
+            var settings = settingService["mp3"];
 
             commandService.SaveMetadataSettingsCommand.RegisterCommand(
                 new DelegateCommand(() => SaveSettings(settings)));

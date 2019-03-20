@@ -43,7 +43,7 @@ namespace AudioWorks.UI.Modules.Mp4.ViewModels
             ICommandService commandService,
             IMetadataSettingService settingService)
         {
-            var settings = settingService[".m4a"];
+            var settings = settingService["m4a"];
 
             commandService.SaveMetadataSettingsCommand.RegisterCommand(
                 new DelegateCommand(() => SaveSettings(settings)));

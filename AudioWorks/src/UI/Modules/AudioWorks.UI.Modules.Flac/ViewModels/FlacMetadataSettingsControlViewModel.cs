@@ -43,7 +43,7 @@ namespace AudioWorks.UI.Modules.Flac.ViewModels
             ICommandService commandService,
             IMetadataSettingService settingService)
         {
-            var settings = settingService[".flac"];
+            var settings = settingService["flac"];
 
             commandService.SaveMetadataSettingsCommand.RegisterCommand(new DelegateCommand(() =>
                 SaveSettings(settings)));

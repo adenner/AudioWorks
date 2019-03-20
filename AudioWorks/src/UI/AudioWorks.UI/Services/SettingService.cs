@@ -31,15 +31,15 @@ namespace AudioWorks.UI.Services
             _settingDictionaries = LoadFromDisk(path);
         }
 
-        public SettingDictionary this[string extension]
+        public SettingDictionary this[string key]
         {
             get
             {
-                if (_settingDictionaries.TryGetValue(extension, out var result))
+                if (_settingDictionaries.TryGetValue(key, out var result))
                     return result;
 
                 result = new SettingDictionary();
-                _settingDictionaries.Add(extension, result);
+                _settingDictionaries.Add(key, result);
                 return result;
             }
         }
@@ -47,8 +47,8 @@ namespace AudioWorks.UI.Services
         public void Save()
         {
             Directory.CreateDirectory(_path);
-            foreach (var (extension, settings) in _settingDictionaries)
-                using (var writer = new StreamWriter(Path.Combine(_path, $"{extension.TrimStart('.')}.json")))
+            foreach (var (key, settings) in _settingDictionaries)
+                using (var writer = new StreamWriter(Path.Combine(_path, $"{key}.json")))
                     writer.Write(JsonConvert.SerializeObject(settings));
         }
 
@@ -58,7 +58,7 @@ namespace AudioWorks.UI.Services
             if (Directory.Exists(path))
                 foreach (var file in Directory.EnumerateFiles(path, "*.json"))
                     using (var reader = new StreamReader(file))
-                        result[$".{Path.GetFileNameWithoutExtension(file)}"] =
+                        result[Path.GetFileNameWithoutExtension(file)] =
                             JsonConvert.DeserializeObject<SettingDictionary>(reader.ReadToEnd(),
                                 new SettingDictionaryConverter());
             return result;
