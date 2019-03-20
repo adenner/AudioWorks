@@ -15,10 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Views\Mp4MetadataSettingsControl.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\AudioWorks.UI\AudioWorks.UI.csproj" />
   </ItemGroup>
   
