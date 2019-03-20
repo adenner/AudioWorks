@@ -198,6 +198,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Mp4",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Lame", "src\UI\Modules\AudioWorks.UI.Modules.Lame\AudioWorks.UI.Modules.Lame.csproj", "{A6A71FE1-AFAB-4E8E-A3CA-FFF30CCD3BF2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioWorks.UI.Modules.Apple", "src\UI\Modules\AudioWorks.UI.Modules.Apple\AudioWorks.UI.Modules.Apple.csproj", "{6B311C7C-43A9-4051-A0E4-981307F9677C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -300,6 +302,10 @@ Global
 		{A6A71FE1-AFAB-4E8E-A3CA-FFF30CCD3BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6A71FE1-AFAB-4E8E-A3CA-FFF30CCD3BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6A71FE1-AFAB-4E8E-A3CA-FFF30CCD3BF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B311C7C-43A9-4051-A0E4-981307F9677C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B311C7C-43A9-4051-A0E4-981307F9677C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B311C7C-43A9-4051-A0E4-981307F9677C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B311C7C-43A9-4051-A0E4-981307F9677C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,6 +330,7 @@ Global
 		{EBA034C8-E71A-435A-A959-6451843FB1BD} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
 		{673D20A3-E5C7-4617-ADD3-45F4FA9FA54D} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
 		{A6A71FE1-AFAB-4E8E-A3CA-FFF30CCD3BF2} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
+		{6B311C7C-43A9-4051-A0E4-981307F9677C} = {B26A7811-E489-4EA4-B95D-2350AC681D7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73104514-BD86-4575-A404-A192C2B5BF6D}
