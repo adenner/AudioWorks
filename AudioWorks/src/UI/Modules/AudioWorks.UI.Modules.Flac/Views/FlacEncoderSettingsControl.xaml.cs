@@ -13,25 +13,13 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using AudioWorks.UI.Modules.Flac.Views;
-using Prism.Ioc;
-using Prism.Modularity;
-using Prism.Regions;
-
-namespace AudioWorks.UI.Modules.Flac
+namespace AudioWorks.UI.Modules.Flac.Views
 {
-    public class FlacModule : IModule
+    public sealed partial class FlacEncoderSettingsControl
     {
-        public void OnInitialized(IContainerProvider containerProvider)
+        public FlacEncoderSettingsControl()
         {
-            containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("EncoderSettings", typeof(FlacEncoderSettingsControl));
-            containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("MetadataSettings", typeof(FlacMetadataSettingsControl));
-        }
-
-        public void RegisterTypes(IContainerRegistry containerRegistry)
-        {
+            InitializeComponent();
         }
     }
 }
