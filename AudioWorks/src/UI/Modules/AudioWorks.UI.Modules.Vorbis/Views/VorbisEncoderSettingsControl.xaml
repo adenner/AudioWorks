@@ -78,7 +78,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                 Minimum="45"
                 Maximum="500"
-                TickFrequency="25"
+                TickFrequency="50"
                 Style="{StaticResource Slider}"/>
         <Label Content="Force a constant bit rate"
                Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
