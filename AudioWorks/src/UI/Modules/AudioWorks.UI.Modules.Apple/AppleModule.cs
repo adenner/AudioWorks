@@ -25,9 +25,9 @@ namespace AudioWorks.UI.Modules.Apple
         public void OnInitialized(IContainerProvider containerProvider)
         {
             containerProvider.Resolve<IRegionManager>()
-                .RegisterViewWithRegion("EncoderSettings", typeof(AacEncoderSettingsControl));
-            containerProvider.Resolve<IRegionManager>()
                 .RegisterViewWithRegion("EncoderSettings", typeof(AlacEncoderSettingsControl));
+            containerProvider.Resolve<IRegionManager>()
+                .RegisterViewWithRegion("EncoderSettings", typeof(AacEncoderSettingsControl));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
