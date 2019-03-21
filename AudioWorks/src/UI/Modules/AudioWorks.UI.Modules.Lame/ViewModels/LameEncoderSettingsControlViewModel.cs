@@ -31,6 +31,7 @@ namespace AudioWorks.UI.Modules.Lame.ViewModels
         bool _forceCbr;
         int _tagVersionIndex;
         int _tagEncodingIndex;
+        int _applyGainIndex;
         int _tagPadding;
 
         public string Title { get; } = "MP3";
@@ -76,6 +77,14 @@ namespace AudioWorks.UI.Modules.Lame.ViewModels
         {
             get => _forceCbr;
             set => SetProperty(ref _forceCbr, value);
+        }
+
+        public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
+
+        public int ApplyGainIndex
+        {
+            get => _applyGainIndex;
+            set => SetProperty(ref _applyGainIndex, value);
         }
 
         public string[] TagVersions => new[] { "2.3", "2.4" };
@@ -127,6 +136,17 @@ namespace AudioWorks.UI.Modules.Lame.ViewModels
                 ? vbrQuality
                 : 3;
 
+            if (settings.TryGetValue("ApplyGain", out string applyGain))
+                switch (applyGain)
+                {
+                    case "Track":
+                        _applyGainIndex = 1;
+                        break;
+                    case "Album":
+                        _applyGainIndex = 2;
+                        break;
+                }
+
             if (settings.TryGetValue("TagVersion", out string version) &&
                 version.Equals("2.4", StringComparison.Ordinal))
                 _tagVersionIndex = 1;
@@ -160,6 +180,19 @@ namespace AudioWorks.UI.Modules.Lame.ViewModels
             {
                 settings.Remove("BitRate");
                 settings.Remove("ForceCBR");
+            }
+
+            switch (_applyGainIndex)
+            {
+                case 1:
+                    settings["ApplyGain"] = "Track";
+                    break;
+                case 2:
+                    settings["ApplyGain"] = "Album";
+                    break;
+                default:
+                    settings.Remove("ApplyGain");
+                    break;
             }
 
             if (_tagVersionIndex == 1)

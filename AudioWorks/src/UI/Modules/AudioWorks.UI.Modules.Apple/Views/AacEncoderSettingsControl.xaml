@@ -89,6 +89,11 @@ You should have received a copy of the GNU Affero General Public License along w
                   SelectedIndex="{Binding ControlModeIndex}"
                   Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                   Style="{StaticResource ComboBox}"/>
+        <Label Content="Gain adjustment"
+               Style="{StaticResource Label}"/>
+        <ComboBox ItemsSource="{Binding ApplyGainValues}"
+                  SelectedIndex="{Binding ApplyGainIndex}"
+                  Style="{StaticResource ComboBox}"/>
         <Label Content="Padding (in bytes)"
                Style="{StaticResource Label}"/>
         <mahapps:NumericUpDown Value="{Binding Padding}"

@@ -29,6 +29,7 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
         int _vbrQuality;
         int _bitRate;
         int _controlModeIndex;
+        int _applyGainIndex;
         int _padding;
 
         public string Title { get; } = "AAC";
@@ -78,6 +79,14 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
             set => SetProperty(ref _controlModeIndex, value);
         }
 
+        public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
+
+        public int ApplyGainIndex
+        {
+            get => _applyGainIndex;
+            set => SetProperty(ref _applyGainIndex, value);
+        }
+
         public int Padding
         {
             get => _padding;
@@ -116,6 +125,17 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
                 ? vbrQuality
                 : 9;
 
+            if (settings.TryGetValue("ApplyGain", out string applyGain))
+                switch (applyGain)
+                {
+                    case "Track":
+                        _applyGainIndex = 1;
+                        break;
+                    case "Album":
+                        _applyGainIndex = 2;
+                        break;
+                }
+
             _padding = settings.TryGetValue("Padding", out int padding)
                 ? padding
                 : 2048;
@@ -149,6 +169,19 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
             {
                 settings.Remove("BitRate");
                 settings.Remove("ControlMode");
+            }
+
+            switch (_applyGainIndex)
+            {
+                case 1:
+                    settings["ApplyGain"] = "Track";
+                    break;
+                case 2:
+                    settings["ApplyGain"] = "Album";
+                    break;
+                default:
+                    settings.Remove("ApplyGain");
+                    break;
             }
 
             if (_padding != 2048)

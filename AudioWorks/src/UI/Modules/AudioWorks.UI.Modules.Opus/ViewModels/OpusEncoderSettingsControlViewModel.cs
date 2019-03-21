@@ -26,6 +26,7 @@ namespace AudioWorks.UI.Modules.Opus.ViewModels
         int _bitRate;
         int _controlModeIndex;
         int _signalTypeIndex;
+        int _applyGainIndex;
 
         public string Title { get; } = "Opus";
 
@@ -49,6 +50,14 @@ namespace AudioWorks.UI.Modules.Opus.ViewModels
         {
             get => _signalTypeIndex;
             set => SetProperty(ref _signalTypeIndex, value);
+        }
+
+        public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
+
+        public int ApplyGainIndex
+        {
+            get => _applyGainIndex;
+            set => SetProperty(ref _applyGainIndex, value);
         }
 
         public OpusEncoderSettingsControlViewModel(
@@ -77,6 +86,17 @@ namespace AudioWorks.UI.Modules.Opus.ViewModels
             if (settings.TryGetValue("SignalType", out string signalType) &&
                 signalType.Equals("Speech", StringComparison.Ordinal))
                 _signalTypeIndex = 1;
+
+            if (settings.TryGetValue("ApplyGain", out string applyGain))
+                switch (applyGain)
+                {
+                    case "Track":
+                        _applyGainIndex = 1;
+                        break;
+                    case "Album":
+                        _applyGainIndex = 2;
+                        break;
+                }
         }
 
         void SaveSettings(SettingDictionary settings)
@@ -100,6 +120,19 @@ namespace AudioWorks.UI.Modules.Opus.ViewModels
                 settings["SignalType"] = "Speech";
             else
                 settings.Remove("SignalType");
+
+            switch (_applyGainIndex)
+            {
+                case 1:
+                    settings["ApplyGain"] = "Track";
+                    break;
+                case 2:
+                    settings["ApplyGain"] = "Album";
+                    break;
+                default:
+                    settings.Remove("ApplyGain");
+                    break;
+            }
         }
     }
 }

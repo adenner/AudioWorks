@@ -28,6 +28,7 @@ namespace AudioWorks.UI.Modules.Vorbis.ViewModels
         int _quality;
         int _bitRate;
         bool _forceCbr;
+        int _applyGainIndex;
 
         public string Title { get; } = "Vorbis";
 
@@ -74,6 +75,14 @@ namespace AudioWorks.UI.Modules.Vorbis.ViewModels
             set => SetProperty(ref _forceCbr, value);
         }
 
+        public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
+
+        public int ApplyGainIndex
+        {
+            get => _applyGainIndex;
+            set => SetProperty(ref _applyGainIndex, value);
+        }
+
         public VorbisEncoderSettingsControlViewModel(
             ICommandService commandService,
             IEncoderSettingService settingService)
@@ -100,6 +109,17 @@ namespace AudioWorks.UI.Modules.Vorbis.ViewModels
             _quality = settings.TryGetValue("Quality", out int vbrQuality)
                 ? vbrQuality
                 : 5;
+
+            if (settings.TryGetValue("ApplyGain", out string applyGain))
+                switch (applyGain)
+                {
+                    case "Track":
+                        _applyGainIndex = 1;
+                        break;
+                    case "Album":
+                        _applyGainIndex = 2;
+                        break;
+                }
         }
 
         void SaveSettings(SettingDictionary settings)
@@ -122,6 +142,19 @@ namespace AudioWorks.UI.Modules.Vorbis.ViewModels
             {
                 settings.Remove("BitRate");
                 settings.Remove("ForceCBR");
+            }
+
+            switch (_applyGainIndex)
+            {
+                case 1:
+                    settings["ApplyGain"] = "Track";
+                    break;
+                case 2:
+                    settings["ApplyGain"] = "Album";
+                    break;
+                default:
+                    settings.Remove("ApplyGain");
+                    break;
             }
         }
     }

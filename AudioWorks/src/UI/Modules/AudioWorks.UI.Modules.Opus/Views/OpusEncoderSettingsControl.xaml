@@ -66,6 +66,11 @@ You should have received a copy of the GNU Affero General Public License along w
         <ComboBox ItemsSource="{Binding SignalTypes}"
                   SelectedIndex="{Binding SignalTypeIndex}"
                   Style="{StaticResource ComboBox}"/>
+        <Label Content="Gain adjustment"
+               Style="{StaticResource Label}"/>
+        <ComboBox ItemsSource="{Binding ApplyGainValues}"
+                  SelectedIndex="{Binding ApplyGainIndex}"
+                  Style="{StaticResource ComboBox}"/>
     </StackPanel>
 
 </UserControl>

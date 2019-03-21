@@ -86,6 +86,11 @@ You should have received a copy of the GNU Affero General Public License along w
         <mahapps:ToggleSwitch IsChecked="{Binding ForceCbr}"
                               Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                               Style="{StaticResource ToggleSwitch}"/>
+        <Label Content="Gain adjustment"
+               Style="{StaticResource Label}"/>
+        <ComboBox ItemsSource="{Binding ApplyGainValues}"
+                  SelectedIndex="{Binding ApplyGainIndex}"
+                  Style="{StaticResource ComboBox}"/>
     </StackPanel>
 
 </UserControl>
