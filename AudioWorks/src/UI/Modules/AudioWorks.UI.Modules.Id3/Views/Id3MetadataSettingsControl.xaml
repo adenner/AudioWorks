@@ -20,61 +20,28 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
-    <UserControl.Resources>
-        <Style TargetType="Label"
-               x:Key="Label"
-               BasedOn="{StaticResource {x:Type Label}}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Padding"
-                    Value="0"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,9"/>
-        </Style>
-        <Style TargetType="ComboBox"
-               x:Key="ComboBox"
-               BasedOn="{StaticResource {x:Type ComboBox}}">
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-        <Style TargetType="mahapps:ToggleSwitch"
-               x:Key="ToggleSwitch"
-               BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-        <Style TargetType="mahapps:NumericUpDown"
-               x:Key="NumericUpDown"
-               BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
-            <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
-                    Value="True"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-    </UserControl.Resources>
-
     <StackPanel>
         <Label Content="Tag version"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding Versions}"
                   SelectedIndex="{Binding VersionIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="Character encoding"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding Encodings}"
                   SelectedIndex="{Binding EncodingIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="Set a fixed padding size"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <mahapps:ToggleSwitch IsChecked="{Binding ConfigurePadding}"
-                              Style="{StaticResource ToggleSwitch}"/>
+                              Style="{StaticResource SettingToggleSwitch}"/>
         <Label Content="Padding (in bytes)"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <mahapps:NumericUpDown Value="{Binding Padding}"
                                IsEnabled="{Binding ConfigurePadding, Mode=OneWay}"
                                Minimum="0"
                                Maximum="16777216"
-                               Style="{StaticResource NumericUpDown}"/>
+                               Style="{StaticResource SettingNumericUpDown}"/>
     </StackPanel>
 
 </UserControl>

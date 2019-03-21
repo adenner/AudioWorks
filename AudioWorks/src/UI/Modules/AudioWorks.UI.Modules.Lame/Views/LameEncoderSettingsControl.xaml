@@ -22,101 +22,61 @@ You should have received a copy of the GNU Affero General Public License along w
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <Style TargetType="Label"
-               x:Key="Label"
-               BasedOn="{StaticResource {x:Type Label}}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Padding"
-                    Value="0"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,9"/>
-        </Style>
-        <Style TargetType="Slider"
-               x:Key="Slider"
-               BasedOn="{StaticResource MahApps.Metro.Styles.Slider.Win10}">
-            <Setter Property="TickPlacement"
-                    Value="TopLeft"/>
-            <Setter Property="AutoToolTipPlacement"
-                    Value="BottomRight"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-        <Style TargetType="ComboBox"
-               x:Key="ComboBox"
-               BasedOn="{StaticResource {x:Type ComboBox}}">
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-        <Style TargetType="mahapps:ToggleSwitch"
-               x:Key="ToggleSwitch"
-               BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
-        <Style TargetType="mahapps:NumericUpDown"
-               x:Key="NumericUpDown"
-               BasedOn="{StaticResource {x:Type mahapps:NumericUpDown}}">
-            <Setter Property="mahapps:TextBoxHelper.SelectAllOnFocus"
-                    Value="True"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,24"/>
-        </Style>
     </UserControl.Resources>
 
     <StackPanel>
         <Label Content="Target mode"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding Modes}"
                   SelectedIndex="{Binding ModeIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="Quality"
                Visibility="{Binding QualityEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <Slider Value="{Binding VbrQuality}"
                 Visibility="{Binding QualityEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                 Minimum="0"
                 Maximum="9"
                 TickFrequency="1"
                 IsDirectionReversed="True"
-                Style="{StaticResource Slider}"/>
+                Style="{StaticResource SettingSlider}"/>
         <Label Content="Bit rate (in kB/s)"
                Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <Slider Value="{Binding BitRate}"
                 Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
                 Minimum="8"
                 Maximum="320"
                 Ticks="8 16 24 32 40 48 56 64 80 96 112 128 160 192 224 256 320"
                 IsSnapToTickEnabled="{Binding ForceCbr, Mode=OneWay}"
-                Style="{StaticResource Slider}"/>
+                Style="{StaticResource SettingSlider}"/>
         <Label Content="Force a constant bit rate"
                Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <mahapps:ToggleSwitch IsChecked="{Binding ForceCbr}"
                               Visibility="{Binding BitRateEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-                              Style="{StaticResource ToggleSwitch}"/>
+                              Style="{StaticResource SettingToggleSwitch}"/>
         <Label Content="Gain adjustment"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding ApplyGainValues}"
                   SelectedIndex="{Binding ApplyGainIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="ID3 tag version"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding TagVersions}"
                   SelectedIndex="{Binding TagVersionIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="Text encoding"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding TagEncodings}"
                   SelectedIndex="{Binding TagEncodingIndex}"
-                  Style="{StaticResource ComboBox}"/>
+                  Style="{StaticResource SettingComboBox}"/>
         <Label Content="Tag padding (in bytes)"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <mahapps:NumericUpDown Value="{Binding TagPadding}"
                                Minimum="0"
                                Maximum="16777216"
-                               Style="{StaticResource NumericUpDown}"/>
+                               Style="{StaticResource SettingNumericUpDown}"/>
     </StackPanel>
 
 </UserControl>

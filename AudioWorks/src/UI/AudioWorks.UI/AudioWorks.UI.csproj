@@ -18,7 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icon.png" />
+      <Resource Include="Resources\Icon.png" />
+      <Resource Include="Resources\Images.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Resource>
+      <Resource Include="Resources\Styles.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Resource>
   </ItemGroup>
 
   <ItemGroup>
