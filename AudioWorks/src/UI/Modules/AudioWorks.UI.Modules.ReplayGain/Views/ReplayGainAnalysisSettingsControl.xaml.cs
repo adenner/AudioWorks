@@ -13,16 +13,13 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using Prism.Commands;
-
-namespace AudioWorks.UI.Services
+namespace AudioWorks.UI.Modules.ReplayGain.Views
 {
-    public interface ICommandService
+    public sealed partial class ReplayGainAnalysisSettingsControl
     {
-        CompositeCommand SaveMetadataSettingsCommand { get; }
-
-        CompositeCommand SaveAnalysisSettingsCommand { get; }
-
-        CompositeCommand SaveEncoderSettingsCommand { get; }
+        public ReplayGainAnalysisSettingsControl()
+        {
+            InitializeComponent();
+        }
     }
 }

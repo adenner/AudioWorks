@@ -73,13 +73,6 @@ You should have received a copy of the GNU Affero General Public License along w
                             Value="0,31,0,0"/>
                 </Style>
             </mahapps:FlyoutsControl.ItemContainerStyle>
-            <mahapps:Flyout Header="Encoder Settings"
-                            IsOpen="{Binding ShowEncoderSettings}"
-                            CloseCommand="{Binding ToggleEncoderSettingsCommand}">
-                <TabControl prism:RegionManager.RegionName="EncoderSettings"
-                            Style="{StaticResource FlyoutTabControl}"
-                            ItemContainerStyle="{StaticResource HeaderedTabItem}"/>
-            </mahapps:Flyout>
             <mahapps:Flyout Header="Metadata Settings"
                             IsOpen="{Binding ShowMetadataSettings}"
                             CloseCommand="{Binding ToggleMetadataSettingsCommand}">
@@ -87,6 +80,21 @@ You should have received a copy of the GNU Affero General Public License along w
                             Style="{StaticResource FlyoutTabControl}"
                             ItemContainerStyle="{StaticResource HeaderedTabItem}">
                 </TabControl>
+            </mahapps:Flyout>
+            <mahapps:Flyout Header="Analysis Settings"
+                            IsOpen="{Binding ShowAnalysisSettings}"
+                            CloseCommand="{Binding ToggleAnalysisSettingsCommand}">
+                <TabControl prism:RegionManager.RegionName="AnalysisSettings"
+                            Style="{StaticResource FlyoutTabControl}"
+                            ItemContainerStyle="{StaticResource HeaderedTabItem}">
+                </TabControl>
+            </mahapps:Flyout>
+            <mahapps:Flyout Header="Encoder Settings"
+                            IsOpen="{Binding ShowEncoderSettings}"
+                            CloseCommand="{Binding ToggleEncoderSettingsCommand}">
+                <TabControl prism:RegionManager.RegionName="EncoderSettings"
+                            Style="{StaticResource FlyoutTabControl}"
+                            ItemContainerStyle="{StaticResource HeaderedTabItem}"/>
             </mahapps:Flyout>
         </mahapps:FlyoutsControl>
     </mahapps:MetroWindow.Flyouts>
@@ -140,6 +148,10 @@ You should have received a copy of the GNU Affero General Public License along w
                                    Command="{Binding RevertModifiedCommand}"
                                    LargeIcon="{StaticResource UndoImage}"
                                    fluent:KeyTip.Keys="R"/>
+                    <fluent:Button Header="Settings"
+                                   Command="{Binding ToggleMetadataSettingsCommand}"
+                                   LargeIcon="{StaticResource SettingsImage}"
+                                   fluent:KeyTip.Keys="M"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Options">
                     <fluent:RibbonGroupBox.ItemContainerStyle>
@@ -216,12 +228,12 @@ You should have received a copy of the GNU Affero General Public License along w
                     </fluent:DropDownButton>
                     <fluent:Button Header="Encoder Settings"
                                    Command="{Binding ToggleEncoderSettingsCommand}"
-                                   LargeIcon="{StaticResource ShowAllConfigurationsImage}"
+                                   LargeIcon="{StaticResource SettingsImage}"
                                    fluent:KeyTip.Keys="E"/>
-                    <fluent:Button Header="Metadata Settings"
-                                   Command="{Binding ToggleMetadataSettingsCommand}"
-                                   LargeIcon="{StaticResource ConfigurationEditorImage}"
-                                   fluent:KeyTip.Keys="M"/>
+                    <fluent:Button Header="Analysis Settings"
+                                   Command="{Binding ToggleAnalysisSettingsCommand}"
+                                   LargeIcon="{StaticResource SettingsImage}"
+                                   fluent:KeyTip.Keys="N"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

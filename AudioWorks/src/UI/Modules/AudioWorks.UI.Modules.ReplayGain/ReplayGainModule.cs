@@ -13,16 +13,23 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using Prism.Commands;
+using AudioWorks.UI.Modules.ReplayGain.Views;
+using Prism.Ioc;
+using Prism.Modularity;
+using Prism.Regions;
 
-namespace AudioWorks.UI.Services
+namespace AudioWorks.UI.Modules.ReplayGain
 {
-    public interface ICommandService
+    public class ReplayGainModule : IModule
     {
-        CompositeCommand SaveMetadataSettingsCommand { get; }
+        public void OnInitialized(IContainerProvider containerProvider)
+        {
+            containerProvider.Resolve<IRegionManager>()
+                .RegisterViewWithRegion("AnalysisSettings", typeof(ReplayGainAnalysisSettingsControl));
+        }
 
-        CompositeCommand SaveAnalysisSettingsCommand { get; }
-
-        CompositeCommand SaveEncoderSettingsCommand { get; }
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+        }
     }
 }

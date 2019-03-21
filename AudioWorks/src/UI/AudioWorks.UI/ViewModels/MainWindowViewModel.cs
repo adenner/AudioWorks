@@ -37,8 +37,9 @@ namespace AudioWorks.UI.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         bool _isBusy;
-        bool _showEncoderSettings;
         bool _showMetadataSettings;
+        bool _showAnalysisSettings;
+        bool _showEncoderSettings;
         readonly object _lock = new object();
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
@@ -48,16 +49,22 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
-        public bool ShowEncoderSettings
-        {
-            get => _showEncoderSettings;
-            set => SetProperty(ref _showEncoderSettings, value);
-        }
-
         public bool ShowMetadataSettings
         {
             get => _showMetadataSettings;
             set => SetProperty(ref _showMetadataSettings, value);
+        }
+
+        public bool ShowAnalysisSettings
+        {
+            get => _showAnalysisSettings;
+            set => SetProperty(ref _showAnalysisSettings, value);
+        }
+
+        public bool ShowEncoderSettings
+        {
+            get => _showEncoderSettings;
+            set => SetProperty(ref _showEncoderSettings, value);
         }
 
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
@@ -75,9 +82,11 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand EditSelectionCommand { get; }
 
-        public DelegateCommand ToggleEncoderSettingsCommand { get; }
-
         public DelegateCommand ToggleMetadataSettingsCommand { get; }
+
+        public DelegateCommand ToggleAnalysisSettingsCommand { get; }
+
+        public DelegateCommand ToggleEncoderSettingsCommand { get; }
 
         public DelegateCommand RevertSelectionCommand { get; }
 
@@ -97,8 +106,9 @@ namespace AudioWorks.UI.ViewModels
             IFileSelectionService fileSelectionService,
             IDialogService prismDialogService,
             ICommandService commandService,
-            IEncoderSettingService encoderSettingService,
             IMetadataSettingService metadataSettingService,
+            IAnalysisSettingService analysisSettingService,
+            IEncoderSettingService encoderSettingService,
             IDialogCoordinator metroDialogCoordinator)
         {
             BindingOperations.EnableCollectionSynchronization(AudioFiles, _lock);
@@ -169,20 +179,6 @@ namespace AudioWorks.UI.ViewModels
                         new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
 
-            ToggleEncoderSettingsCommand = new DelegateCommand(() =>
-            {
-                if (ShowEncoderSettings)
-                {
-                    if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
-                        commandService.SaveEncoderSettingsCommand.Execute(null);
-                    encoderSettingService.Save();
-
-                    ShowEncoderSettings = false;
-                }
-                else
-                    ShowEncoderSettings = true;
-            });
-
             ToggleMetadataSettingsCommand = new DelegateCommand(() =>
             {
                 if (ShowMetadataSettings)
@@ -195,6 +191,34 @@ namespace AudioWorks.UI.ViewModels
                 }
                 else
                     ShowMetadataSettings = true;
+            });
+
+            ToggleAnalysisSettingsCommand = new DelegateCommand(() =>
+            {
+                if (ShowAnalysisSettings)
+                {
+                    if (commandService.SaveAnalysisSettingsCommand.CanExecute(null))
+                        commandService.SaveAnalysisSettingsCommand.Execute(null);
+                    analysisSettingService.Save();
+
+                    ShowAnalysisSettings = false;
+                }
+                else
+                    ShowAnalysisSettings = true;
+            });
+
+            ToggleEncoderSettingsCommand = new DelegateCommand(() =>
+            {
+                if (ShowEncoderSettings)
+                {
+                    if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
+                        commandService.SaveEncoderSettingsCommand.Execute(null);
+                    encoderSettingService.Save();
+
+                    ShowEncoderSettings = false;
+                }
+                else
+                    ShowEncoderSettings = true;
             });
 
             RevertSelectionCommand = new DelegateCommand(() =>

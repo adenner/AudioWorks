@@ -13,16 +13,20 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using Prism.Commands;
+using System;
+using System.IO;
 
 namespace AudioWorks.UI.Services
 {
-    public interface ICommandService
+    public sealed class AnalysisSettingService : SettingService, IAnalysisSettingService
     {
-        CompositeCommand SaveMetadataSettingsCommand { get; }
-
-        CompositeCommand SaveAnalysisSettingsCommand { get; }
-
-        CompositeCommand SaveEncoderSettingsCommand { get; }
+        public AnalysisSettingService() : base(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "AudioWorks",
+            "UI",
+            "Settings",
+            "Analysis"))
+        {
+        }
     }
 }

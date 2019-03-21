@@ -19,8 +19,10 @@ namespace AudioWorks.UI.Services
 {
     sealed class CommandService : ICommandService
     {
-        public CompositeCommand SaveEncoderSettingsCommand { get; } = new CompositeCommand();
-
         public CompositeCommand SaveMetadataSettingsCommand { get; } = new CompositeCommand();
+
+        public CompositeCommand SaveAnalysisSettingsCommand { get; } = new CompositeCommand();
+
+        public CompositeCommand SaveEncoderSettingsCommand { get; } = new CompositeCommand();
     }
 }
