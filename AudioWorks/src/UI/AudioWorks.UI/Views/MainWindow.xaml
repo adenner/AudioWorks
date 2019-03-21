@@ -30,16 +30,6 @@ You should have received a copy of the GNU Affero General Public License along w
                      TitleCharacterCasing="Normal">
 
     <mahapps:MetroWindow.Resources>
-        <Style TargetType="mahapps:Flyout"
-               x:Key="Flyout"
-               BasedOn="{StaticResource {x:Type mahapps:Flyout}}">
-            <Setter Property="Position"
-                    Value="Right"/>
-            <Setter Property="AnimateOpacity"
-                    Value="True"/>
-            <Setter Property="Margin"
-                    Value="0,31,0,0"/>
-        </Style>
         <Style TargetType="TabControl"
                x:Key="FlyoutTabControl"
                BasedOn="{StaticResource {x:Type TabControl}}">
@@ -58,6 +48,12 @@ You should have received a copy of the GNU Affero General Public License along w
             <Setter Property="mahapps:TabControlHelper.Underlined"
                     Value="TabPanel"/>
         </Style>
+        <Style TargetType="TabItem"
+               x:Key="HeaderedTabItem"
+               BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="Header"
+                    Value="{Binding DataContext.Title}"/>
+        </Style>
     </mahapps:MetroWindow.Resources>
 
     <i:Interaction.Triggers>
@@ -68,34 +64,29 @@ You should have received a copy of the GNU Affero General Public License along w
 
     <mahapps:MetroWindow.Flyouts>
         <mahapps:FlyoutsControl>
+            <mahapps:FlyoutsControl.ItemContainerStyle>
+                <Style TargetType="mahapps:Flyout">
+                    <Setter Property="Position"
+                            Value="Right"/>
+                    <Setter Property="AnimateOpacity"
+                            Value="True"/>
+                    <Setter Property="Margin"
+                            Value="0,31,0,0"/>
+                </Style>
+            </mahapps:FlyoutsControl.ItemContainerStyle>
             <mahapps:Flyout Header="Encoder Settings"
                             IsOpen="{Binding ShowEncoderSettings}"
-                            CloseCommand="{Binding ToggleEncoderSettingsCommand}"
-                            Style="{StaticResource Flyout}">
+                            CloseCommand="{Binding ToggleEncoderSettingsCommand}">
                 <TabControl prism:RegionManager.RegionName="EncoderSettings"
-                            Style="{StaticResource FlyoutTabControl}">
-                    <TabControl.ItemContainerStyle>
-                        <Style TargetType="TabItem"
-                               BasedOn="{StaticResource {x:Type TabItem}}">
-                            <Setter Property="Header"
-                                    Value="{Binding DataContext.Title}"/>
-                        </Style>
-                    </TabControl.ItemContainerStyle>
-                </TabControl>
+                            Style="{StaticResource FlyoutTabControl}"
+                            ItemContainerStyle="{StaticResource HeaderedTabItem}"/>
             </mahapps:Flyout>
             <mahapps:Flyout Header="Metadata Settings"
                             IsOpen="{Binding ShowMetadataSettings}"
-                            CloseCommand="{Binding ToggleMetadataSettingsCommand}"
-                            Style="{StaticResource Flyout}">
+                            CloseCommand="{Binding ToggleMetadataSettingsCommand}">
                 <TabControl prism:RegionManager.RegionName="MetadataSettings"
-                            Style="{StaticResource FlyoutTabControl}">
-                    <TabControl.ItemContainerStyle>
-                        <Style TargetType="TabItem"
-                               BasedOn="{StaticResource {x:Type TabItem}}">
-                            <Setter Property="Header"
-                                    Value="{Binding DataContext.Title}"/>
-                        </Style>
-                    </TabControl.ItemContainerStyle>
+                            Style="{StaticResource FlyoutTabControl}"
+                            ItemContainerStyle="{StaticResource HeaderedTabItem}">
                 </TabControl>
             </mahapps:Flyout>
         </mahapps:FlyoutsControl>
