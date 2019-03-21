@@ -106,6 +106,12 @@ You should have received a copy of the GNU Affero General Public License along w
         <fluent:Ribbon DockPanel.Dock="Top" IsQuickAccessToolBarVisible="False">
             <fluent:RibbonTabItem Header="Home">
                 <fluent:RibbonGroupBox Header="File">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="50"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
                     <fluent:DropDownButton Header="Open"
                                            LargeIcon="{StaticResource OpenFileDialogImage}"
                                            fluent:KeyTip.Keys="O">
@@ -126,6 +132,12 @@ You should have received a copy of the GNU Affero General Public License along w
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Metadata">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="58"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
                     <fluent:Button Header="Save All"
                                    Command="{Binding SaveAllCommand}"
                                    LargeIcon="{StaticResource SaveAllImage}"
@@ -140,6 +152,12 @@ You should have received a copy of the GNU Affero General Public License along w
                                    fluent:KeyTip.Keys="R"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Options">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="66"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">
