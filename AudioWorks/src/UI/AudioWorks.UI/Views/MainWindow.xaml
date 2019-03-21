@@ -25,8 +25,8 @@ You should have received a copy of the GNU Affero General Public License along w
                      mahapps:DialogParticipation.Register="{Binding}"
                      Title="AudioWorks"
                      Icon="../Resources/Icon.png"
-                     Height="640"
-                     Width="1000"
+                     Height="768"
+                     Width="1024"
                      TitleCharacterCasing="Normal">
 
     <mahapps:MetroWindow.Resources>
