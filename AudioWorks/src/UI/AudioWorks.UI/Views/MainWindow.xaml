@@ -127,37 +127,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                    LargeIcon="{StaticResource ExitImage}"
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
-                <fluent:RibbonGroupBox Header="Metadata">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="58"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
-                    <fluent:Button Header="Save All"
-                                   Command="{Binding SaveAllCommand}"
-                                   LargeIcon="{StaticResource SaveAllImage}"
-                                   fluent:KeyTip.Keys="A"/>
-                    <fluent:Button Header="Save Changes"
-                                   Command="{Binding SaveModifiedCommand}"
-                                   LargeIcon="{StaticResource SaveTableImage}"
-                                   fluent:KeyTip.Keys="S"/>
-                    <fluent:Button Header="Revert Changes"
-                                   Command="{Binding RevertModifiedCommand}"
-                                   LargeIcon="{StaticResource UndoImage}"
-                                   fluent:KeyTip.Keys="R"/>
-                    <fluent:Button Header="Settings"
-                                   Command="{Binding ToggleMetadataSettingsCommand}"
-                                   LargeIcon="{StaticResource SettingsImage}"
-                                   fluent:KeyTip.Keys="M"/>
-                </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Options">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="66"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">
@@ -224,14 +194,59 @@ You should have received a copy of the GNU Affero General Public License along w
                         <fluent:CheckBox Header="Sample Rate"
                                          x:Name="SampleRateColumnCheckBox"/>
                     </fluent:DropDownButton>
-                    <fluent:Button Header="Encoder Settings"
-                                   Command="{Binding ToggleEncoderSettingsCommand}"
-                                   LargeIcon="{StaticResource SettingsImage}"
-                                   fluent:KeyTip.Keys="E"/>
-                    <fluent:Button Header="Analysis Settings"
-                                   Command="{Binding ToggleAnalysisSettingsCommand}"
-                                   LargeIcon="{StaticResource SettingsImage}"
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Metadata">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="53"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                    <fluent:Button Header="Save All"
+                                   Command="{Binding SaveAllCommand}"
+                                   LargeIcon="{StaticResource SaveAllImage}"
+                                   fluent:KeyTip.Keys="A"/>
+                    <fluent:Button Header="Save Changes"
+                                   Command="{Binding SaveModifiedCommand}"
+                                   LargeIcon="{StaticResource SaveTableImage}"
+                                   fluent:KeyTip.Keys="S"/>
+                    <fluent:Button Header="Revert Changes"
+                                   Command="{Binding RevertModifiedCommand}"
+                                   LargeIcon="{StaticResource UndoImage}"
+                                   fluent:KeyTip.Keys="R"/>
+                    <fluent:Button Header="Settings"
+                                   Command="{Binding ToggleMetadataSettingsCommand}"
+                                   LargeIcon="{StaticResource SettingsImage}"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Analysis">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="53"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                    <fluent:Button Header="Analyze All"
+                                   Command="{Binding AnalyzeAllCommand}"
+                                   LargeIcon="{StaticResource AnalyzeTraceImage}"
                                    fluent:KeyTip.Keys="N"/>
+                    <fluent:Button Header="Settings"
+                                   Command="{Binding ToggleAnalysisSettingsCommand}"
+                                   LargeIcon="{StaticResource SettingsImage}"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Encoding">
+                    <fluent:RibbonGroupBox.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="MinWidth"
+                                    Value="53"/>
+                        </Style>
+                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                    <fluent:Button Header="Encode All"
+                                   Command="{Binding EncodeAllCommand}"
+                                   LargeIcon="{StaticResource OutputImage}"
+                                   fluent:KeyTip.Keys="E"/>
+                    <fluent:Button Header="Settings"
+                                   Command="{Binding ToggleEncoderSettingsCommand}"
+                                   LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
@@ -300,6 +315,11 @@ You should have received a copy of the GNU Affero General Public License along w
                               Command="{Binding RevertSelectionCommand}"/>
                     <MenuItem Header="Save"
                               Command="{Binding SaveSelectionCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Analyze..."
+                              Command="{Binding AnalyzeSelectionCommand}"/>
+                    <MenuItem Header="Encode..."
+                              Command="{Binding EncodeSelectionCommand}"/>
                     <Separator/>
                     <MenuItem Header="Remove"
                               Command="{Binding RemoveSelectionCommand}"/>

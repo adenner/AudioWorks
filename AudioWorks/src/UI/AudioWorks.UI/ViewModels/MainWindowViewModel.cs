@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -99,6 +100,14 @@ namespace AudioWorks.UI.ViewModels
         public DelegateCommand SaveAllCommand { get; }
 
         public DelegateCommand RemoveSelectionCommand { get; }
+
+        public DelegateCommand AnalyzeSelectionCommand { get; }
+
+        public DelegateCommand AnalyzeAllCommand { get; }
+
+        public DelegateCommand EncodeSelectionCommand { get; }
+
+        public DelegateCommand EncodeAllCommand { get; }
 
         public DelegateCommand<CancelEventArgs> ExitCommand { get; }
 
@@ -298,6 +307,46 @@ namespace AudioWorks.UI.ViewModels
                 foreach (var audioFile in _selectedAudioFiles)
                     AudioFiles.Remove(audioFile);
             }, () => _selectedAudioFiles.Count > 0);
+
+            AnalyzeSelectionCommand = new DelegateCommand(async () =>
+                {
+                    //TODO
+                }, () => !IsBusy && _selectedAudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
+
+            AnalyzeAllCommand = new DelegateCommand(async () =>
+                {
+                    IsBusy = true;
+
+                    var analyzer = new AudioFileAnalyzer("ReplayGain", analysisSettingService["ReplayGain"]);
+                    var controller = await metroDialogCoordinator.ShowProgressAsync(this, "Title", "message", true);
+
+                    var cancelSource = new CancellationTokenSource();
+                    controller.Canceled += (sender, ev) => cancelSource.Cancel();
+
+                    var totalFrames = (double) AudioFiles.Sum(audioFile => audioFile.Info.FrameCount);
+                    var progress = new Progress<ProgressToken>();
+                    progress.ProgressChanged += (sender, ev) =>
+                        controller.SetProgress(Math.Round(ev.FramesCompleted / totalFrames));
+
+                    await analyzer.AnalyzeAsync(AudioFiles.Select(viewModel => viewModel.AudioFile), cancelSource.Token, progress);
+                    await controller.CloseAsync();
+
+                    IsBusy = false;
+                }, () => !IsBusy && AudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
+
+            EncodeSelectionCommand = new DelegateCommand(async () =>
+                {
+                    //TODO
+                }, () => !IsBusy && _selectedAudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
+
+            EncodeAllCommand = new DelegateCommand(async () =>
+                {
+                    //TODO
+                }, () => !IsBusy && AudioFiles.Count > 0)
+                .ObservesProperty(() => IsBusy);
 
             ExitCommand = new DelegateCommand<CancelEventArgs>(e =>
             {

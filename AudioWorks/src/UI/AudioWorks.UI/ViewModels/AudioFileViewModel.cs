@@ -24,11 +24,11 @@ namespace AudioWorks.UI.ViewModels
 {
     public sealed class AudioFileViewModel : BindableBase
     {
-        readonly ITaggedAudioFile _audioFile;
+        internal ITaggedAudioFile AudioFile { get; }
 
-        public string Path => _audioFile.Path;
+        public string Path => AudioFile.Path;
 
-        public AudioInfo Info => _audioFile.Info;
+        public AudioInfo Info => AudioFile.Info;
 
         public AudioMetadataViewModel Metadata { get; }
 
@@ -38,7 +38,7 @@ namespace AudioWorks.UI.ViewModels
 
         public AudioFileViewModel(ITaggedAudioFile audioFile)
         {
-            _audioFile = audioFile;
+            AudioFile = audioFile;
             Metadata = new AudioMetadataViewModel(audioFile.Metadata);
             Metadata.PropertyChanged += (sender, e) =>
             {
@@ -48,16 +48,16 @@ namespace AudioWorks.UI.ViewModels
 
             SaveCommand = new DelegateCommand(() =>
             {
-                _audioFile.SaveMetadata(
+                AudioFile.SaveMetadata(
                     ServiceLocator.Current.GetInstance<IMetadataSettingService>()
                         [IO.Path.GetExtension(Path).TrimStart('.')]);
-                Metadata.UpdateModel(_audioFile.Metadata);
+                Metadata.UpdateModel(AudioFile.Metadata);
             });
 
             RevertCommand = new DelegateCommand(() =>
             {
-                _audioFile.LoadMetadata();
-                Metadata.UpdateModel(_audioFile.Metadata);
+                AudioFile.LoadMetadata();
+                Metadata.UpdateModel(AudioFile.Metadata);
             }, () => Metadata.Modified);
         }
     }
