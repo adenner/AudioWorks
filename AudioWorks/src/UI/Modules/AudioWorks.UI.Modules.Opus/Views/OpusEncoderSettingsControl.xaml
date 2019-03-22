@@ -19,7 +19,7 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
-    <StackPanel>
+    <StackPanel Width="250">
         <Label Content="Bit rate (in kB/s)"
                Style="{StaticResource SettingLabel}"/>
         <Slider Value="{Binding BitRate}"

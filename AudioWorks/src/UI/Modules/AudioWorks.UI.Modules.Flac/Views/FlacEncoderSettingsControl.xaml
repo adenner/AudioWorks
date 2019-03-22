@@ -20,7 +20,7 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
-    <StackPanel>
+    <StackPanel Width="250">
         <Label Content="Compression level"
                Style="{StaticResource SettingLabel}"/>
         <Slider Value="{Binding CompressionLevel}"
@@ -35,7 +35,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                Maximum="600"
                                Style="{StaticResource SettingNumericUpDown}"/>
         <Label Content="Padding (in bytes)"
-               Style="{StaticResource Label}"/>
+               Style="{StaticResource SettingLabel}"/>
         <mahapps:NumericUpDown Value="{Binding Padding}"
                                Minimum="0"
                                Maximum="16777216"

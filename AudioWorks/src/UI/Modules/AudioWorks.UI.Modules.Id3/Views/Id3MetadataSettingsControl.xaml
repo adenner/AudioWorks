@@ -20,7 +20,7 @@ You should have received a copy of the GNU Affero General Public License along w
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
-    <StackPanel>
+    <StackPanel Width="250">
         <Label Content="Tag version"
                Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding Versions}"

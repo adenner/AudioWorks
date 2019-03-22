@@ -24,7 +24,7 @@ You should have received a copy of the GNU Affero General Public License along w
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <StackPanel>
+    <StackPanel Width="250">
         <Label Content="Target mode"
                Style="{StaticResource SettingLabel}"/>
         <ComboBox ItemsSource="{Binding Modes}"
