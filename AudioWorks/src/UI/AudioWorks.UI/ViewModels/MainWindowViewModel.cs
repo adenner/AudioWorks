@@ -50,6 +50,10 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
+        public AudioAnalyzerInfo[] Analyzers { get; } = AudioAnalyzerManager.GetAnalyzerInfo().ToArray();
+
+        public AudioEncoderInfo[] Encoders { get; } = AudioEncoderManager.GetEncoderInfo().ToArray();
+
         public bool ShowMetadataSettings
         {
             get => _showMetadataSettings;

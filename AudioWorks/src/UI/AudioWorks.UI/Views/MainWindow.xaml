@@ -108,16 +108,14 @@ You should have received a copy of the GNU Affero General Public License along w
                     <fluent:DropDownButton Header="Open"
                                            LargeIcon="{StaticResource OpenFileDialogImage}"
                                            fluent:KeyTip.Keys="O">
-                        <fluent:Button Header="Select File(s)"
-                                       Command="{Binding OpenFilesCommand}"
-                                       SizeDefinition="Middle"
-                                       Icon="{StaticResource OpenFileImage}"
-                                       fluent:KeyTip.Keys="F"/>
-                        <fluent:Button Header="Search a Directory"
-                                       Command="{Binding OpenDirectoryCommand}"
-                                       SizeDefinition="Middle"
-                                       Icon="{StaticResource OpenFolderImage}"
-                                       fluent:KeyTip.Keys="D"/>
+                        <fluent:MenuItem Header="Select File(s)"
+                                         Command="{Binding OpenFilesCommand}"
+                                         Icon="{StaticResource OpenFileImage}"
+                                         fluent:KeyTip.Keys="F"/>
+                        <fluent:MenuItem Header="Search a Directory"
+                                         Command="{Binding OpenDirectoryCommand}"
+                                         Icon="{StaticResource OpenFolderImage}"
+                                         fluent:KeyTip.Keys="D"/>
                     </fluent:DropDownButton>
                     <fluent:Button Header="Exit"
                                    Click="ExitButton_OnClick"
@@ -128,67 +126,75 @@ You should have received a copy of the GNU Affero General Public License along w
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">
-                        <fluent:CheckBox Header="Path"
+                        <fluent:DropDownButton.ItemContainerStyle>
+                            <Style TargetType="fluent:MenuItem">
+                                <Setter Property="IsCheckable"
+                                        Value="True"/>
+                                <Setter Property="IsDefinitive"
+                                        Value="False"/>
+                            </Style>
+                        </fluent:DropDownButton.ItemContainerStyle>
+                        <fluent:MenuItem Header="Path"
                                          x:Name="PathColumnCheckBox"/>
                         <fluent:GroupSeparatorMenuItem/>
-                        <fluent:CheckBox Header="Album"
-                                         IsChecked="True"
-                                         x:Name="AlbumColumnCheckBox"/>
-                        <fluent:CheckBox Header="Album Artist"
+                        <fluent:MenuItem Header="Album"
+                                         x:Name="AlbumColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Album Artist"
                                          x:Name="AlbumArtistColumnCheckBox"/>
-                        <fluent:CheckBox Header="Artist"
-                                         IsChecked="True"
-                                         x:Name="ArtistColumnCheckBox"/>
-                        <fluent:CheckBox Header="Comment"
+                        <fluent:MenuItem Header="Artist"
+                                         x:Name="ArtistColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Comment"
                                          x:Name="CommentColumnCheckBox"/>
-                        <fluent:CheckBox Header="Composer"
+                        <fluent:MenuItem Header="Composer"
                                          x:Name="ComposerColumnCheckBox"/>
-                        <fluent:CheckBox Header="Cover Art"
-                                         IsChecked="True"
-                                         x:Name="CoverArtColumnCheckBox"/>
-                        <fluent:CheckBox Header="Day"
+                        <fluent:MenuItem Header="Cover Art"
+                                         x:Name="CoverArtColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Day"
                                          x:Name="DayColumnCheckBox"/>
-                        <fluent:CheckBox Header="Genre"
-                                         IsChecked="True"
-                                         x:Name="GenreColumnCheckBox"/>
-                        <fluent:CheckBox Header="Month"
+                        <fluent:MenuItem Header="Genre"
+                                         x:Name="GenreColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Month"
                                          x:Name="MonthColumnCheckBox"/>
-                        <fluent:CheckBox Header="Title"
-                                         IsChecked="True"
-                                         x:Name="TitleColumnCheckBox"/>
-                        <fluent:CheckBox Header="Track #"
-                                         IsChecked="True"
-                                         x:Name="TrackNumberColumnCheckBox"/>
-                        <fluent:CheckBox Header="Track Count"
+                        <fluent:MenuItem Header="Title"
+                                         x:Name="TitleColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Track #"
+                                         x:Name="TrackNumberColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Track Count"
                                          x:Name="TrackCountColumnCheckBox"/>
-                        <fluent:CheckBox Header="Year"
-                                         IsChecked="True"
-                                         x:Name="YearColumnCheckBox"/>
+                        <fluent:MenuItem Header="Year"
+                                         x:Name="YearColumnCheckBox"
+                                         IsChecked="True"/>
                         <fluent:GroupSeparatorMenuItem/>
-                        <fluent:CheckBox Header="Album Gain"
+                        <fluent:MenuItem Header="Album Gain"
                                          x:Name="AlbumGainColumnCheckBox"/>
-                        <fluent:CheckBox Header="Album Peak"
+                        <fluent:MenuItem Header="Album Peak"
                                          x:Name="AlbumPeakColumnCheckBox"/>
-                        <fluent:CheckBox Header="Track Gain"
+                        <fluent:MenuItem Header="Track Gain"
                                          x:Name="TrackGainColumnCheckBox"/>
-                        <fluent:CheckBox Header="Track Peak"
+                        <fluent:MenuItem Header="Track Peak"
                                          x:Name="TrackPeakColumnCheckBox"/>
                         <fluent:GroupSeparatorMenuItem/>
-                        <fluent:CheckBox Header="Bit Rate"
+                        <fluent:MenuItem Header="Bit Rate"
                                          x:Name="BitRateColumnCheckBox"/>
-                        <fluent:CheckBox Header="Bits Per Sample"
+                        <fluent:MenuItem Header="Bits Per Sample"
                                          x:Name="BitsPerSampleColumnCheckBox"/>
-                        <fluent:CheckBox Header="Channels"
+                        <fluent:MenuItem Header="Channels"
                                          x:Name="ChannelsColumnCheckBox"/>
-                        <fluent:CheckBox Header="Format"
-                                         IsChecked="True"
-                                         x:Name="FormatColumnCheckBox"/>
-                        <fluent:CheckBox Header="Frame Count"
+                        <fluent:MenuItem Header="Format"
+                                         x:Name="FormatColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Frame Count"
                                          x:Name="FrameCountColumnCheckBox"/>
-                        <fluent:CheckBox Header="Play Length"
-                                         IsChecked="True"
-                                         x:Name="PlayLengthColumnCheckBox"/>
-                        <fluent:CheckBox Header="Sample Rate"
+                        <fluent:MenuItem Header="Play Length"
+                                         x:Name="PlayLengthColumnCheckBox"
+                                         IsChecked="True"/>
+                        <fluent:MenuItem Header="Sample Rate"
                                          x:Name="SampleRateColumnCheckBox"/>
                     </fluent:DropDownButton>
                 </fluent:RibbonGroupBox>
@@ -223,11 +229,19 @@ You should have received a copy of the GNU Affero General Public License along w
                         </Style>
                     </fluent:RibbonGroupBox.ItemContainerStyle>
                     <fluent:DropDownButton Header="Analyze All"
-                                   LargeIcon="{StaticResource AnalyzeTraceImage}"
-                                   fluent:KeyTip.Keys="N">
-                        <MenuItem Header="ReplayGain"
-                                  Command="{Binding AnalyzeAllCommand}"
-                                  CommandParameter="ReplayGain"/>
+                                           LargeIcon="{StaticResource AnalyzeTraceImage}"
+                                           ItemsSource="{Binding Analyzers}"
+                                           fluent:KeyTip.Keys="N">
+                        <fluent:DropDownButton.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header"
+                                        Value="{Binding Name}"/>
+                                <Setter Property="Command"
+                                        Value="{Binding DataContext.AnalyzeAllCommand, RelativeSource={RelativeSource AncestorType={x:Type fluent:DropDownButton}}}"/>
+                                <Setter Property="CommandParameter"
+                                        Value="{Binding Name}"/>
+                            </Style>
+                        </fluent:DropDownButton.ItemContainerStyle>
                     </fluent:DropDownButton>
                     <fluent:ToggleButton Header="Settings"
                                          IsChecked="{Binding ShowAnalysisSettings}"
@@ -240,10 +254,21 @@ You should have received a copy of the GNU Affero General Public License along w
                                     Value="53"/>
                         </Style>
                     </fluent:RibbonGroupBox.ItemContainerStyle>
-                    <fluent:Button Header="Encode All"
-                                   Command="{Binding EncodeAllCommand}"
-                                   LargeIcon="{StaticResource OutputImage}"
-                                   fluent:KeyTip.Keys="E"/>
+                    <fluent:DropDownButton Header="Encode All"
+                                           LargeIcon="{StaticResource OutputImage}"
+                                           ItemsSource="{Binding Encoders}"
+                                           fluent:KeyTip.Keys="E">
+                        <fluent:DropDownButton.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header"
+                                        Value="{Binding Name}"/>
+                                <Setter Property="Command"
+                                        Value="{Binding DataContext.EncodeAllCommand, RelativeSource={RelativeSource AncestorType={x:Type fluent:DropDownButton}}}"/>
+                                <Setter Property="CommandParameter"
+                                        Value="{Binding Name}"/>
+                            </Style>
+                        </fluent:DropDownButton.ItemContainerStyle>
+                    </fluent:DropDownButton>
                     <fluent:ToggleButton Header="Settings"
                                          IsChecked="{Binding ShowEncoderSettings}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
