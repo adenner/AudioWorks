@@ -17,6 +17,7 @@ using System.Windows;
 using AudioWorks.UI.Services;
 using AudioWorks.UI.ViewModels;
 using AudioWorks.UI.Views;
+using CommonServiceLocator;
 using MahApps.Metro.Controls.Dialogs;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -53,6 +54,25 @@ namespace AudioWorks.UI
             Fluent.ThemeManager.SyncThemeWithWindowsAppModeSetting();
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            var commandService = ServiceLocator.Current.GetInstance<ICommandService>();
+
+            if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
+                commandService.SaveMetadataSettingsCommand.Execute(null);
+            ServiceLocator.Current.GetInstance<IMetadataSettingService>().Save();
+
+            if (commandService.SaveAnalysisSettingsCommand.CanExecute(null))
+                commandService.SaveAnalysisSettingsCommand.Execute(null);
+            ServiceLocator.Current.GetInstance<IAnalysisSettingService>().Save();
+
+            if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
+                commandService.SaveEncoderSettingsCommand.Execute(null);
+            ServiceLocator.Current.GetInstance<IEncoderSettingService>().Save();
+
+            base.OnExit(e);
         }
     }
 }

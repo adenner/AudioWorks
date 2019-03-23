@@ -83,12 +83,6 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand EditSelectionCommand { get; }
 
-        public DelegateCommand ToggleMetadataSettingsCommand { get; }
-
-        public DelegateCommand ToggleAnalysisSettingsCommand { get; }
-
-        public DelegateCommand ToggleEncoderSettingsCommand { get; }
-
         public DelegateCommand RevertSelectionCommand { get; }
 
         public DelegateCommand RevertModifiedCommand { get; }
@@ -114,8 +108,6 @@ namespace AudioWorks.UI.ViewModels
         public MainWindowViewModel(
             IFileSelectionService fileSelectionService,
             IDialogService prismDialogService,
-            ICommandService commandService,
-            IMetadataSettingService metadataSettingService,
             IAnalysisSettingService analysisSettingService,
             IEncoderSettingService encoderSettingService,
             IDialogCoordinator metroDialogCoordinator)
@@ -189,48 +181,6 @@ namespace AudioWorks.UI.ViewModels
                     prismDialogService.ShowDialog("EditControl",
                         new DialogParameters { { "AudioFiles", _selectedAudioFiles } }, null),
                 () => _selectedAudioFiles.Count > 0);
-
-            ToggleMetadataSettingsCommand = new DelegateCommand(() =>
-            {
-                if (ShowMetadataSettings)
-                {
-                    if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
-                        commandService.SaveMetadataSettingsCommand.Execute(null);
-                    metadataSettingService.Save();
-
-                    ShowMetadataSettings = false;
-                }
-                else
-                    ShowMetadataSettings = true;
-            });
-
-            ToggleAnalysisSettingsCommand = new DelegateCommand(() =>
-            {
-                if (ShowAnalysisSettings)
-                {
-                    if (commandService.SaveAnalysisSettingsCommand.CanExecute(null))
-                        commandService.SaveAnalysisSettingsCommand.Execute(null);
-                    analysisSettingService.Save();
-
-                    ShowAnalysisSettings = false;
-                }
-                else
-                    ShowAnalysisSettings = true;
-            });
-
-            ToggleEncoderSettingsCommand = new DelegateCommand(() =>
-            {
-                if (ShowEncoderSettings)
-                {
-                    if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
-                        commandService.SaveEncoderSettingsCommand.Execute(null);
-                    encoderSettingService.Save();
-
-                    ShowEncoderSettings = false;
-                }
-                else
-                    ShowEncoderSettings = true;
-            });
 
             RevertSelectionCommand = new DelegateCommand(() =>
                 {
