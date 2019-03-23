@@ -17,15 +17,32 @@ using System;
 using System.IO;
 using System.Windows.Media.Imaging;
 using AudioWorks.Common;
+using NuGet.Configuration;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.ViewModels
 {
     public sealed class AudioMetadataViewModel : BindableBase
     {
+        AudioMetadata _savedValues;
         AudioMetadata _metadata;
+        bool _songTitleIsModified;
+        bool _artistIsModified;
+        bool _albumIsModified;
+        bool _albumArtistIsModified;
+        bool _composerIsModified;
+        bool _genreIsModified;
+        bool _commentIsModified;
+        bool _dayIsModified;
+        bool _monthIsModified;
+        bool _yearIsModified;
+        bool _trackNumberIsModified;
+        bool _trackCountIsModified;
+        bool _trackPeakIsModified;
+        bool _albumPeakIsModified;
+        bool _trackGainIsModified;
+        bool _albumGainIsModified;
         Lazy<BitmapImage?> _coverImage;
-        bool _modified;
 
         public string SongTitle
         {
@@ -34,7 +51,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Title = value;
                 RaisePropertyChanged();
+                SongTitleIsModified = !value.Equals(_savedValues.Title, StringComparison.Ordinal);
             }
+        }
+
+        public bool SongTitleIsModified
+        {
+            get => _songTitleIsModified;
+            private set => SetProperty(ref _songTitleIsModified, value);
         }
 
         public string Artist
@@ -44,7 +68,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Artist = value;
                 RaisePropertyChanged();
+                ArtistIsModified = !value.Equals(_savedValues.Artist, StringComparison.Ordinal);
             }
+        }
+
+        public bool ArtistIsModified
+        {
+            get => _artistIsModified;
+            private set => SetProperty(ref _artistIsModified, value);
         }
 
         public string Album
@@ -54,7 +85,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Album = value;
                 RaisePropertyChanged();
+                AlbumIsModified = !value.Equals(_savedValues.Album, StringComparison.Ordinal);
             }
+        }
+
+        public bool AlbumIsModified
+        {
+            get => _albumIsModified;
+            private set => SetProperty(ref _albumIsModified, value);
         }
 
         public string AlbumArtist
@@ -64,7 +102,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.AlbumArtist = value;
                 RaisePropertyChanged();
+                AlbumArtistIsModified = !value.Equals(_savedValues.AlbumArtist, StringComparison.Ordinal);
             }
+        }
+
+        public bool AlbumArtistIsModified
+        {
+            get => _albumArtistIsModified;
+            private set => SetProperty(ref _albumArtistIsModified, value);
         }
 
         public string Composer
@@ -74,7 +119,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Composer = value;
                 RaisePropertyChanged();
+                ComposerIsModified = !value.Equals(_savedValues.Composer, StringComparison.Ordinal);
             }
+        }
+
+        public bool ComposerIsModified
+        {
+            get => _composerIsModified;
+            private set => SetProperty(ref _composerIsModified, value);
         }
 
         public string Genre
@@ -84,7 +136,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Genre = value;
                 RaisePropertyChanged();
+                GenreIsModified = !value.Equals(_savedValues.Genre, StringComparison.Ordinal);
             }
+        }
+
+        public bool GenreIsModified
+        {
+            get => _genreIsModified;
+            private set => SetProperty(ref _genreIsModified, value);
         }
 
         public string Comment
@@ -94,9 +153,15 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Comment = value;
                 RaisePropertyChanged();
+                CommentIsModified = !value.Equals(_savedValues.Comment, StringComparison.Ordinal);
             }
         }
 
+        public bool CommentIsModified
+        {
+            get => _commentIsModified;
+            private set => SetProperty(ref _commentIsModified, value);
+        }
 
         public string Day
         {
@@ -105,9 +170,15 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Day = value;
                 RaisePropertyChanged();
+                DayIsModified = !value.Equals(_savedValues.Day, StringComparison.Ordinal);
             }
         }
 
+        public bool DayIsModified
+        {
+            get => _dayIsModified;
+            private set => SetProperty(ref _dayIsModified, value);
+        }
 
         public string Month
         {
@@ -116,9 +187,15 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Month = value;
                 RaisePropertyChanged();
+                MonthIsModified = !value.Equals(_savedValues.Month, StringComparison.Ordinal);
             }
         }
 
+        public bool MonthIsModified
+        {
+            get => _monthIsModified;
+            private set => SetProperty(ref _monthIsModified, value);
+        }
 
         public string Year
         {
@@ -127,7 +204,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.Year = value;
                 RaisePropertyChanged();
+                YearIsModified = !value.Equals(_savedValues.Year, StringComparison.Ordinal);
             }
+        }
+
+        public bool YearIsModified
+        {
+            get => _yearIsModified;
+            private set => SetProperty(ref _yearIsModified, value);
         }
 
         public string TrackNumber
@@ -137,7 +221,14 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.TrackNumber = value;
                 RaisePropertyChanged();
+                TrackNumberIsModified = !value.Equals(_savedValues.TrackNumber, StringComparison.Ordinal);
             }
+        }
+
+        public bool TrackNumberIsModified
+        {
+            get => _trackNumberIsModified;
+            private set => SetProperty(ref _trackNumberIsModified, value);
         }
 
         public string TrackCount
@@ -147,43 +238,131 @@ namespace AudioWorks.UI.ViewModels
             {
                 _metadata.TrackCount = value;
                 RaisePropertyChanged();
+                TrackCountIsModified = !value.Equals(_savedValues.TrackCount, StringComparison.Ordinal);
             }
         }
 
-        public string TrackPeak => _metadata.TrackPeak;
+        public bool TrackCountIsModified
+        {
+            get => _trackCountIsModified;
+            private set => SetProperty(ref _trackCountIsModified, value);
+        }
 
-        public string AlbumPeak => _metadata.AlbumPeak;
+        public string TrackPeak
+        {
+            get => _metadata.TrackPeak;
+            private set
+            {
+                _metadata.TrackPeak = value;
+                RaisePropertyChanged();
+                TrackPeakIsModified = !value.Equals(_savedValues.TrackPeak, StringComparison.Ordinal);
+            }
+        }
 
-        public string TrackGain => _metadata.TrackGain;
+        public bool TrackPeakIsModified
+        {
+            get => _trackPeakIsModified;
+            private set => SetProperty(ref _trackPeakIsModified, value);
+        }
 
-        public string AlbumGain => _metadata.AlbumGain;
+        public string AlbumPeak
+        {
+            get => _metadata.AlbumPeak;
+            private set
+            {
+                _metadata.AlbumPeak = value;
+                RaisePropertyChanged();
+                AlbumPeakIsModified = !value.Equals(_savedValues.AlbumPeak, StringComparison.Ordinal);
+            }
+        }
+
+        public bool AlbumPeakIsModified
+        {
+            get => _albumPeakIsModified;
+            private set => SetProperty(ref _albumPeakIsModified, value);
+        }
+
+        public string TrackGain
+        {
+            get => _metadata.TrackGain;
+            private set
+            {
+                _metadata.TrackGain = value;
+                RaisePropertyChanged();
+                TrackGainIsModified = !value.Equals(_savedValues.TrackGain, StringComparison.Ordinal);
+            }
+        }
+
+        public bool TrackGainIsModified
+        {
+            get => _trackGainIsModified;
+            private set => SetProperty(ref _trackGainIsModified, value);
+        }
+
+        public string AlbumGain
+        {
+            get => _metadata.AlbumGain;
+            private set
+            {
+                _metadata.AlbumGain = value;
+                RaisePropertyChanged();
+                AlbumGainIsModified = !value.Equals(_savedValues.AlbumGain, StringComparison.Ordinal);
+            }
+        }
+
+        public bool AlbumGainIsModified
+        {
+            get => _albumGainIsModified;
+            private set => SetProperty(ref _albumGainIsModified, value);
+        }
 
         public BitmapImage? CoverImage => _coverImage.Value;
 
-        public bool Modified
-        {
-            get => _modified;
-            private set => SetProperty(ref _modified, value);
-        }
+        public bool Modified =>
+            SongTitleIsModified || ArtistIsModified || AlbumIsModified || AlbumArtistIsModified || ComposerIsModified ||
+            GenreIsModified || CommentIsModified || DayIsModified || MonthIsModified || YearIsModified ||
+            TrackNumberIsModified || TrackCountIsModified || TrackPeakIsModified || AlbumPeakIsModified ||
+            TrackGainIsModified || AlbumGainIsModified;
 
         public AudioMetadataViewModel(AudioMetadata metadata)
         {
-            _metadata = metadata;
             PropertyChanged += (sender, e) =>
             {
-                if (!e.PropertyName.Equals("Modified", StringComparison.Ordinal))
-                    Modified = true;
+                if (e.PropertyName.EndsWith("IsModified", StringComparison.Ordinal))
+                    RaisePropertyChanged("Modified");
             };
 
+            _savedValues = new AudioMetadata(metadata);
+            _metadata = metadata;
             _coverImage = new Lazy<BitmapImage?>(() => LoadImage(metadata.CoverArt));
         }
 
         internal void UpdateModel(AudioMetadata metadata)
         {
+            _savedValues = new AudioMetadata(metadata);
             _metadata = metadata;
             _coverImage = new Lazy<BitmapImage?>(() => LoadImage(metadata.CoverArt));
-            RaisePropertyChanged(string.Empty);
-            Modified = false;
+            Refresh();
+        }
+
+        internal void Refresh()
+        {
+            SongTitle = _metadata.Title;
+            Artist = _metadata.Artist;
+            Album = _metadata.Album;
+            AlbumArtist = _metadata.AlbumArtist;
+            Composer = _metadata.Composer;
+            Genre = _metadata.Genre;
+            Comment = _metadata.Comment;
+            Day = _metadata.Day;
+            Month = _metadata.Month;
+            Year = _metadata.Year;
+            TrackNumber = _metadata.TrackNumber;
+            TrackCount = _metadata.TrackCount;
+            TrackPeak = _metadata.TrackPeak;
+            AlbumPeak = _metadata.AlbumPeak;
+            TrackGain = _metadata.TrackGain;
+            AlbumGain = _metadata.AlbumGain;
         }
 
         static unsafe BitmapImage? LoadImage(ICoverArt? coverArt)
