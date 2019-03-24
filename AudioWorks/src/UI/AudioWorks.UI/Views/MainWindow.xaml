@@ -654,22 +654,86 @@ You should have received a copy of the GNU Affero General Public License along w
                                     Binding="{Binding Metadata.TrackGain, Mode=OneWay, StringFormat={}{0} dB}"
                                     ElementStyle="{StaticResource NumericTextBlock}"
                                     IsReadOnly="True"
-                                    Visibility="{Binding IsChecked, Source={x:Reference TrackGainColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference TrackGainColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.TrackGainIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.TrackGainIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Track Peak"
                                     Binding="{Binding Metadata.TrackPeak, Mode=OneWay}"
                                     ElementStyle="{StaticResource NumericTextBlock}"
                                     IsReadOnly="True"
-                                    Visibility="{Binding IsChecked, Source={x:Reference TrackPeakColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference TrackPeakColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.TrackPeakIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.TrackPeakIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Album Gain"
                                     Binding="{Binding Metadata.AlbumGain, Mode=OneWay, StringFormat={}{0} dB}"
                                     ElementStyle="{StaticResource NumericTextBlock}"
                                     IsReadOnly="True"
-                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumGainColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumGainColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.AlbumGainIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.AlbumGainIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Album Peak"
                                     Binding="{Binding Metadata.AlbumPeak, Mode=OneWay}"
                                     ElementStyle="{StaticResource NumericTextBlock}"
                                     IsReadOnly="True"
-                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumPeakColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumPeakColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.AlbumPeakIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.AlbumPeakIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Format"
                                     Binding="{Binding Info.Format, Mode=OneTime}"
                                     IsReadOnly="True"
