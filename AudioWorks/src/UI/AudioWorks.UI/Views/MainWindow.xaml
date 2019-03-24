@@ -101,6 +101,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
         <fluent:Ribbon DockPanel.Dock="Top" IsQuickAccessToolBarVisible="False">
             <fluent:RibbonTabItem Header="Home">
+
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:RibbonGroupBox.ItemContainerStyle>
                         <Style TargetType="Control">
@@ -125,6 +126,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                    LargeIcon="{StaticResource ExitImage}"
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
+
                 <fluent:RibbonGroupBox Header="Options">
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
@@ -201,6 +203,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                          x:Name="SampleRateColumnCheckBox"/>
                     </fluent:DropDownButton>
                 </fluent:RibbonGroupBox>
+
                 <fluent:RibbonGroupBox Header="Metadata">
                     <fluent:RibbonGroupBox.ItemContainerStyle>
                         <Style TargetType="Control">
@@ -224,6 +227,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                          IsChecked="{Binding IsOpen, Source={x:Reference MetadataFlyout}}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
+
                 <fluent:RibbonGroupBox Header="Analysis">
                     <fluent:RibbonGroupBox.ItemContainerStyle>
                         <Style TargetType="Control">
@@ -250,6 +254,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                          IsChecked="{Binding IsOpen, Source={x:Reference AnalysisFlyout}}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
+
                 <fluent:RibbonGroupBox Header="Encoding">
                     <fluent:RibbonGroupBox.ItemContainerStyle>
                         <Style TargetType="Control">
