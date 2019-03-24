@@ -38,9 +38,6 @@ namespace AudioWorks.UI.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         bool _isBusy;
-        bool _showMetadataSettings;
-        bool _showAnalysisSettings;
-        bool _showEncoderSettings;
         readonly object _lock = new object();
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
@@ -53,24 +50,6 @@ namespace AudioWorks.UI.ViewModels
         public AudioAnalyzerInfo[] Analyzers { get; } = AudioAnalyzerManager.GetAnalyzerInfo().ToArray();
 
         public AudioEncoderInfo[] Encoders { get; } = AudioEncoderManager.GetEncoderInfo().ToArray();
-
-        public bool ShowMetadataSettings
-        {
-            get => _showMetadataSettings;
-            set => SetProperty(ref _showMetadataSettings, value);
-        }
-
-        public bool ShowAnalysisSettings
-        {
-            get => _showAnalysisSettings;
-            set => SetProperty(ref _showAnalysisSettings, value);
-        }
-
-        public bool ShowEncoderSettings
-        {
-            get => _showEncoderSettings;
-            set => SetProperty(ref _showEncoderSettings, value);
-        }
 
         public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
             new ObservableCollection<AudioFileViewModel>();

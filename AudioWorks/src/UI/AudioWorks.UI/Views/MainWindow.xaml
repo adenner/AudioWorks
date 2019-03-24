@@ -72,6 +72,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 </Style>
             </mahapps:FlyoutsControl.ItemContainerStyle>
             <mahapps:Flyout Header="Metadata Settings"
+                            x:Name="MetadataFlyout"
                             IsOpen="{Binding ShowMetadataSettings}">
                 <TabControl prism:RegionManager.RegionName="MetadataSettings"
                             Style="{StaticResource FlyoutTabControl}"
@@ -79,6 +80,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 </TabControl>
             </mahapps:Flyout>
             <mahapps:Flyout Header="Analysis Settings"
+                            x:Name="AnalysisFlyout"
                             IsOpen="{Binding ShowAnalysisSettings}">
                 <TabControl prism:RegionManager.RegionName="AnalysisSettings"
                             Style="{StaticResource FlyoutTabControl}"
@@ -86,6 +88,7 @@ You should have received a copy of the GNU Affero General Public License along w
                 </TabControl>
             </mahapps:Flyout>
             <mahapps:Flyout Header="Encoder Settings"
+                            x:Name="EncoderFlyout"
                             IsOpen="{Binding ShowEncoderSettings}">
                 <TabControl prism:RegionManager.RegionName="EncoderSettings"
                             Style="{StaticResource FlyoutTabControl}"
@@ -218,7 +221,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                    LargeIcon="{StaticResource UndoImage}"
                                    fluent:KeyTip.Keys="R"/>
                     <fluent:ToggleButton Header="Settings"
-                                         IsChecked="{Binding ShowMetadataSettings}"
+                                         IsChecked="{Binding IsOpen, Source={x:Reference MetadataFlyout}}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Analysis">
@@ -244,7 +247,7 @@ You should have received a copy of the GNU Affero General Public License along w
                         </fluent:DropDownButton.ItemContainerStyle>
                     </fluent:DropDownButton>
                     <fluent:ToggleButton Header="Settings"
-                                         IsChecked="{Binding ShowAnalysisSettings}"
+                                         IsChecked="{Binding IsOpen, Source={x:Reference AnalysisFlyout}}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Encoding">
@@ -270,7 +273,7 @@ You should have received a copy of the GNU Affero General Public License along w
                         </fluent:DropDownButton.ItemContainerStyle>
                     </fluent:DropDownButton>
                     <fluent:ToggleButton Header="Settings"
-                                         IsChecked="{Binding ShowEncoderSettings}"
+                                         IsChecked="{Binding IsOpen, Source={x:Reference EncoderFlyout}}"
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
