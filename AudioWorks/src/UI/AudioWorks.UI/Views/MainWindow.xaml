@@ -283,6 +283,7 @@ You should have received a copy of the GNU Affero General Public License along w
                   AllowDrop="True"
                   IsReadOnly="{Binding IsBusy}"
                   PreviewDragOver="DataGrid_OnPreviewDragOver">
+
             <DataGrid.Resources>
                 <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
                 <views:BitRateConverter x:Key="BitRateConverter"/>
@@ -299,22 +300,7 @@ You should have received a copy of the GNU Affero General Public License along w
                             Value="Right"/>
                 </Style>
             </DataGrid.Resources>
-            <DataGrid.Style>
-                <Style TargetType="{x:Type DataGrid}"
-                       BasedOn="{StaticResource MetroDataGrid}">
-                    <Setter Property="AlternatingRowBackground"
-                            Value="{DynamicResource GrayBrush10}" />
-                </Style>
-            </DataGrid.Style>
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader"
-                       BasedOn="{StaticResource MetroDataGridColumnHeader}">
-                    <Setter Property="FontWeight"
-                            Value="Normal"/>
-                    <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing"
-                            Value="Normal"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
@@ -327,10 +313,12 @@ You should have received a copy of the GNU Affero General Public License along w
                     <prism:InvokeCommandAction Command="{Binding DropCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+
             <DataGrid.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick"
                               Command="{Binding EditSelectionCommand}"/>
             </DataGrid.InputBindings>
+
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Edit..."
@@ -350,6 +338,47 @@ You should have received a copy of the GNU Affero General Public License along w
                               Command="{Binding RemoveSelectionCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
+
+            <DataGrid.Style>
+                <Style TargetType="{x:Type DataGrid}"
+                       BasedOn="{StaticResource MetroDataGrid}">
+                    <Setter Property="AlternatingRowBackground"
+                            Value="{DynamicResource GrayBrush10}"/>
+                </Style>
+            </DataGrid.Style>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader"
+                       BasedOn="{StaticResource MetroDataGridColumnHeader}">
+                    <Setter Property="FontWeight"
+                            Value="Normal"/>
+                    <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing"
+                            Value="Normal"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource MetroDataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Metadata.Modified}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource HighlightBrush}"/>
+                            <Setter Property="BorderThickness"
+                                    Value="1"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Metadata.Modified}"
+                                     Value="False">
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource SolidColorBrush}"/>
+                            <Setter Property="BorderThickness"
+                                    Value="0"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Path"
                                     Binding="{Binding Path, Mode=OneTime}"
@@ -360,50 +389,210 @@ You should have received a copy of the GNU Affero General Public License along w
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
-                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackNumberColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackNumberColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.TrackNumberIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.TrackNumberIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </mahapps:DataGridNumericUpDownColumn>
                 <mahapps:DataGridNumericUpDownColumn Header="Track Count"
                                                      Binding="{Binding Metadata.TrackCount}"
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
-                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackCountColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                                     Visibility="{Binding IsChecked, Source={x:Reference TrackCountColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.TrackCountIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.TrackCountIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </mahapps:DataGridNumericUpDownColumn>
                 <DataGridTextColumn Header="Title"
                                     Binding="{Binding Metadata.SongTitle, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference TitleColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference TitleColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.SongTitleIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.SongTitleIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Artist"
                                     Binding="{Binding Metadata.Artist, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference ArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference ArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.ArtistIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.ArtistIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Album Artist"
                                     Binding="{Binding Metadata.AlbumArtist, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumArtistColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.AlbumArtistIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.AlbumArtistIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Composer"
                                     Binding="{Binding Metadata.Composer, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference ComposerColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference ComposerColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.ComposerIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.ComposerIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Album"
                                     Binding="{Binding Metadata.Album, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference AlbumColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.AlbumIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.AlbumIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <mahapps:DataGridNumericUpDownColumn Header="Day"
                                                      Binding="{Binding Metadata.Day, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
-                                                     Visibility="{Binding IsChecked, Source={x:Reference DayColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                                     Visibility="{Binding IsChecked, Source={x:Reference DayColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.DayIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.DayIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </mahapps:DataGridNumericUpDownColumn>
                 <mahapps:DataGridNumericUpDownColumn Header="Month"
                                                      Binding="{Binding Metadata.Month, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1"
                                                      Maximum="99"
                                                      StringFormat="00"
-                                                     Visibility="{Binding IsChecked, Source={x:Reference MonthColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                                     Visibility="{Binding IsChecked, Source={x:Reference MonthColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.MonthIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.MonthIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </mahapps:DataGridNumericUpDownColumn>
                 <mahapps:DataGridNumericUpDownColumn Header="Year"
                                                      Binding="{Binding Metadata.Year, UpdateSourceTrigger=PropertyChanged}"
                                                      Minimum="1000"
                                                      Maximum="9999"
-                                                     Visibility="{Binding IsChecked, Source={x:Reference YearColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                                     Visibility="{Binding IsChecked, Source={x:Reference YearColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.YearIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.YearIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </mahapps:DataGridNumericUpDownColumn>
                 <DataGridTemplateColumn Header="Cover Art"
                                         Visibility="{Binding IsChecked, Source={x:Reference CoverArtColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -416,11 +605,43 @@ You should have received a copy of the GNU Affero General Public License along w
                 <DataGridTextColumn Header="Genre"
                                     Binding="{Binding Metadata.Genre, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference GenreColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference GenreColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.GenreIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.GenreIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Comment"
                                     Binding="{Binding Metadata.Comment, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource EntryTextBox}"
-                                    Visibility="{Binding IsChecked, Source={x:Reference CommentColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                                    Visibility="{Binding IsChecked, Source={x:Reference CommentColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <DataGridColumn.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource MetroDataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Metadata.CommentIsModified}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Metadata.CommentIsModified}"
+                                             Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Track Gain"
                                     Binding="{Binding Metadata.TrackGain, Mode=OneWay, StringFormat={}{0} dB}"
                                     ElementStyle="{StaticResource NumericTextBlock}"
@@ -475,10 +696,6 @@ You should have received a copy of the GNU Affero General Public License along w
                                     ElementStyle="{StaticResource NumericTextBlock}"
                                     IsReadOnly="True"
                                     Visibility="{Binding IsChecked, Source={x:Reference FrameCountColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
-                <DataGridCheckBoxColumn Header="Modified"
-                                        Binding="{Binding Metadata.Modified, Mode=OneWay}"
-                                        IsReadOnly="True"
-                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
             </DataGrid.Columns>
         </DataGrid>
 
