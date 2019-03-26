@@ -29,6 +29,16 @@ You should have received a copy of the GNU Affero General Public License along w
                      Width="1024"
                      TitleCharacterCasing="Normal">
 
+    <Window.Resources>
+        <views:GroupByDirectoryConverter x:Key="GroupByDirectoryConverter"/>
+        <CollectionViewSource x:Key="AudioFilesCvs"
+                              Source="{Binding AudioFiles}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription Converter="{StaticResource GroupByDirectoryConverter}"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <prism:InvokeCommandAction Command="{Binding ExitCommand}"/>
@@ -284,7 +294,7 @@ You should have received a copy of the GNU Affero General Public License along w
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
-        <DataGrid ItemsSource="{Binding AudioFiles}"
+        <DataGrid ItemsSource="{Binding Source={StaticResource AudioFilesCvs}}"
                   AutoGenerateColumns="False"
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
                   GridLinesVisibility="Vertical"
@@ -364,6 +374,29 @@ You should have received a copy of the GNU Affero General Public License along w
                             Value="Normal"/>
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter/>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
 
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow"
