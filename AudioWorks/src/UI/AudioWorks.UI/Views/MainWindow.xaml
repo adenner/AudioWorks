@@ -149,6 +149,9 @@ You should have received a copy of the GNU Affero General Public License along w
                                         Value="False"/>
                             </Style>
                         </fluent:DropDownButton.ItemContainerStyle>
+                        <fluent:MenuItem Header="File Name"
+                                         x:Name="FileNameColumnCheckBox"
+                                         IsChecked="True"/>
                         <fluent:MenuItem Header="Path"
                                          x:Name="PathColumnCheckBox"/>
                         <fluent:GroupSeparatorMenuItem/>
@@ -425,6 +428,10 @@ You should have received a copy of the GNU Affero General Public License along w
                                     Binding="{Binding Path, Mode=OneTime}"
                                     IsReadOnly="True"
                                     Visibility="{Binding IsChecked, Source={x:Reference PathColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
+                <DataGridTextColumn Header="File Name"
+                                    Binding="{Binding FileName, Mode=OneTime}"
+                                    IsReadOnly="True"
+                                    Visibility="{Binding IsChecked, Source={x:Reference FileNameColumnCheckBox}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>
                 <mahapps:DataGridNumericUpDownColumn Header="Track #"
                                                      Binding="{Binding Metadata.TrackNumber}"
                                                      Minimum="1"
