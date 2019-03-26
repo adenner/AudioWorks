@@ -15,75 +15,66 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Flac.ViewModels
 {
     public class FlacEncoderSettingsControlViewModel : BindableBase
     {
-        int _compressionLevel;
-        int _seekPointInterval;
-        int _padding;
+        const int _defaultCompressionLevel = 5;
+        const int _defaultSeekPointInterval = 10;
+        const int _defaultPadding = 8192;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "FLAC";
 
         public int CompressionLevel
         {
-            get => _compressionLevel;
-            set => SetProperty(ref _compressionLevel, value);
+            get => _settings.TryGetValue("CompressionLevel", out int seekPointInterval)
+                ? seekPointInterval
+                : _defaultCompressionLevel;
+            set
+            {
+                if (value != _defaultCompressionLevel)
+                    _settings["CompressionLevel"] = value;
+                else
+                    _settings.Remove("CompressionLevel");
+                RaisePropertyChanged();
+            }
         }
 
         public int SeekPointInterval
         {
-            get => _seekPointInterval;
-            set => SetProperty(ref _seekPointInterval, value);
+            get => _settings.TryGetValue("SeekPointInterval", out int seekPointInterval)
+                ? seekPointInterval
+                : _defaultSeekPointInterval;
+            set
+            {
+                if (value != _defaultSeekPointInterval)
+                    _settings["SeekPointInterval"] = value;
+                else
+                    _settings.Remove("SeekPointInterval");
+                RaisePropertyChanged();
+            }
         }
 
         public int Padding
         {
-            get => _padding;
-            set => SetProperty(ref _padding, value);
-        }
-
-        public FlacEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["FLAC"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            _compressionLevel = settings.TryGetValue("CompressionLevel", out int compressionLevel)
-                ? compressionLevel
-                : 5;
-
-            _seekPointInterval = settings.TryGetValue("SeekPointInterval", out int seekPointInterval)
-                ? seekPointInterval
-                : 10;
-
-            _padding = settings.TryGetValue("Padding", out int padding)
+            get => _settings.TryGetValue("Padding", out int padding)
                 ? padding
-                : 8192;
+                : _defaultPadding;
+            set
+            {
+                if (value != _defaultPadding)
+                    _settings["Padding"] = value;
+                else
+                    _settings.Remove("Padding");
+                RaisePropertyChanged();
+            }
         }
 
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_compressionLevel != 5)
-                settings["CompressionLevel"] = _compressionLevel;
-            else
-                settings.Remove("CompressionLevel");
-
-            if (_padding != 8192)
-                settings["Padding"] = _padding;
-            else
-                settings.Remove("Padding");
-
-            if (_seekPointInterval != 10)
-                settings["SeekPointInterval"] = _seekPointInterval;
-            else
-                settings.Remove("SeekPointInterval");
-        }
+        public FlacEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["FLAC"];
     }
 }

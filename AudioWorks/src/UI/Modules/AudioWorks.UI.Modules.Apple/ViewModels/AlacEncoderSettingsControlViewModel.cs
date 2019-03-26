@@ -15,43 +15,34 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Apple.ViewModels
 {
     public class AlacEncoderSettingsControlViewModel : BindableBase
     {
-        int _padding;
+        const int _defaultPadding = 2048;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "ALAC";
 
         public int Padding
         {
-            get => _padding;
-            set => SetProperty(ref _padding, value);
-        }
-
-        public AlacEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["ALAC"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            _padding = settings.TryGetValue("Padding", out int padding)
+            get => _settings.TryGetValue("Padding", out int padding)
                 ? padding
-                : 2048;
+                : _defaultPadding;
+            set
+            {
+                if (value != _defaultPadding)
+                    _settings["Padding"] = value;
+                else
+                    _settings.Remove("Padding");
+                RaisePropertyChanged();
+            }
         }
 
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_padding != 2048)
-                settings["Padding"] = _padding;
-            else
-                settings.Remove("Padding");
-        }
+        public AlacEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["ALAC"];
     }
 }

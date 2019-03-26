@@ -16,23 +16,17 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Lame.ViewModels
 {
     public class LameEncoderSettingsControlViewModel : BindableBase
     {
-        int _modeIndex;
-        bool _qualityEnabled;
-        bool _bitRateEnabled;
-        int _vbrQuality;
-        int _bitRate;
-        bool _forceCbr;
-        int _tagVersionIndex;
-        int _tagEncodingIndex;
-        int _applyGainIndex;
-        int _tagPadding;
+        const int _defaultQuality = 3;
+        const int _defaultBitRate = 128;
+        const int _defaultPadding = 2048;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "MP3";
 
@@ -40,176 +34,164 @@ namespace AudioWorks.UI.Modules.Lame.ViewModels
 
         public int ModeIndex
         {
-            get => _modeIndex;
+            get => _settings.ContainsKey("BitRate") ? 1 : 0;
             set
             {
-                SetProperty(ref _modeIndex, value);
-                QualityEnabled = _modeIndex == 0;
-                BitRateEnabled = _modeIndex == 1;
+                if (value == 0)
+                {
+                    _settings.Remove("BitRate");
+                    RaisePropertyChanged("BitRate");
+
+                    _settings.Remove("ForceCBR");
+                    RaisePropertyChanged("ForceCBR");
+                }
+                else
+                {
+                    _settings.Remove("VBRQuality");
+                    RaisePropertyChanged("VBRQuality");
+
+                    _settings["BitRate"] = _defaultBitRate;
+                    RaisePropertyChanged("BitRate");
+                }
+
+                RaisePropertyChanged("QualityEnabled");
+                RaisePropertyChanged("BitRateEnabled");
+                RaisePropertyChanged();
             }
         }
 
-        public bool QualityEnabled
-        {
-            get => _qualityEnabled;
-            set => SetProperty(ref _qualityEnabled, value);
-        }
+        public bool QualityEnabled => ModeIndex == 0;
 
-        public bool BitRateEnabled
-        {
-            get => _bitRateEnabled;
-            set => SetProperty(ref _bitRateEnabled, value);
-        }
+        public bool BitRateEnabled => ModeIndex == 1;
 
         public int VbrQuality
         {
-            get => _vbrQuality;
-            set => SetProperty(ref _vbrQuality, value);
+            get => _settings.TryGetValue("VBRQuality", out int vbrQuality)
+                ? vbrQuality
+                : _defaultQuality;
+            set
+            {
+                if (value != _defaultQuality)
+                    _settings["VBRQuality"] = value;
+                else
+                    _settings.Remove("VBRQuality");
+                RaisePropertyChanged();
+            }
         }
 
         public int BitRate
         {
-            get => _bitRate;
-            set => SetProperty(ref _bitRate, value);
+            get => _settings.TryGetValue("BitRate", out int bitRate)
+                ? bitRate
+                : _defaultBitRate;
+            set
+            {
+                _settings["BitRate"] = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool ForceCbr
         {
-            get => _forceCbr;
-            set => SetProperty(ref _forceCbr, value);
+            get => _settings.TryGetValue("ForceCBR", out bool forceCbr) && forceCbr;
+            set
+            {
+                if (value)
+                    _settings["ForceCBR"] = true;
+                else
+                    _settings.Remove("ForceCBR");
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
 
         public int ApplyGainIndex
         {
-            get => _applyGainIndex;
-            set => SetProperty(ref _applyGainIndex, value);
+            get
+            {
+                if (_settings.TryGetValue("ApplyGain", out string applyGain))
+                    switch (applyGain)
+                    {
+                        case "Track":
+                            return 1;
+                        case "Album":
+                            return 2;
+                    }
+
+                return 0;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 1:
+                        _settings["ApplyGain"] = "Track";
+                        break;
+                    case 2:
+                        _settings["ApplyGain"] = "Album";
+                        break;
+                    default:
+                        _settings.Remove("ApplyGain");
+                        break;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public string[] TagVersions => new[] { "2.3", "2.4" };
 
         public int TagVersionIndex
         {
-            get => _tagVersionIndex;
-            set => SetProperty(ref _tagVersionIndex, value);
+            get => _settings.TryGetValue("TagVersion", out string tagVersion) &&
+                   tagVersion.Equals("2.4", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["TagVersion"] = "2.4";
+                else
+                    _settings.Remove("TagVersion");
+                RaisePropertyChanged();
+            }
         }
 
         public string[] TagEncodings => new[] { "Latin-1", "UTF-16" };
 
         public int TagEncodingIndex
         {
-            get => _tagEncodingIndex;
-            set => SetProperty(ref _tagEncodingIndex, value);
+            get => _settings.TryGetValue("TagEncoding", out string tagVersion) &&
+                   tagVersion.Equals("UTF-16", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["TagEncoding"] = "UTF-16";
+                else
+                    _settings.Remove("TagEncoding");
+                RaisePropertyChanged();
+
+            }
         }
 
         public int TagPadding
         {
-            get => _tagPadding;
-            set => SetProperty(ref _tagPadding, value);
-        }
-
-        public LameEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["LameMP3"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            if (settings.TryGetValue("BitRate", out int bitRate))
-            {
-                ModeIndex = 1;
-                _bitRate = bitRate;
-
-                if (settings.TryGetValue("ForceCBR", out bool forceCbr))
-                    _forceCbr = forceCbr;
-            }
-            else
-            {
-                ModeIndex = 0;
-                _bitRate = 128;
-            }
-
-            _vbrQuality = settings.TryGetValue("VBRQuality", out int vbrQuality)
-                ? vbrQuality
-                : 3;
-
-            if (settings.TryGetValue("ApplyGain", out string applyGain))
-                switch (applyGain)
-                {
-                    case "Track":
-                        _applyGainIndex = 1;
-                        break;
-                    case "Album":
-                        _applyGainIndex = 2;
-                        break;
-                }
-
-            if (settings.TryGetValue("TagVersion", out string version) &&
-                version.Equals("2.4", StringComparison.Ordinal))
-                _tagVersionIndex = 1;
-
-            if (settings.TryGetValue("TagEncoding", out string encoding) &&
-                encoding.Equals("UTF16", StringComparison.Ordinal))
-                _tagEncodingIndex = 1;
-
-            _tagPadding = settings.TryGetValue("Padding", out int padding)
+            get => _settings.TryGetValue("Padding", out int padding)
                 ? padding
-                : 2048;
-        }
-
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_qualityEnabled && _vbrQuality != 3)
-                settings["VBRQuality"] = _vbrQuality;
-            else
-                settings.Remove("VBRQuality");
-
-            if (_bitRateEnabled)
+                : _defaultPadding;
+            set
             {
-                settings["BitRate"] = _bitRate;
-
-                if (_forceCbr)
-                    settings["ForceCBR"] = true;
+                if (value != _defaultPadding)
+                    _settings["Padding"] = value;
                 else
-                    settings.Remove("ForceCBR");
+                    _settings.Remove("Padding");
+                RaisePropertyChanged();
             }
-            else
-            {
-                settings.Remove("BitRate");
-                settings.Remove("ForceCBR");
-            }
-
-            switch (_applyGainIndex)
-            {
-                case 1:
-                    settings["ApplyGain"] = "Track";
-                    break;
-                case 2:
-                    settings["ApplyGain"] = "Album";
-                    break;
-                default:
-                    settings.Remove("ApplyGain");
-                    break;
-            }
-
-            if (_tagVersionIndex == 1)
-                settings["TagVersion"] = "2.4";
-            else
-                settings.Remove("TagVersion");
-
-
-            if (_tagEncodingIndex == 1)
-                settings["TagEncoding"] = "UTF16";
-            else
-                settings.Remove("TagEncoding");
-
-            if (_tagPadding != 2048)
-                settings["Padding"] = _tagPadding;
-            else
-                settings.Remove("Padding");
         }
+
+        public LameEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["LameMP3"];
     }
 }

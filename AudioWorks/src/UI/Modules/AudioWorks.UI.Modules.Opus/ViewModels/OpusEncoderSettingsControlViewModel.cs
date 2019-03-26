@@ -16,123 +16,119 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Opus.ViewModels
 {
     public class OpusEncoderSettingsControlViewModel : BindableBase
     {
-        int _bitRate;
-        int _controlModeIndex;
-        int _signalTypeIndex;
-        int _applyGainIndex;
+        const int _defaultBitRate = 128;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "Opus";
 
         public int BitRate
         {
-            get => _bitRate;
-            set => SetProperty(ref _bitRate, value);
+            get => _settings.TryGetValue("BitRate", out int bitRate)
+                ? bitRate
+                : _defaultBitRate;
+            set
+            {
+                _settings["BitRate"] = value;
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ControlModes => new[] { "Variable", "Constrained", "Constant" };
 
         public int ControlModeIndex
         {
-            get => _controlModeIndex;
-            set => SetProperty(ref _controlModeIndex, value);
+            get
+            {
+                if (_settings.TryGetValue("ControlMode", out string controlMode))
+                    switch (controlMode)
+                    {
+                        case "Variable":
+                            return 0;
+                        case "Constant":
+                            return 2;
+                    }
+
+                return 1;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 0:
+                        _settings["ControlMode"] = "Variable";
+                        break;
+                    case 2:
+                        _settings["ControlMode"] = "Constant";
+                        break;
+                    default:
+                        _settings.Remove("ControlMode");
+                        break;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public string[] SignalTypes => new[] { "Music", "Speech" };
 
         public int SignalTypeIndex
         {
-            get => _signalTypeIndex;
-            set => SetProperty(ref _signalTypeIndex, value);
+            get => _settings.TryGetValue("SignalType", out string signalType) &&
+                   signalType.Equals("Speech", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["SignalType"] = "Speech";
+                else
+                    _settings.Remove("SignalType");
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
 
         public int ApplyGainIndex
         {
-            get => _applyGainIndex;
-            set => SetProperty(ref _applyGainIndex, value);
-        }
-
-        public OpusEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["Opus"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            _bitRate = settings.TryGetValue("BitRate", out int bitRate)
-                ? bitRate
-                : 128;
-
-            if (settings.TryGetValue("ControlMode", out string controlMode))
+            get
             {
-                if (controlMode.Equals("Constrained", StringComparison.Ordinal))
-                    _controlModeIndex = 1;
-                else if (controlMode.Equals("Constant", StringComparison.Ordinal))
-                    _controlModeIndex = 2;
+                if (_settings.TryGetValue("ApplyGain", out string applyGain))
+                    switch (applyGain)
+                    {
+                        case "Track":
+                            return 1;
+                        case "Album":
+                            return 2;
+                    }
+
+                return 0;
             }
-            else
-                _controlModeIndex = 1;
-
-            if (settings.TryGetValue("SignalType", out string signalType) &&
-                signalType.Equals("Speech", StringComparison.Ordinal))
-                _signalTypeIndex = 1;
-
-            if (settings.TryGetValue("ApplyGain", out string applyGain))
-                switch (applyGain)
+            set
+            {
+                switch (value)
                 {
-                    case "Track":
-                        _applyGainIndex = 1;
+                    case 1:
+                        _settings["ApplyGain"] = "Track";
                         break;
-                    case "Album":
-                        _applyGainIndex = 2;
+                    case 2:
+                        _settings["ApplyGain"] = "Album";
+                        break;
+                    default:
+                        _settings.Remove("ApplyGain");
                         break;
                 }
-        }
-
-        void SaveSettings(SettingDictionary settings)
-        {
-            settings["BitRate"] = _bitRate;
-
-            switch (_controlModeIndex)
-            {
-                case 0:
-                    settings["ControlMode"] = "Variable";
-                    break;
-                case 2:
-                    settings["ControlMode"] = "Constant";
-                    break;
-                default:
-                    settings.Remove("ControlMode");
-                    break;
-            }
-
-            if (_signalTypeIndex == 1)
-                settings["SignalType"] = "Speech";
-            else
-                settings.Remove("SignalType");
-
-            switch (_applyGainIndex)
-            {
-                case 1:
-                    settings["ApplyGain"] = "Track";
-                    break;
-                case 2:
-                    settings["ApplyGain"] = "Album";
-                    break;
-                default:
-                    settings.Remove("ApplyGain");
-                    break;
+                RaisePropertyChanged();
             }
         }
+
+        public OpusEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["Opus"];
     }
 }

@@ -32,7 +32,6 @@ namespace AudioWorks.UI
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<IFileSelectionService, FileSelectionService>();
-            containerRegistry.RegisterSingleton<ICommandService, CommandService>();
             containerRegistry.RegisterSingleton<IMetadataSettingService, MetadataSettingService>();
             containerRegistry.RegisterSingleton<IAnalysisSettingService, AnalysisSettingService>();
             containerRegistry.RegisterSingleton<IEncoderSettingService, EncoderSettingService>();
@@ -58,18 +57,8 @@ namespace AudioWorks.UI
 
         protected override void OnExit(ExitEventArgs e)
         {
-            var commandService = ServiceLocator.Current.GetInstance<ICommandService>();
-
-            if (commandService.SaveMetadataSettingsCommand.CanExecute(null))
-                commandService.SaveMetadataSettingsCommand.Execute(null);
             ServiceLocator.Current.GetInstance<IMetadataSettingService>().Save();
-
-            if (commandService.SaveAnalysisSettingsCommand.CanExecute(null))
-                commandService.SaveAnalysisSettingsCommand.Execute(null);
             ServiceLocator.Current.GetInstance<IAnalysisSettingService>().Save();
-
-            if (commandService.SaveEncoderSettingsCommand.CanExecute(null))
-                commandService.SaveEncoderSettingsCommand.Execute(null);
             ServiceLocator.Current.GetInstance<IEncoderSettingService>().Save();
 
             base.OnExit(e);

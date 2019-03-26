@@ -15,20 +15,16 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Vorbis.ViewModels
 {
     public class VorbisEncoderSettingsControlViewModel : BindableBase
     {
-        int _modeIndex;
-        bool _qualityEnabled;
-        bool _bitRateEnabled;
-        int _quality;
-        int _bitRate;
-        bool _forceCbr;
-        int _applyGainIndex;
+        const int _defaultQuality = 5;
+        const int _defaultBitRate = 128;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "Vorbis";
 
@@ -36,126 +32,112 @@ namespace AudioWorks.UI.Modules.Vorbis.ViewModels
 
         public int ModeIndex
         {
-            get => _modeIndex;
+            get => _settings.ContainsKey("BitRate") ? 1 : 0;
             set
             {
-                SetProperty(ref _modeIndex, value);
-                QualityEnabled = _modeIndex == 0;
-                BitRateEnabled = _modeIndex == 1;
+                if (value == 0)
+                {
+                    _settings.Remove("BitRate");
+                    RaisePropertyChanged("BitRate");
+
+                    _settings.Remove("ForceCBR");
+                    RaisePropertyChanged("ForceCBR");
+                }
+                else
+                {
+                    _settings.Remove("Quality");
+                    RaisePropertyChanged("Quality");
+
+                    _settings["BitRate"] = _defaultBitRate;
+                    RaisePropertyChanged("BitRate");
+                }
+
+                RaisePropertyChanged("QualityEnabled");
+                RaisePropertyChanged("BitRateEnabled");
+                RaisePropertyChanged();
             }
         }
 
-        public bool QualityEnabled
-        {
-            get => _qualityEnabled;
-            set => SetProperty(ref _qualityEnabled, value);
-        }
+        public bool QualityEnabled => ModeIndex == 0;
 
-        public bool BitRateEnabled
-        {
-            get => _bitRateEnabled;
-            set => SetProperty(ref _bitRateEnabled, value);
-        }
+        public bool BitRateEnabled => ModeIndex == 1;
 
         public int Quality
         {
-            get => _quality;
-            set => SetProperty(ref _quality, value);
+            get => _settings.TryGetValue("Quality", out int vbrQuality)
+                ? vbrQuality
+                : _defaultQuality;
+            set
+            {
+                if (value != _defaultQuality)
+                    _settings["Quality"] = value;
+                else
+                    _settings.Remove("Quality");
+                RaisePropertyChanged();
+            }
         }
 
         public int BitRate
         {
-            get => _bitRate;
-            set => SetProperty(ref _bitRate, value);
+            get => _settings.TryGetValue("BitRate", out int bitRate)
+                ? bitRate
+                : _defaultBitRate;
+            set
+            {
+                _settings["BitRate"] = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool ForceCbr
         {
-            get => _forceCbr;
-            set => SetProperty(ref _forceCbr, value);
+            get => _settings.TryGetValue("ForceCBR", out bool forceCbr) && forceCbr;
+            set
+            {
+                if (value)
+                    _settings["ForceCBR"] = true;
+                else
+                    _settings.Remove("ForceCBR");
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
 
         public int ApplyGainIndex
         {
-            get => _applyGainIndex;
-            set => SetProperty(ref _applyGainIndex, value);
-        }
-
-        public VorbisEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["Vorbis"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            if (settings.TryGetValue("BitRate", out int bitRate))
+            get
             {
-                ModeIndex = 1;
-                _bitRate = bitRate;
+                if (_settings.TryGetValue("ApplyGain", out string applyGain))
+                    switch (applyGain)
+                    {
+                        case "Track":
+                            return 1;
+                        case "Album":
+                            return 2;
+                    }
 
-                if (settings.TryGetValue("ForceCBR", out bool forceCbr))
-                    _forceCbr = forceCbr;
+                return 0;
             }
-            else
+            set
             {
-                ModeIndex = 0;
-                _bitRate = 128;
-            }
-
-            _quality = settings.TryGetValue("Quality", out int vbrQuality)
-                ? vbrQuality
-                : 5;
-
-            if (settings.TryGetValue("ApplyGain", out string applyGain))
-                switch (applyGain)
+                switch (value)
                 {
-                    case "Track":
-                        _applyGainIndex = 1;
+                    case 1:
+                        _settings["ApplyGain"] = "Track";
                         break;
-                    case "Album":
-                        _applyGainIndex = 2;
+                    case 2:
+                        _settings["ApplyGain"] = "Album";
+                        break;
+                    default:
+                        _settings.Remove("ApplyGain");
                         break;
                 }
-        }
-
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_qualityEnabled && _quality != 5)
-                settings["Quality"] = _quality;
-            else
-                settings.Remove("Quality");
-
-            if (_bitRateEnabled)
-            {
-                settings["BitRate"] = _bitRate;
-
-                if (_forceCbr)
-                    settings["ForceCBR"] = true;
-                else
-                    settings.Remove("ForceCBR");
-            }
-            else
-            {
-                settings.Remove("BitRate");
-                settings.Remove("ForceCBR");
-            }
-
-            switch (_applyGainIndex)
-            {
-                case 1:
-                    settings["ApplyGain"] = "Track";
-                    break;
-                case 2:
-                    settings["ApplyGain"] = "Album";
-                    break;
-                default:
-                    settings.Remove("ApplyGain");
-                    break;
+                RaisePropertyChanged();
             }
         }
+
+        public VorbisEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["Vorbis"];
     }
 }

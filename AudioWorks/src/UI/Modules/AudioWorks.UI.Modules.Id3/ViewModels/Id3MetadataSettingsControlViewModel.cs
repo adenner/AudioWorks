@@ -16,17 +16,15 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Id3.ViewModels
 {
     public class Id3MetadataSettingsControlViewModel : BindableBase
     {
-        int _versionIndex;
-        int _encodingIndex;
-        bool _configurePadding;
-        int _padding;
+        const int _defaultPadding = 2048;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "ID3";
 
@@ -34,76 +32,69 @@ namespace AudioWorks.UI.Modules.Id3.ViewModels
 
         public int VersionIndex
         {
-            get => _versionIndex;
-            set => SetProperty(ref _versionIndex, value);
+            get => _settings.TryGetValue("TagVersion", out string tagVersion) &&
+                   tagVersion.Equals("2.4", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["TagVersion"] = "2.4";
+                else
+                    _settings.Remove("TagVersion");
+                RaisePropertyChanged();
+            }
         }
 
         public string[] Encodings => new[] { "Latin-1", "UTF-16" };
 
         public int EncodingIndex
         {
-            get => _encodingIndex;
-            set => SetProperty(ref _encodingIndex, value);
+            get => _settings.TryGetValue("TagEncoding", out string tagVersion) &&
+                   tagVersion.Equals("UTF-16", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["TagEncoding"] = "UTF-16";
+                else
+                    _settings.Remove("TagEncoding");
+                RaisePropertyChanged();
+            }
         }
 
         public bool ConfigurePadding
         {
-            get => _configurePadding;
-            set => SetProperty(ref _configurePadding, value);
+            get => _settings.ContainsKey("Padding");
+            set
+            {
+                if (value)
+                    _settings["Padding"] = _defaultPadding;
+                else
+                    _settings.Remove("Padding");
+
+                RaisePropertyChanged("Padding");
+                RaisePropertyChanged();
+            }
         }
 
         public int Padding
         {
-            get => _padding;
-            set => SetProperty(ref _padding, value);
-        }
-
-        public Id3MetadataSettingsControlViewModel(
-            ICommandService commandService,
-            IMetadataSettingService settingService)
-        {
-            var settings = settingService["mp3"];
-
-            commandService.SaveMetadataSettingsCommand.RegisterCommand(
-                new DelegateCommand(() => SaveSettings(settings)));
-
-            if (settings.TryGetValue("TagVersion", out string version) &&
-                version.Equals("2.4", StringComparison.Ordinal))
-                _versionIndex = 1;
-
-            if (settings.TryGetValue("TagEncoding", out string encoding) &&
-                encoding.Equals("UTF16", StringComparison.Ordinal))
-                _encodingIndex = 1;
-
-            if (settings.TryGetValue("Padding", out int padding))
+            get => _settings.TryGetValue("Padding", out int padding)
+                ? padding
+                : _defaultPadding;
+            set
             {
-                _padding = padding;
-                _configurePadding = true;
-            }
-            else
-            {
-                _padding = 2048;
-                _configurePadding = false;
+                if (value != _defaultPadding)
+                    _settings["Padding"] = value;
+                else
+                    _settings.Remove("Padding");
+                RaisePropertyChanged();
             }
         }
 
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_versionIndex == 1)
-                settings["TagVersion"] = "2.4";
-            else
-                settings.Remove("TagVersion");
-
-
-            if (_encodingIndex == 1)
-                settings["TagEncoding"] = "UTF16";
-            else
-                settings.Remove("TagEncoding");
-
-            if (_configurePadding)
-                settings["Padding"] = _padding;
-            else
-                settings.Remove("Padding");
-        }
+        public Id3MetadataSettingsControlViewModel(IMetadataSettingService settingService) =>
+            _settings = settingService["mp3"];
     }
 }

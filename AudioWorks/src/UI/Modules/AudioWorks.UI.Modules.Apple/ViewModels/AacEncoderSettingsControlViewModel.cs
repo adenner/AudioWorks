@@ -13,24 +13,19 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.Apple.ViewModels
 {
     public class AacEncoderSettingsControlViewModel : BindableBase
     {
-        int _modeIndex;
-        bool _qualityEnabled;
-        bool _bitRateEnabled;
-        int _vbrQuality;
-        int _bitRate;
-        int _controlModeIndex;
-        int _applyGainIndex;
-        int _padding;
+        const int _defaultQuality = 9;
+        const int _defaultBitRate = 128;
+        const int _defaultPadding = 2048;
+
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "AAC";
 
@@ -38,156 +33,149 @@ namespace AudioWorks.UI.Modules.Apple.ViewModels
 
         public int ModeIndex
         {
-            get => _modeIndex;
+            get => _settings.ContainsKey("BitRate") ? 1 : 0;
             set
             {
-                SetProperty(ref _modeIndex, value);
-                QualityEnabled = _modeIndex == 0;
-                BitRateEnabled = _modeIndex == 1;
+                if (value == 0)
+                {
+                    _settings.Remove("BitRate");
+                    RaisePropertyChanged("BitRate");
+
+                    _settings.Remove("ControlMode");
+                    RaisePropertyChanged("ControlModeIndex");
+                }
+                else
+                {
+                    _settings.Remove("VBRQuality");
+                    RaisePropertyChanged("VBRQuality");
+
+                    _settings["BitRate"] = _defaultBitRate;
+                    RaisePropertyChanged("BitRate");
+                }
+
+                RaisePropertyChanged("QualityEnabled");
+                RaisePropertyChanged("BitRateEnabled");
+                RaisePropertyChanged();
             }
         }
 
-        public bool QualityEnabled
-        {
-            get => _qualityEnabled;
-            set => SetProperty(ref _qualityEnabled, value);
-        }
+        public bool QualityEnabled => ModeIndex == 0;
 
-        public bool BitRateEnabled
-        {
-            get => _bitRateEnabled;
-            set => SetProperty(ref _bitRateEnabled, value);
-        }
+        public bool BitRateEnabled => ModeIndex == 1;
 
         public int VbrQuality
         {
-            get => _vbrQuality;
-            set => SetProperty(ref _vbrQuality, value);
+            get => _settings.TryGetValue("VBRQuality", out int vbrQuality)
+                ? vbrQuality
+                : _defaultQuality;
+            set
+            {
+                if (value != _defaultQuality)
+                    _settings["VBRQuality"] = value;
+                else
+                    _settings.Remove("VBRQuality");
+                RaisePropertyChanged();
+            }
         }
 
         public int BitRate
         {
-            get => _bitRate;
-            set => SetProperty(ref _bitRate, value);
+            get => _settings.TryGetValue("BitRate", out int bitRate)
+                ? bitRate
+                : _defaultBitRate;
+            set
+            {
+                _settings["BitRate"] = value;
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ControlModes => new[] { "Constrained", "Average", "Constant" };
 
         public int ControlModeIndex
         {
-            get => _controlModeIndex;
-            set => SetProperty(ref _controlModeIndex, value);
+            get
+            {
+                if (_settings.TryGetValue("ControlMode", out string controlMode))
+                    switch (controlMode)
+                    {
+                        case "Average":
+                            return 1;
+                        case "Constant":
+                            return 2;
+                    }
+
+                return 0;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 1:
+                        _settings["ControlMode"] = "Average";
+                        break;
+                    case 2:
+                        _settings["ControlMode"] = "Constant";
+                        break;
+                    default:
+                        _settings.Remove("ControlMode");
+                        break;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public string[] ApplyGainValues => new[] { "None", "Track", "Album" };
 
         public int ApplyGainIndex
         {
-            get => _applyGainIndex;
-            set => SetProperty(ref _applyGainIndex, value);
+            get
+            {
+                if (_settings.TryGetValue("ApplyGain", out string applyGain))
+                    switch (applyGain)
+                    {
+                        case "Track":
+                            return 1;
+                        case "Album":
+                            return 2;
+                    }
+
+                return 0;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 1:
+                        _settings["ApplyGain"] = "Track";
+                        break;
+                    case 2:
+                        _settings["ApplyGain"] = "Album";
+                        break;
+                    default:
+                        _settings.Remove("ApplyGain");
+                        break;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public int Padding
         {
-            get => _padding;
-            set => SetProperty(ref _padding, value);
-        }
-
-        public AacEncoderSettingsControlViewModel(
-            ICommandService commandService,
-            IEncoderSettingService settingService)
-        {
-            var settings = settingService["AppleAAC"];
-
-            commandService.SaveEncoderSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            if (settings.TryGetValue("BitRate", out int bitRate))
-            {
-                ModeIndex = 1;
-                _bitRate = bitRate;
-
-                if (settings.TryGetValue("ControlMode", out string controlMode))
-                {
-                    if (controlMode.Equals("Average", StringComparison.Ordinal))
-                        _controlModeIndex = 1;
-                    else if (controlMode.Equals("Constant", StringComparison.Ordinal))
-                        _controlModeIndex = 2;
-                }
-            }
-            else
-            {
-                ModeIndex = 0;
-                _bitRate = 128;
-            }
-
-            _vbrQuality = settings.TryGetValue("VBRQuality", out int vbrQuality)
-                ? vbrQuality
-                : 9;
-
-            if (settings.TryGetValue("ApplyGain", out string applyGain))
-                switch (applyGain)
-                {
-                    case "Track":
-                        _applyGainIndex = 1;
-                        break;
-                    case "Album":
-                        _applyGainIndex = 2;
-                        break;
-                }
-
-            _padding = settings.TryGetValue("Padding", out int padding)
+            get => _settings.TryGetValue("Padding", out int padding)
                 ? padding
-                : 2048;
+                : _defaultPadding;
+            set
+            {
+                if (value != _defaultPadding)
+                    _settings["Padding"] = value;
+                else
+                    _settings.Remove("Padding");
+                RaisePropertyChanged();
+            }
         }
 
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_qualityEnabled && _vbrQuality != 9)
-                settings["VBRQuality"] = _vbrQuality;
-            else
-                settings.Remove("VBRQuality");
-
-            if (_bitRateEnabled)
-            {
-                settings["BitRate"] = _bitRate;
-
-                switch (_controlModeIndex)
-                {
-                    case 1:
-                        settings["ControlMode"] = "Average";
-                        break;
-                    case 2:
-                        settings["ControlMode"] = "Constant";
-                        break;
-                    default:
-                        settings.Remove("ControlMode");
-                        break;
-                }
-            }
-            else
-            {
-                settings.Remove("BitRate");
-                settings.Remove("ControlMode");
-            }
-
-            switch (_applyGainIndex)
-            {
-                case 1:
-                    settings["ApplyGain"] = "Track";
-                    break;
-                case 2:
-                    settings["ApplyGain"] = "Album";
-                    break;
-                default:
-                    settings.Remove("ApplyGain");
-                    break;
-            }
-
-            if (_padding != 2048)
-                settings["Padding"] = _padding;
-            else
-                settings.Remove("Padding");
-        }
+        public AacEncoderSettingsControlViewModel(IEncoderSettingService settingService) =>
+            _settings = settingService["AppleAAC"];
     }
 }

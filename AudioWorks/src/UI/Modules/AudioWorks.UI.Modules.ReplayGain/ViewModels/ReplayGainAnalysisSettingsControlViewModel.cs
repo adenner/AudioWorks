@@ -16,14 +16,13 @@ You should have received a copy of the GNU Affero General Public License along w
 using System;
 using AudioWorks.Common;
 using AudioWorks.UI.Services;
-using Prism.Commands;
 using Prism.Mvvm;
 
 namespace AudioWorks.UI.Modules.ReplayGain.ViewModels
 {
     public class ReplayGainAnalysisSettingsControlViewModel : BindableBase
     {
-        int _peakAnalysisTypeIndex;
+        readonly SettingDictionary _settings;
 
         public string Title { get; } = "ReplayGain";
 
@@ -31,30 +30,21 @@ namespace AudioWorks.UI.Modules.ReplayGain.ViewModels
 
         public int PeakAnalysisTypeIndex
         {
-            get => _peakAnalysisTypeIndex;
-            set => SetProperty(ref _peakAnalysisTypeIndex, value);
+            get => _settings.TryGetValue("PeakAnalysis", out string peakAnalysis) &&
+                   peakAnalysis.Equals("Interpolated", StringComparison.Ordinal)
+                ? 1
+                : 0;
+            set
+            {
+                if (value == 1)
+                    _settings["PeakAnalysis"] = "Interpolated";
+                else
+                    _settings.Remove("PeakAnalysis");
+                RaisePropertyChanged();
+            }
         }
 
-        public ReplayGainAnalysisSettingsControlViewModel(
-            ICommandService commandService,
-            IAnalysisSettingService settingService)
-        {
-            var settings = settingService["ReplayGain"];
-
-            commandService.SaveAnalysisSettingsCommand.RegisterCommand(new DelegateCommand(() =>
-                SaveSettings(settings)));
-
-            if (settings.TryGetValue("PeakAnalysis", out string peakAnalysis) &&
-                peakAnalysis.Equals("Interpolated", StringComparison.Ordinal))
-                _peakAnalysisTypeIndex = 1;
-        }
-
-        void SaveSettings(SettingDictionary settings)
-        {
-            if (_peakAnalysisTypeIndex == 1)
-                settings["PeakAnalysis"] = "Interpolated";
-            else
-                settings.Remove("PeakAnalysis");
-        }
+        public ReplayGainAnalysisSettingsControlViewModel(IAnalysisSettingService settingService) =>
+            _settings = settingService["ReplayGain"];
     }
 }
