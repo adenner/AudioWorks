@@ -255,7 +255,7 @@ namespace AudioWorks.UI.ViewModels
 
                     var analyzer = new AudioFileAnalyzer(name, analysisSettingService[name]);
                     var controller = await metroDialogCoordinator.ShowProgressAsync(this,
-                        "Performing ReplayGain Analysis", "Testing 1-2-3", true);
+                        $"Performing {name} Analysis", $"Analyzing {AudioFiles.Count} files...", true);
 
                     var cancelSource = new CancellationTokenSource();
                     controller.Canceled += (sender, e) => cancelSource.Cancel();
@@ -264,7 +264,10 @@ namespace AudioWorks.UI.ViewModels
                     var progress = new Progress<ProgressToken>(token =>
                         controller.SetProgress(Math.Round(token.FramesCompleted / totalFrames)));
 
-                    await analyzer.AnalyzeAsync(AudioFiles.Select(viewModel => viewModel.AudioFile), cancelSource.Token, progress);
+                    await analyzer.AnalyzeAsync(
+                        AudioFiles.Select(viewModel => viewModel.AudioFile),
+                        cancelSource.Token,
+                        progress);
                     await controller.CloseAsync();
 
                     foreach (var audioFile in AudioFiles)
