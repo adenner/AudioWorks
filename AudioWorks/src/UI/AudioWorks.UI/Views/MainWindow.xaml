@@ -82,24 +82,21 @@ You should have received a copy of the GNU Affero General Public License along w
                 </Style>
             </mahapps:FlyoutsControl.ItemContainerStyle>
             <mahapps:Flyout Header="Metadata Settings"
-                            x:Name="MetadataFlyout"
-                            IsOpen="{Binding ShowMetadataSettings}">
+                            x:Name="MetadataFlyout">
                 <TabControl prism:RegionManager.RegionName="MetadataSettings"
                             Style="{StaticResource FlyoutTabControl}"
                             ItemContainerStyle="{StaticResource HeaderedTabItem}">
                 </TabControl>
             </mahapps:Flyout>
             <mahapps:Flyout Header="Analysis Settings"
-                            x:Name="AnalysisFlyout"
-                            IsOpen="{Binding ShowAnalysisSettings}">
+                            x:Name="AnalysisFlyout">
                 <TabControl prism:RegionManager.RegionName="AnalysisSettings"
                             Style="{StaticResource FlyoutTabControl}"
                             ItemContainerStyle="{StaticResource HeaderedTabItem}">
                 </TabControl>
             </mahapps:Flyout>
             <mahapps:Flyout Header="Encoder Settings"
-                            x:Name="EncoderFlyout"
-                            IsOpen="{Binding ShowEncoderSettings}">
+                            x:Name="EncoderFlyout">
                 <TabControl prism:RegionManager.RegionName="EncoderSettings"
                             Style="{StaticResource FlyoutTabControl}"
                             ItemContainerStyle="{StaticResource HeaderedTabItem}"/>
