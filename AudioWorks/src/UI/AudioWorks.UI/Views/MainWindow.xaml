@@ -109,7 +109,8 @@ You should have received a copy of the GNU Affero General Public License along w
 
     <DockPanel>
 
-        <fluent:Ribbon DockPanel.Dock="Top" IsQuickAccessToolBarVisible="False">
+        <fluent:Ribbon DockPanel.Dock="Top"
+                       IsQuickAccessToolBarVisible="False">
             <fluent:RibbonTabItem Header="Home">
 
                 <fluent:RibbonGroupBox Header="File">
