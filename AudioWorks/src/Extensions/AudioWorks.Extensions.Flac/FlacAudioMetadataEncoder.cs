@@ -80,10 +80,10 @@ namespace AudioWorks.Extensions.Flac
         }
 
         static void UpdateChain(
-            [NotNull] MetadataIterator iterator,
-            [NotNull] VorbisCommentBlock newComments,
-            [CanBeNull] PictureBlock? pictureBlock,
-            [CanBeNull] PaddingBlock? paddingBlock)
+            MetadataIterator iterator,
+            VorbisCommentBlock newComments,
+            PictureBlock? pictureBlock,
+            PaddingBlock? paddingBlock)
         {
             var metadataInserted = false;
             var pictureInserted = false;
