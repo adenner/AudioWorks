@@ -29,7 +29,7 @@ namespace AudioWorks.Api
         AudioMetadata? _metadata;
 
         /// <inheritdoc/>
-        public AudioMetadata Metadata => _metadata ?? (_metadata = LoadMetadata(Path));
+        public AudioMetadata Metadata => _metadata ??= LoadMetadata(Path);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaggedAudioFile"/> class.
