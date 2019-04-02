@@ -39,7 +39,7 @@ namespace AudioWorks.Api
         /// <see cref="Environment.ProcessorCount"/>.
         /// </summary>
         /// <value>The maximum degree of parallelism.</value>
-        /// <exception cref="ArgumentOutOfRangeException">Throw in <paramref name="value"/> is less than 1.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="value"/> is less than 1.</exception>
         public int MaxDegreeOfParallelism
         {
             get => _maxDegreeOfParallelism;
