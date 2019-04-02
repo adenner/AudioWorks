@@ -13,8 +13,8 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using AudioWorks.Common;
 using System.Management.Automation;
+using AudioWorks.Common;
 
 namespace AudioWorks.Commands
 {
