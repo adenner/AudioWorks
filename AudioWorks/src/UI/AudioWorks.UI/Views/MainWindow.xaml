@@ -63,6 +63,8 @@ You should have received a copy of the GNU Affero General Public License along w
                             Value="Left"/>
                     <Setter Property="mahapps:TabControlHelper.Underlined"
                             Value="TabPanel"/>
+                    <Setter Property="mahapps:TabControlHelper.Transition"
+                            Value="Right"/>
                 </Style>
                 <Style TargetType="TabItem"
                        x:Key="HeaderedTabItem"
