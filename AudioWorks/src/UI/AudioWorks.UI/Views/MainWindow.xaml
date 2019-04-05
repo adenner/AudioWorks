@@ -30,12 +30,8 @@ You should have received a copy of the GNU Affero General Public License along w
                      TitleCharacterCasing="Normal">
 
     <Window.Resources>
-        <views:GroupByDirectoryConverter x:Key="GroupByDirectoryConverter"/>
         <CollectionViewSource x:Key="AudioFilesCvs"
                               Source="{Binding AudioFiles}">
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription Converter="{StaticResource GroupByDirectoryConverter}"/>
-            </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Window.Resources>
 
@@ -112,13 +108,7 @@ You should have received a copy of the GNU Affero General Public License along w
                        IsQuickAccessToolBarVisible="False">
             <fluent:RibbonTabItem Header="Home">
 
-                <fluent:RibbonGroupBox Header="File">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="50"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                <fluent:RibbonGroupBox Header="File" ItemContainerStyle="{StaticResource LargeRibbonButton}">
                     <fluent:DropDownButton Header="Open"
                                            LargeIcon="{StaticResource OpenFileDialogImage}"
                                            fluent:KeyTip.Keys="O">
@@ -137,7 +127,29 @@ You should have received a copy of the GNU Affero General Public License along w
                                    fluent:KeyTip.Keys="X"/>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="Options">
+                <fluent:RibbonGroupBox Header="Options" ItemContainerStyle="{StaticResource LargeRibbonButton}">
+                    <fluent:ToggleButton Checked="GroupToggleButton_OnChecked"
+                                         Unchecked="GroupToggleButton_OnUnchecked"
+                                         LargeIcon="{StaticResource GroupClauseImage}"
+                                         fluent:KeyTip.Keys="G">
+                        <fluent:ToggleButton.Style>
+                            <Style TargetType="fluent:ToggleButton"
+                                   BasedOn="{StaticResource LargeRibbonButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                                 Value="True">
+                                        <Setter Property="Header"
+                                                Value="Ungroup"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                                 Value="False">
+                                        <Setter Property="Header"
+                                                Value="Group"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </fluent:ToggleButton.Style>
+                    </fluent:ToggleButton>
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">
@@ -217,13 +229,7 @@ You should have received a copy of the GNU Affero General Public License along w
                     </fluent:DropDownButton>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="Metadata">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="53"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                <fluent:RibbonGroupBox Header="Metadata" ItemContainerStyle="{StaticResource LargeRibbonButton}">
                     <fluent:Button Header="Save All"
                                    Command="{Binding SaveAllCommand}"
                                    LargeIcon="{StaticResource SaveAllImage}"
@@ -241,13 +247,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="Analysis">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="53"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                <fluent:RibbonGroupBox Header="Analysis" ItemContainerStyle="{StaticResource LargeRibbonButton}">
                     <fluent:DropDownButton Header="Analyze All"
                                            LargeIcon="{StaticResource AnalyzeTraceImage}"
                                            ItemsSource="{Binding Analyzers}"
@@ -268,13 +268,7 @@ You should have received a copy of the GNU Affero General Public License along w
                                          LargeIcon="{StaticResource SettingsImage}"/>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="Encoding">
-                    <fluent:RibbonGroupBox.ItemContainerStyle>
-                        <Style TargetType="Control">
-                            <Setter Property="MinWidth"
-                                    Value="53"/>
-                        </Style>
-                    </fluent:RibbonGroupBox.ItemContainerStyle>
+                <fluent:RibbonGroupBox Header="Encoding" ItemContainerStyle="{StaticResource LargeRibbonButton}">
                     <fluent:DropDownButton Header="Encode All"
                                            LargeIcon="{StaticResource OutputImage}"
                                            ItemsSource="{Binding Encoders}"

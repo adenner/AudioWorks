@@ -15,6 +15,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -22,10 +23,16 @@ namespace AudioWorks.UI.Views
 {
     public sealed partial class MainWindow
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        readonly PropertyGroupDescription _groupDescription = new PropertyGroupDescription
+            { Converter = new GroupByDirectoryConverter() };
+
+        public MainWindow() => InitializeComponent();
+
+        void GroupToggleButton_OnChecked(object sender, RoutedEventArgs e) =>
+            ((CollectionViewSource) Resources["AudioFilesCvs"]).GroupDescriptions.Add(_groupDescription);
+
+        void GroupToggleButton_OnUnchecked(object sender, RoutedEventArgs e) =>
+            ((CollectionViewSource) Resources["AudioFilesCvs"]).GroupDescriptions.Remove(_groupDescription);
 
         void DataGrid_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
