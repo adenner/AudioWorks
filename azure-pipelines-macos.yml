@@ -11,7 +11,7 @@ trigger:
     - azure-pipelines-linux.yml
 
 pool:
-  vmImage: macOS-10.13
+  vmImage: macOS-10.14
 
 variables:
   buildConfiguration: Release
@@ -20,7 +20,7 @@ steps:
 - task: DotNetCoreInstaller@0
   inputs:
     packageType: sdk
-    version: 2.1.505
+    version: 2.1.506
   displayName: 'Upgrade .NET Core'
 
 - script: |
