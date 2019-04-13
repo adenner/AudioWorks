@@ -1,4 +1,4 @@
-﻿/* Copyright © 2018 Jeremy Herbison
+﻿/* Copyright © 2019 Jeremy Herbison
 
 This file is part of AudioWorks.
 
