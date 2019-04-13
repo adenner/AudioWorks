@@ -39,6 +39,8 @@ namespace AudioWorks.UI.ViewModels
     {
         bool _isBusy;
         readonly object _lock = new object();
+        readonly PropertyGroupDescription _groupDescription = new PropertyGroupDescription
+            { Converter = new GroupByDirectoryConverter() };
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
         public bool IsBusy
@@ -51,8 +53,9 @@ namespace AudioWorks.UI.ViewModels
 
         public AudioEncoderInfo[] Encoders { get; } = AudioEncoderManager.GetEncoderInfo().ToArray();
 
-        public ObservableCollection<AudioFileViewModel> AudioFiles { get; } =
-            new ObservableCollection<AudioFileViewModel>();
+        public ICollectionView AudioFiles { get; }
+
+        public DelegateCommand ToggleGroupingCommand { get; }
 
         public DelegateCommand<IList> SelectionChangedCommand { get; }
 
@@ -95,8 +98,19 @@ namespace AudioWorks.UI.ViewModels
             IEncoderSettingService encoderSettingService,
             IDialogCoordinator metroDialogCoordinator)
         {
-            BindingOperations.EnableCollectionSynchronization(AudioFiles, _lock);
-            AudioFiles.CollectionChanged += (sender, e) =>
+            var audioFilesCollection = new ObservableCollection<AudioFileViewModel>();
+            BindingOperations.EnableCollectionSynchronization(audioFilesCollection, _lock);
+            AudioFiles = CollectionViewSource.GetDefaultView(audioFilesCollection);
+
+            ToggleGroupingCommand = new DelegateCommand(() =>
+            {
+                if (AudioFiles.GroupDescriptions.Contains(_groupDescription))
+                    AudioFiles.GroupDescriptions.Remove(_groupDescription);
+                else
+                    AudioFiles.GroupDescriptions.Add(_groupDescription);
+            });
+
+            audioFilesCollection.CollectionChanged += (sender, e) =>
             {
                 if (e.NewItems != null)
                     foreach (var newItem in e.NewItems)
@@ -178,10 +192,11 @@ namespace AudioWorks.UI.ViewModels
             RevertModifiedCommand = new DelegateCommand(() =>
                 {
                     IsBusy = true;
-                    foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.RevertCommand.CanExecute()))
+                    foreach (var audioFile in audioFilesCollection
+                        .Where(audioFile => audioFile.RevertCommand.CanExecute()))
                         audioFile.RevertCommand.Execute();
                     IsBusy = false;
-                }, () => !IsBusy && AudioFiles.Any(audioFile => audioFile.RevertCommand.CanExecute()))
+                }, () => !IsBusy && audioFilesCollection.Any(audioFile => audioFile.RevertCommand.CanExecute()))
                 .ObservesProperty(() => IsBusy);
 
             SaveSelectionCommand = new DelegateCommand(() =>
@@ -197,11 +212,11 @@ namespace AudioWorks.UI.ViewModels
             SaveModifiedCommand = new DelegateCommand(() =>
                 {
                     IsBusy = true;
-                    foreach (var audioFile in AudioFiles.Where(audioFile =>
+                    foreach (var audioFile in audioFilesCollection.Where(audioFile =>
                         audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
                         audioFile.SaveCommand.Execute();
                     IsBusy = false;
-                }, () => !IsBusy && AudioFiles.Any(audioFile =>
+                }, () => !IsBusy && audioFilesCollection.Any(audioFile =>
                              audioFile.Metadata.Modified && audioFile.SaveCommand.CanExecute()))
                 .ObservesProperty(() => IsBusy);
 
@@ -211,10 +226,11 @@ namespace AudioWorks.UI.ViewModels
                     if (await metroDialogCoordinator.ShowMessageAsync(this, "Are You Sure?",
                             "All files will be re-written according to the current metadata encoder settings.",
                             MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                        foreach (var audioFile in AudioFiles.Where(audioFile => audioFile.SaveCommand.CanExecute()))
+                        foreach (var audioFile in audioFilesCollection
+                            .Where(audioFile => audioFile.SaveCommand.CanExecute()))
                             audioFile.SaveCommand.Execute();
                     IsBusy = false;
-                }, () => !IsBusy && AudioFiles.Count > 0)
+                }, () => !IsBusy && audioFilesCollection.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
             RemoveSelectionCommand = new DelegateCommand(async () =>
@@ -240,7 +256,7 @@ namespace AudioWorks.UI.ViewModels
                     }
 
                 foreach (var audioFile in _selectedAudioFiles)
-                    AudioFiles.Remove(audioFile);
+                    audioFilesCollection.Remove(audioFile);
             }, () => _selectedAudioFiles.Count > 0);
 
             AnalyzeSelectionCommand = new DelegateCommand<string>(async name =>
@@ -255,26 +271,26 @@ namespace AudioWorks.UI.ViewModels
 
                     var analyzer = new AudioFileAnalyzer(name, analysisSettingService[name]);
                     var controller = await metroDialogCoordinator.ShowProgressAsync(this,
-                        $"Performing {name} Analysis", $"Analyzing {AudioFiles.Count} files...", true);
+                        $"Performing {name} Analysis", $"Analyzing {audioFilesCollection.Count} files...", true);
 
                     var cancelSource = new CancellationTokenSource();
                     controller.Canceled += (sender, e) => cancelSource.Cancel();
 
-                    var totalFrames = (double) AudioFiles.Sum(audioFile => audioFile.Info.FrameCount);
+                    var totalFrames = (double) audioFilesCollection.Sum(audioFile => audioFile.Info.FrameCount);
                     var progress = new Progress<ProgressToken>(token =>
                         controller.SetProgress(Math.Round(token.FramesCompleted / totalFrames)));
 
                     await analyzer.AnalyzeAsync(
-                        AudioFiles.Select(viewModel => viewModel.AudioFile),
+                        audioFilesCollection.Select(viewModel => viewModel.AudioFile),
                         cancelSource.Token,
                         progress);
                     await controller.CloseAsync();
 
-                    foreach (var audioFile in AudioFiles)
+                    foreach (var audioFile in audioFilesCollection)
                         audioFile.Metadata.Refresh();
 
                     IsBusy = false;
-                }, name => !IsBusy && AudioFiles.Count > 0)
+                }, name => !IsBusy && audioFilesCollection.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
             EncodeSelectionCommand = new DelegateCommand<string>(async name =>
@@ -286,12 +302,12 @@ namespace AudioWorks.UI.ViewModels
             EncodeAllCommand = new DelegateCommand<string>(async name =>
                 {
                     //TODO
-                }, name => !IsBusy && AudioFiles.Count > 0)
+                }, name => !IsBusy && audioFilesCollection.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
             ExitCommand = new DelegateCommand<CancelEventArgs>(e =>
             {
-                var modifications = AudioFiles.Count(audioFile => audioFile.Metadata.Modified);
+                var modifications = audioFilesCollection.Count(audioFile => audioFile.Metadata.Modified);
                 if (modifications == 0) return;
 
                 switch (metroDialogCoordinator.ShowModalMessageExternal(this, "Unsaved Changes",
@@ -331,13 +347,14 @@ namespace AudioWorks.UI.ViewModels
             await Task.Run(() =>
             {
                 var validExtensions = AudioFileManager.GetFormatInfo().Select(info => info.Extension).ToList();
-                var existingFiles = AudioFiles.Select(audioFile => audioFile.Path);
+                var audioFileCollection = (ObservableCollection<AudioFileViewModel>) AudioFiles.SourceCollection;
+                var existingFiles = audioFileCollection.Select(audioFile => audioFile.Path);
 
                 foreach (var newFile in filePaths.Where(file =>
                         validExtensions.Contains(new FileInfo(file).Extension, StringComparer.OrdinalIgnoreCase) &&
                         !existingFiles.Contains(file, StringComparer.OrdinalIgnoreCase))
                     .Select(file => new AudioFileViewModel(new TaggedAudioFile(file))))
-                    AudioFiles.Add(newFile);
+                    audioFileCollection.Add(newFile);
             });
     }
 }

@@ -1,4 +1,4 @@
-﻿/* Copyright © 2018 Jeremy Herbison
+﻿/* Copyright © 2019 Jeremy Herbison
 
 This file is part of AudioWorks.
 
@@ -17,9 +17,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
-using AudioWorks.UI.ViewModels;
 
-namespace AudioWorks.UI.Views
+namespace AudioWorks.UI.ViewModels
 {
     public sealed class GroupByDirectoryConverter : IValueConverter
     {
