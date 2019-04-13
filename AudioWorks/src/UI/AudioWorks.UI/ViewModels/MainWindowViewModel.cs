@@ -280,10 +280,18 @@ namespace AudioWorks.UI.ViewModels
                     var progress = new Progress<ProgressToken>(token =>
                         controller.SetProgress(Math.Round(token.FramesCompleted / totalFrames)));
 
-                    await analyzer.AnalyzeAsync(
-                        audioFilesCollection.Select(viewModel => viewModel.AudioFile),
-                        cancelSource.Token,
-                        progress);
+                    if (AudioFiles.Groups != null)
+                        foreach (var group in AudioFiles.Groups.Cast<CollectionViewGroup>())
+                            await analyzer.AnalyzeAsync(
+                                group.Items.Cast<AudioFileViewModel>().Select(viewModel => viewModel.AudioFile),
+                                cancelSource.Token,
+                                progress);
+                    else
+                        await analyzer.AnalyzeAsync(
+                            audioFilesCollection.Select(viewModel => viewModel.AudioFile),
+                            cancelSource.Token,
+                            progress);
+
                     await controller.CloseAsync();
 
                     foreach (var audioFile in audioFilesCollection)
