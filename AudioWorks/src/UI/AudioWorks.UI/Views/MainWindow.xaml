@@ -122,27 +122,24 @@ You should have received a copy of the GNU Affero General Public License along w
                 </fluent:RibbonGroupBox>
 
                 <fluent:RibbonGroupBox Header="Options" ItemContainerStyle="{StaticResource LargeRibbonButton}">
-                    <fluent:ToggleButton Command="{Binding ToggleGroupingCommand}"
-                                         LargeIcon="{StaticResource GroupClauseImage}"
-                                         fluent:KeyTip.Keys="G">
-                        <fluent:ToggleButton.Style>
-                            <Style TargetType="fluent:ToggleButton"
-                                   BasedOn="{StaticResource LargeRibbonButton}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                                                 Value="True">
-                                        <Setter Property="Header"
-                                                Value="Ungroup"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                                                 Value="False">
-                                        <Setter Property="Header"
-                                                Value="Group"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
+                    <fluent:DropDownButton Header="Grouping"
+                                           LargeIcon="{StaticResource GroupClauseImage}"
+                                           fluent:KeyTip.Keys="G">
+                        <fluent:DropDownButton.ItemContainerStyle>
+                            <Style TargetType="fluent:MenuItem">
+                                <Setter Property="IsCheckable"
+                                        Value="True"/>
+                                <Setter Property="IsDefinitive"
+                                        Value="True"/>
                             </Style>
-                        </fluent:ToggleButton.Style>
-                    </fluent:ToggleButton>
+                        </fluent:DropDownButton.ItemContainerStyle>
+                        <fluent:MenuItem Header="None"
+                                         IsChecked="{Binding GroupingDisabled}"/>
+                        <fluent:MenuItem Header="By Directory"
+                                         IsChecked="{Binding GroupByDirectory}"/>
+                        <fluent:MenuItem Header="By Album"
+                                         IsChecked="{Binding GroupByAlbum}"/>
+                    </fluent:DropDownButton>
                     <fluent:DropDownButton Header="Show/Hide Columns"
                                            LargeIcon="{StaticResource AddRemoveColumnsImage}"
                                            fluent:KeyTip.Keys="C">

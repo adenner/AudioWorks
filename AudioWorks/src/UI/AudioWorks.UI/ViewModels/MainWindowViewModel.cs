@@ -38,9 +38,14 @@ namespace AudioWorks.UI.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         bool _isBusy;
+        bool _groupingDisabled;
+        bool _groupByDirectory;
+        bool _groupByAlbum;
         readonly object _lock = new object();
-        readonly PropertyGroupDescription _groupDescription = new PropertyGroupDescription
+        readonly GroupDescription _directoryGroupDescription = new PropertyGroupDescription
             { Converter = new GroupByDirectoryConverter() };
+        readonly GroupDescription _albumGroupDescription = new PropertyGroupDescription
+            { Converter = new GroupByAlbumConverter() };
         List<AudioFileViewModel> _selectedAudioFiles = new List<AudioFileViewModel>(0);
 
         public bool IsBusy
@@ -49,13 +54,59 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
+        public bool GroupingDisabled
+        {
+            get => _groupingDisabled;
+            set
+            {
+                if (!value) return;
+
+                SetGroupDescriptions(null);
+                SetProperty(ref _groupingDisabled, value);
+                _groupByDirectory = false;
+                RaisePropertyChanged("GroupByDirectory");
+                _groupByAlbum = false;
+                RaisePropertyChanged("GroupByAlbum");
+            }
+        }
+
+        public bool GroupByDirectory
+        {
+            get => _groupByDirectory;
+            set
+            {
+                if (!value) return;
+
+                SetGroupDescriptions(_directoryGroupDescription);
+                SetProperty(ref _groupByDirectory, value);
+                _groupingDisabled = false;
+                RaisePropertyChanged("GroupingDisabled");
+                _groupByAlbum = false;
+                RaisePropertyChanged("GroupByAlbum");
+            }
+        }
+
+        public bool GroupByAlbum
+        {
+            get => _groupByAlbum;
+            set
+            {
+                if (!value) return;
+
+                SetGroupDescriptions(_albumGroupDescription);
+                SetProperty(ref _groupByAlbum, value);
+                _groupingDisabled = false;
+                RaisePropertyChanged("GroupingDisabled");
+                _groupByDirectory = false;
+                RaisePropertyChanged("GroupByDirectory");
+            }
+        }
+
         public AudioAnalyzerInfo[] Analyzers { get; } = AudioAnalyzerManager.GetAnalyzerInfo().ToArray();
 
         public AudioEncoderInfo[] Encoders { get; } = AudioEncoderManager.GetEncoderInfo().ToArray();
 
         public ICollectionView AudioFiles { get; }
-
-        public DelegateCommand ToggleGroupingCommand { get; }
 
         public DelegateCommand<IList> SelectionChangedCommand { get; }
 
@@ -102,13 +153,7 @@ namespace AudioWorks.UI.ViewModels
             BindingOperations.EnableCollectionSynchronization(audioFilesCollection, _lock);
             AudioFiles = CollectionViewSource.GetDefaultView(audioFilesCollection);
 
-            ToggleGroupingCommand = new DelegateCommand(() =>
-            {
-                if (AudioFiles.GroupDescriptions.Contains(_groupDescription))
-                    AudioFiles.GroupDescriptions.Remove(_groupDescription);
-                else
-                    AudioFiles.GroupDescriptions.Add(_groupDescription);
-            });
+            GroupByDirectory = true;
 
             audioFilesCollection.CollectionChanged += (sender, e) =>
             {
@@ -337,6 +382,13 @@ namespace AudioWorks.UI.ViewModels
                         break;
                 }
             });
+        }
+
+        void SetGroupDescriptions(GroupDescription? groupDescription)
+        {
+            AudioFiles.GroupDescriptions.Clear();
+            if (groupDescription != null)
+                AudioFiles.GroupDescriptions.Add(groupDescription);
         }
 
         void Metadata_PropertyChanged(object sender, PropertyChangedEventArgs e)
