@@ -70,7 +70,7 @@ You should have received a copy of the GNU Affero General Public License along w
                     <Setter Property="AnimateOpacity"
                             Value="True"/>
                     <Setter Property="Margin"
-                            Value="0,31,0,0"/>
+                            Value="0,31,0,23"/>
                 </Style>
             </mahapps:FlyoutsControl.ItemContainerStyle>
             <mahapps:Flyout Header="Metadata Settings"
