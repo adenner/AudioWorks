@@ -281,6 +281,12 @@ You should have received a copy of the GNU Affero General Public License along w
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding AudioFiles.Count, StringFormat=Editing {0} file(s)}"/>
+            </StatusBarItem>
+        </StatusBar>
+
         <DataGrid ItemsSource="{Binding AudioFiles}"
                   AutoGenerateColumns="False"
                   PreviewMouseRightButtonUp="DataGrid_OnPreviewMouseRightButtonUp"
