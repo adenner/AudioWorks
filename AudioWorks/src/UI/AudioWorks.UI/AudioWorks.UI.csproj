@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\AnalysisControl.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
       <Resource Include="Resources\Icon.png" />
       <Resource Include="Resources\Images.xaml">
         <Generator>MSBuild:Compile</Generator>

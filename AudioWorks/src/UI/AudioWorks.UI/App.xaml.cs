@@ -36,6 +36,7 @@ namespace AudioWorks.UI
             containerRegistry.RegisterSingleton<IAnalysisSettingService, AnalysisSettingService>();
             containerRegistry.RegisterSingleton<IEncoderSettingService, EncoderSettingService>();
             containerRegistry.RegisterDialog<EditControl, EditControlViewModel>();
+            containerRegistry.RegisterDialog<AnalysisControl, AnalysisControlViewModel>();
             containerRegistry.RegisterDialogWindow<CustomDialogWindow>();
 
             // MahApps.Metro dialog service

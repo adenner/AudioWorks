@@ -145,7 +145,6 @@ namespace AudioWorks.UI.ViewModels
         public MainWindowViewModel(
             IFileSelectionService fileSelectionService,
             IDialogService prismDialogService,
-            IAnalysisSettingService analysisSettingService,
             IEncoderSettingService encoderSettingService,
             IDialogCoordinator metroDialogCoordinator)
         {
@@ -310,40 +309,14 @@ namespace AudioWorks.UI.ViewModels
                 }, name => !IsBusy && _selectedAudioFiles.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
-            AnalyzeAllCommand = new DelegateCommand<string>(async name =>
-                {
-                    IsBusy = true;
-
-                    var analyzer = new AudioFileAnalyzer(name, analysisSettingService[name]);
-                    var controller = await metroDialogCoordinator.ShowProgressAsync(this,
-                        $"Performing {name} Analysis", $"Analyzing {audioFilesCollection.Count} files...", true);
-
-                    var cancelSource = new CancellationTokenSource();
-                    controller.Canceled += (sender, e) => cancelSource.Cancel();
-
-                    var totalFrames = (double) audioFilesCollection.Sum(audioFile => audioFile.Info.FrameCount);
-                    var progress = new Progress<ProgressToken>(token =>
-                        controller.SetProgress(Math.Round(token.FramesCompleted / totalFrames)));
-
-                    if (AudioFiles.Groups != null)
-                        foreach (var group in AudioFiles.Groups.Cast<CollectionViewGroup>())
-                            await analyzer.AnalyzeAsync(
-                                group.Items.Cast<AudioFileViewModel>().Select(viewModel => viewModel.AudioFile),
-                                cancelSource.Token,
-                                progress);
-                    else
-                        await analyzer.AnalyzeAsync(
-                            audioFilesCollection.Select(viewModel => viewModel.AudioFile),
-                            cancelSource.Token,
-                            progress);
-
-                    await controller.CloseAsync();
-
-                    foreach (var audioFile in audioFilesCollection)
-                        audioFile.Metadata.Refresh();
-
-                    IsBusy = false;
-                }, name => !IsBusy && audioFilesCollection.Count > 0)
+            AnalyzeAllCommand = new DelegateCommand<string>(name =>
+                        prismDialogService.ShowDialog("AnalysisControl",
+                            new DialogParameters { { "Name", name }, { "AudioFiles", AudioFiles } }, result =>
+                            {
+                                foreach (var audioFile in audioFilesCollection)
+                                    audioFile.Metadata.Refresh();
+                            }),
+                    name => !IsBusy && audioFilesCollection.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
             EncodeSelectionCommand = new DelegateCommand<string>(async name =>
