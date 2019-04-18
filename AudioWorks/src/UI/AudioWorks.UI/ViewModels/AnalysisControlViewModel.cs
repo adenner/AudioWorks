@@ -13,28 +13,27 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
-using System;
-using System.Collections;
+using AudioWorks.Api;
+using AudioWorks.UI.Services;
 using Prism.Services.Dialogs;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using AudioWorks.Api;
-using AudioWorks.UI.Services;
-using Prism.Commands;
 
 namespace AudioWorks.UI.ViewModels
 {
     // ReSharper disable once UnusedMember.Global
     public class AnalysisControlViewModel : DialogViewModelBase
     {
-        readonly CancellationTokenSource _cancelationSource = new CancellationTokenSource();
+        readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
         readonly IAnalysisSettingService _analysisSettingService;
         string _description = string.Empty;
+        bool _isInProgress = true;
         int _progress;
 
         public string Description
@@ -43,20 +42,24 @@ namespace AudioWorks.UI.ViewModels
             set => SetProperty(ref _description, value);
         }
 
+        public bool IsInProgress
+        {
+            get => _isInProgress;
+            set => SetProperty(ref _isInProgress, value);
+        }
+
         public int Progress
         {
             get => _progress;
             set => SetProperty(ref _progress, value);
         }
 
-        public DelegateCommand CancelCommand { get; }
+        public string ButtonText => _isInProgress ? "Cancel" : "Finish";
 
         public AnalysisControlViewModel(
             IAnalysisSettingService analysisSettingService)
         {
             _analysisSettingService = analysisSettingService;
-
-            CancelCommand = new DelegateCommand(() => _cancelationSource.Cancel());
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)
@@ -68,41 +71,48 @@ namespace AudioWorks.UI.ViewModels
             Title = $"Performing {name} Analysis";
             Description = $"Analyzing {audioFilesCollection.Count} files...";
 
-            var analyzer = new AudioFileAnalyzer(name, _analysisSettingService[name]);
-            var totalFrames = (double) audioFilesCollection.Sum(audioFile => audioFile.Info.FrameCount);
-            var lastAudioFilesCompleted = 0;
-            var lastPercentComplete = 0;
-
-            var progress = new Progress<ProgressToken>(token =>
-            {
-                var percentComplete = (int) Math.Round(token.FramesCompleted / totalFrames * 100);
-
-                // Avoid reporting progress when nothing has changed
-                if (percentComplete <= lastPercentComplete && token.AudioFilesCompleted <= lastAudioFilesCompleted)
-                    return;
-
-                lastAudioFilesCompleted = token.AudioFilesCompleted;
-                lastPercentComplete = percentComplete;
-
-                Progress = Math.Min(percentComplete, 100);
-            });
-
             Task.Run(async () =>
             {
+                var analyzer = new AudioFileAnalyzer(name, _analysisSettingService[name]);
+                var totalFrames = (double) audioFilesCollection.Sum(audioFile => audioFile.Info.FrameCount);
+                var previousFramesCompleted = 0L;
+                var lastPercentComplete = 0;
+
+                var progress = new Progress<ProgressToken>(token =>
+                {
+                    var percentComplete =
+                        (int) Math.Round((token.FramesCompleted + previousFramesCompleted) / totalFrames * 100);
+
+                    // Avoid reporting progress when nothing has changed
+                    if (percentComplete <= lastPercentComplete) return;
+                    lastPercentComplete = percentComplete;
+                    Progress = Math.Min(percentComplete, 100);
+                });
+
                 if (audioFiles.Groups != null)
                     foreach (var group in audioFiles.Groups.Cast<CollectionViewGroup>())
-                        await analyzer.AnalyzeAsync(
-                            group.Items.Cast<AudioFileViewModel>().Select(viewModel => viewModel.AudioFile),
-                            _cancelationSource.Token,
-                            progress);
+                    {
+                        var groupAudioFiles = group.Items.Cast<AudioFileViewModel>()
+                            .Select(viewModel => viewModel.AudioFile).ToArray();
+                        await analyzer.AnalyzeAsync(groupAudioFiles, _cancellationSource.Token, progress);
+                        previousFramesCompleted += groupAudioFiles.Sum(audioFile => audioFile.Info.FrameCount);
+                    }
                 else
                     await analyzer.AnalyzeAsync(
                         audioFilesCollection.Select(viewModel => viewModel.AudioFile),
-                        _cancelationSource.Token,
+                        _cancellationSource.Token,
                         progress);
 
-                RaiseRequestClose(new DialogResult(true));
+                _isInProgress = false;
+                SystemSounds.Beep.Play();
+                RaisePropertyChanged("ButtonText");
             });
+        }
+
+        public override void OnDialogClosed()
+        {
+            if (_isInProgress)
+                _cancellationSource.Cancel();
         }
     }
 }
