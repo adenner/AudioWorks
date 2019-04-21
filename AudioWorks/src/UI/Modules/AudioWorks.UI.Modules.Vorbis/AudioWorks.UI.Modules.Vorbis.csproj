@@ -18,7 +18,7 @@
   </ItemGroup>
   
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)src\UI\AudioWorks.UI\bin\Debug\$(TargetFramework)" /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)src\UI\AudioWorks.UI\bin\$(Configuration)\$(TargetFramework)" /Y</PostBuildEvent>
   </PropertyGroup>
 
 </Project>
