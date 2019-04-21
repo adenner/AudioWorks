@@ -20,7 +20,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -132,11 +131,7 @@ namespace AudioWorks.UI.ViewModels
 
         public DelegateCommand RemoveSelectionCommand { get; }
 
-        public DelegateCommand<string> AnalyzeSelectionCommand { get; }
-
         public DelegateCommand<string> AnalyzeAllCommand { get; }
-
-        public DelegateCommand<string> EncodeSelectionCommand { get; }
 
         public DelegateCommand<string> EncodeAllCommand { get; }
 
@@ -303,12 +298,6 @@ namespace AudioWorks.UI.ViewModels
                     audioFilesCollection.Remove(audioFile);
             }, () => _selectedAudioFiles.Count > 0);
 
-            AnalyzeSelectionCommand = new DelegateCommand<string>(async name =>
-                {
-                    //TODO
-                }, name => !IsBusy && _selectedAudioFiles.Count > 0)
-                .ObservesProperty(() => IsBusy);
-
             AnalyzeAllCommand = new DelegateCommand<string>(name =>
                         prismDialogService.ShowDialog("AnalysisControl",
                             new DialogParameters { { "Name", name }, { "AudioFiles", AudioFiles } }, result =>
@@ -317,12 +306,6 @@ namespace AudioWorks.UI.ViewModels
                                     audioFile.Metadata.Refresh();
                             }),
                     name => !IsBusy && audioFilesCollection.Count > 0)
-                .ObservesProperty(() => IsBusy);
-
-            EncodeSelectionCommand = new DelegateCommand<string>(async name =>
-                {
-                    //TODO
-                }, name => !IsBusy && _selectedAudioFiles.Count > 0)
                 .ObservesProperty(() => IsBusy);
 
             EncodeAllCommand = new DelegateCommand<string>(async name =>
