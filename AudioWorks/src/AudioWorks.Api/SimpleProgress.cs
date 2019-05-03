@@ -23,7 +23,6 @@ namespace AudioWorks.Api
     /// </summary>
     /// <typeparam name="T">Specifies the type of the progress report value.</typeparam>
     /// <seealso cref="IProgress{T}"/>
-    [PublicAPI]
     public sealed class SimpleProgress<T> : IProgress<T>
     {
         readonly Action<T> _handler;

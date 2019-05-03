@@ -21,7 +21,6 @@ namespace AudioWorks.Api
     /// <summary>
     /// Provides information about an audio file format.
     /// </summary>
-    [PublicAPI]
     [Serializable]
     public sealed class AudioFileFormatInfo
     {

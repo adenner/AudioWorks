@@ -21,7 +21,6 @@ namespace AudioWorks.Api
     /// <summary>
     /// Provides information about an audio analyzer.
     /// </summary>
-    [PublicAPI]
     [Serializable]
     public sealed class AudioAnalyzerInfo
     {

@@ -26,7 +26,6 @@ namespace AudioWorks.Common
     /// <summary>
     /// Provides static methods for creating <see cref="ICoverArt"/> objects.
     /// </summary>
-    [PublicAPI]
     public static class CoverArtFactory
     {
         static readonly string[] _acceptedExtensions = { ".bmp", ".png", ".jpg", ".jpeg" };

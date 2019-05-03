@@ -22,7 +22,6 @@ namespace AudioWorks.Extensibility
     /// <summary>
     /// Represents a block of audio samples.
     /// </summary>
-    [PublicAPI]
     public sealed class SampleBuffer : IDisposable
     {
         /// <summary>
