@@ -14,14 +14,17 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
 
 namespace AudioWorks.Extensions.ReplayGain
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification =
+        "Instances are created via MEF.")]
     [AudioAnalyzerExport("ReplayGain", "ReplayGain 2.0")]
-    public sealed class ReplayGainAnalyzer : IAudioAnalyzer
+    sealed class ReplayGainAnalyzer : IAudioAnalyzer
     {
         const int _referenceLevel = -18;
 
@@ -33,6 +36,8 @@ namespace AudioWorks.Extensions.ReplayGain
             ["PeakAnalysis"] = new StringSettingInfo("Simple", "Interpolated")
         };
 
+        [SuppressMessage("Usage", "CA2000:Dispose objects before losing scope", Justification =
+            "GroupState is disposed by the GroupToken, outside this method.")]
         public void Initialize(AudioInfo info, SettingDictionary settings, GroupToken groupToken)
         {
             _analyzer = new R128Analyzer((uint) info.Channels, (uint) info.SampleRate,

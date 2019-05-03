@@ -13,6 +13,7 @@ details.
 You should have received a copy of the GNU Affero General Public License along with AudioWorks. If not, see
 <https://www.gnu.org/licenses/>. */
 
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using AudioWorks.Common;
 
@@ -69,6 +70,8 @@ namespace AudioWorks.Commands
         [Parameter]
         public SwitchParameter PassThru { get; set; }
 
+        [SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification =
+            "Complexity cannot easily be reduced and the method is easy to understand, test, and maintain.")]
         protected override void ProcessRecord()
         {
             var metadata = AudioFile!.Metadata;

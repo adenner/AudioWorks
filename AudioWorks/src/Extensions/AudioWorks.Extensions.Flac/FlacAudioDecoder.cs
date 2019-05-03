@@ -14,14 +14,17 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using AudioWorks.Common;
 using AudioWorks.Extensibility;
 
 namespace AudioWorks.Extensions.Flac
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification =
+        "Instances are created via MEF.")]
     [AudioDecoderExport(".flac")]
-    public sealed class FlacAudioDecoder : IAudioDecoder, IDisposable
+    sealed class FlacAudioDecoder : IAudioDecoder, IDisposable
     {
         AudioStreamDecoder? _decoder;
 
