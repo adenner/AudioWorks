@@ -20,6 +20,7 @@ namespace AudioWorks.Extensibility
     /// <summary>
     /// Identifies an audio file as a member of a group.
     /// </summary>
+    [PublicAPI]
     public sealed class GroupToken : IDisposable
     {
         readonly object _syncRoot = new object();

@@ -23,8 +23,10 @@ using AudioWorks.Extensibility;
 
 namespace AudioWorks.Extensions.Apple
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification =
+        "Instances are created via MEF.")]
     [AudioDecoderExport(".m4a")]
-    public sealed class AlacAudioDecoder : IAudioDecoder, IDisposable
+    sealed class AlacAudioDecoder : IAudioDecoder, IDisposable
     {
         const uint _defaultFrameCount = 4096;
 
@@ -49,7 +51,6 @@ namespace AudioWorks.Extensions.Apple
             _magicCookie = GetMagicCookie(_audioFile, _converter);
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public unsafe SampleBuffer DecodeSamples()
         {
             Span<int> buffer = stackalloc int[(int) (_defaultFrameCount * _outputDescription.ChannelsPerFrame)];

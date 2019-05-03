@@ -30,6 +30,7 @@ namespace AudioWorks.Extensibility
     /// Each AudioWorks extension is loaded into its own <see cref="ExtensionLoadContext"/> instance.
     /// </summary>
     /// <seealso cref="AssemblyLoadContext"/>
+    [PublicAPI]
     public sealed class ExtensionLoadContext : AssemblyLoadContext
     {
         readonly List<string> _unmanagedLibraryPaths = new List<string>();

@@ -20,8 +20,10 @@ using AudioWorks.Extensibility;
 
 namespace AudioWorks.Extensions.Flac
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification =
+        "Instances are created via MEF.")]
     [AudioDecoderExport(".flac")]
-    public sealed class FlacAudioDecoder : IAudioDecoder, IDisposable
+    sealed class FlacAudioDecoder : IAudioDecoder, IDisposable
     {
         AudioStreamDecoder? _decoder;
 

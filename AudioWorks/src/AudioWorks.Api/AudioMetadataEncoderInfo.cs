@@ -21,6 +21,7 @@ namespace AudioWorks.Api
     /// <summary>
     /// Provides information about a metadata encoder.
     /// </summary>
+    [PublicAPI]
     [Serializable]
     public sealed class AudioMetadataEncoderInfo
     {

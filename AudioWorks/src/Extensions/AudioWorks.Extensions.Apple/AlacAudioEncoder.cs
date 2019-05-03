@@ -14,6 +14,7 @@ You should have received a copy of the GNU Affero General Public License along w
 <https://www.gnu.org/licenses/>. */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -23,8 +24,10 @@ using AudioWorks.Extensibility;
 
 namespace AudioWorks.Extensions.Apple
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification =
+        "Instances are created via MEF.")]
     [AudioEncoderExport("ALAC", "Apple Lossless Audio Codec")]
-    public sealed class AlacAudioEncoder : IAudioEncoder, IDisposable
+    sealed class AlacAudioEncoder : IAudioEncoder, IDisposable
     {
         Stream? _stream;
         AudioMetadata? _metadata;

@@ -21,6 +21,7 @@ namespace AudioWorks.Extensibility
     /// Wraps a temporary file. Suitable as a <see cref="MemoryStream"/> replacement for large data sets.
     /// </summary>
     /// <seealso cref="Stream" />
+    [PublicAPI]
     public sealed class TempFileStream : Stream
     {
         readonly FileStream _fileStream = File.Create(Path.GetTempFileName(), 4096, FileOptions.DeleteOnClose);
