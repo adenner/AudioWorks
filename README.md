@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://gitcdn.xyz/repo/jherby2k/AudioWorks/master/Logo.png" width="567" /></h1>
+<h1 align="center"><img src="https://gitcdn.link/repo/jherby2k/AudioWorks/master/Logo.png" width="567" /></h1>
 
 A cross-platform, multi-format audio conversion and tagging suite for .NET and PowerShell. Formats currently supported are MP3, MP4 AAC, FLAC, Apple Lossless (ALAC), Opus, Ogg Vorbis and Wave.
 
